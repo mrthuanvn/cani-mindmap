@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" 
+	xmlns:validators="pl.cani.mindmap.validators.*" xmlns:utils="flexunit.utils.*"
+	creationComplete="onCreationComplete()">
+
+	<mx:Script>
+		<![CDATA[
+			private function onCreationComplete() : void {
+				validator.addRegisteredEmail( "van_jan@o2.pl" );
+				focusManager.setFocus( txt );
+			}
+		]]>
+	</mx:Script>
+	
+	<validators:RegisteredEmailValidator id="validator" source="{ txt }" 
+		property="text">
+	</validators:RegisteredEmailValidator>
+	
+	<mx:Panel>
+		<mx:TextInput id="txt" />
+		<mx:TextInput />
+	</mx:Panel>
+	
+</mx:Application>

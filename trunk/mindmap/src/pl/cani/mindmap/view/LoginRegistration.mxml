@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="315" 
+	title="@Resource( key = 'panelTitle' )" layout="horizontal" 
+	horizontalAlign="center" verticalAlign="middle" 
+	xmlns:view="pl.cani.mindmap.view.*"
+	creationComplete="onCreationComplete()">
+
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.cairngorm.view.ViewLocator;
+			import pl.cani.mindmap.view.helpers.LoginRegistrationHelper;
+			import pl.cani.mindmap.model.AppModelLocator;
+
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import com.asual.swfaddress.SWFAddress;
+
+			private function onCreationComplete() : void {
+				trace( "LoginRegistration::creationComplete" );
+				var helper : LoginRegistrationHelper 
+					= new LoginRegistrationHelper( this );
+
+				ViewLocator.getInstance().register( 
+					ViewNames.LOGIN_AND_REGISTRATION, helper );
+
+				AppModelLocator.getInstance().loginAndRegistrationView = this;
+			}
+
+			private function changeAddress() : void {
+				var children : Array = [ 
+					ViewNames.LOGIN_FORM,
+					ViewNames.REGISTRATION_FORM
+				];
+				SWFAddress.setValue( children[ container.selectedIndex ] );
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Accordion width="90%" height="90%" id="container" 
+		change="changeAddress()">
+	
+		<view:LoginForm />
+		
+		<view:RegistrationForm />
+		
+	</mx:Accordion>
+	
+</mx:Panel>

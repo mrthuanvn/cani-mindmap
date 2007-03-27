@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal"
+	xmlns:view="pl.cani.mindmap.view.*" xmlns:local="*" xmlns:pl="pl.*" 
+	xmlns:control="pl.cani.mindmap.control.*" 
+	xmlns:business="pl.cani.mindmap.business.*"
+	applicationComplete="initSWFAddress()">
+
+	
+
+	<mx:Script>
+		<![CDATA[
+			import pl.cani.mindmap.utils.SWFAddressHandler;
+			import com.asual.swfaddress.SWFAddress;
+			
+			private function initSWFAddress() : void {
+				trace( "applicationComplete" );
+				SWFAddress.onChange = SWFAddressHandler.handle;
+				stage.frameRate = 31;
+			}
+			
+		]]>
+	</mx:Script>
+
+	<control:Controller id="controller" />
+	
+	<business:Services id="services" />
+
+	<view:MainView />
+		
+</mx:Application>

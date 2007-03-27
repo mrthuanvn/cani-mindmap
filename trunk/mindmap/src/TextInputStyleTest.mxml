@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" 
+	xmlns:local="*">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			import mx.controls.Alert;
+			
+		
+			
+			private function onChange() : void {
+				debugTxt.setStyle( "borderColor", txt.getStyle( "errorColor" ) );
+				debugTxt.text = txt.getStyle( "errorColor" );
+				debugTxt.setStyle( "themeColor", txt.getStyle( "errorColor" ) );
+				debugTxt.styleName = "errorColor";
+				if ( txt.styleName != null ) {
+					debugTxt.text = txt.styleName.toString();
+				}
+				validator.validate();
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:StringValidator required="true" id="validator"
+		source="{ txt }" property="text" minLength="3" />
+		
+	<mx:TextInput id="txt" change="onChange()" />
+	<mx:TextInput id="debugTxt" />
+	
+</mx:Application>

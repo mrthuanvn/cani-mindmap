@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Form xmlns:mx="http://www.adobe.com/2006/mxml" label="@Resource( key = 'loginFormTitle' )" 
+	height="100%" defaultButton="{ loginBtn }" width="100%" 
+	creationComplete="onCreationComplete()"	show="resetFocus()" 
+	xmlns:validators="pl.cani.mindmap.validators.*">
+
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.resources.ResourceBundle;
+
+			import mx.effects.easing.Quadratic;
+
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import com.adobe.cairngorm.view.ViewLocator;
+			import pl.cani.mindmap.model.AppModelLocator;
+			import pl.cani.mindmap.view.helpers.LoginFormHelper;
+		
+			// NOTE: http://www.adobe.com/devnet/flex/quickstart/validating_data/
+			// do raportu, kawałek o walidacji i user experience
+		
+			[Bindable]
+			[ResourceBundle( name = "LoginForm" )]
+			private var rb : ResourceBundle;
+		
+			[Bindable]
+			public var ACTIVATE_AND_LOG_IN_STATE : String = "activateAndLogIn";
+		
+			[Bindable]
+			public var formIsValid : Boolean = false;
+		
+			private var helper : LoginFormHelper;
+                                  
+            public function onCreationComplete() : void {
+            	AppModelLocator.getInstance().loginForm = this;
+            	helper = new LoginFormHelper( this );
+            	ViewLocator.getInstance().register( ViewNames.LOGIN_FORM, helper );
+            	resetFocus();
+            }                      
+            
+            private function resetFocus() : void {
+            	focusManager.setFocus( emailTxt );	
+            }
+                                  
+		]]>
+	</mx:Script>
+
+	<mx:states>
+		<mx:State name="{ ACTIVATE_AND_LOG_IN_STATE }">
+			<mx:AddChild relativeTo="{ rememberMeFI }" position="before">
+				<mx:FormItem label="@Resource( key = 'activationKeyLbl' )" 
+					id="activationKeyFI" alpha="0">
+					<mx:TextInput id="activationKeyTxt" change="helper.validateForm( event )" />
+				</mx:FormItem>
+			</mx:AddChild>
+			<mx:SetProperty target="{ loginBtn }" name="label" 
+				value="{ rb.getString( 'activateAndLoginBtn' ) }" />
+			<mx:AddChild position="lastChild">
+				<mx:Label text="@Resource( key = 'emailNotActive' )" id="errorLbl"
+					color="red" />
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+	
+	<mx:transitions>
+		<mx:Transition fromState="*" toState="*">
+			<mx:Sequence effectEnd="invalidateDisplayList(); invalidateSize()">
+				<mx:Fade alphaTo="0" duration="0" target="{ activationKeyFI }" />
+				<mx:Move duration="200" easingFunction="Quadratic.easeOut"
+					targets="{ [ rememberMeFI, logInFI ] }" />
+				<mx:Fade alphaTo="100" target="{ activationKeyFI }" duration="100" />
+			</mx:Sequence>
+		</mx:Transition>
+	</mx:transitions>
+	
+	
+	<validators:LoginEmailValidator id="emailValidator" source="{ emailTxt }" 
+		property="text" />
+	<validators:PasswordValidator id="passwordValidator" source="{ passwordTxt }" 
+		property="text"	minLength="6" />
+	<validators:ActivationKeyValidator id="activationKeyValidator"
+		source="{ activationKeyTxt }" property="text" email="{ emailTxt.text }" />
+
+
+	<mx:FormItem label="E-mail" id="emailFI">
+		<mx:TextInput id="emailTxt" change="helper.validateForm( event )" />
+	</mx:FormItem>
+	<mx:FormItem label="@Resource( key = 'passwordLbl' )" id="passwordFI">
+		<mx:TextInput id="passwordTxt" displayAsPassword="true" 
+			change="helper.validateForm( event )" />
+	</mx:FormItem>
+	<mx:FormItem id="rememberMeFI">
+		<mx:CheckBox label="@Resource( key = 'rememberMeChb' )" id="remeberMeChb"/>
+	</mx:FormItem>
+	<mx:FormItem id="logInFI">
+		<mx:Button label="@Resource( key = 'loginBtn' )" id="loginBtn" 
+			click="helper.login()" enabled="{ formIsValid }" />
+	</mx:FormItem>
+	
+</mx:Form>

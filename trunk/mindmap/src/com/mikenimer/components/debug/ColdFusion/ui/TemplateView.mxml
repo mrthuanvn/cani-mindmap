@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Author: Mike Nimer mnimer@gmail.com
+// Copyright 2006 Mike Nimer
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY. 
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" >
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import com.mikenimer.components.debug.ColdFusion.TemplateDebugObject;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var summaryCollection:Object;
+			[Bindable]
+			public var summaryArrayCollection:ArrayCollection;
+			
+			private var _templates:TemplateDebugObject;
+			[Bindable]
+			public function get CFTemplates():TemplateDebugObject
+			{
+				return this._templates;
+			}
+			public function set CFTemplates(t1:TemplateDebugObject):void
+			{
+				this._templates = t1;				
+				this.summaryArrayCollection = new ArrayCollection();
+				this.summaryCollection = {};
+				
+				var templateitem:Array = t1.value as Array;
+				for(var i:int=0; i<templateitem.length; i++)
+				{
+					var item:Object = templateitem[i];
+					var time:Number = item.endtime - item.starttime;
+					var template:String = item.Template;
+					var filename:String = "";
+					
+					var start:int = template.indexOf("from");
+					if( start != -1 )
+					{
+						template = template.substr(start+5);
+					}
+					
+					var start2:int = template.lastIndexOf("\\");
+					if( start2 != -1 )
+					{
+						filename = template.substr(start2);
+					}
+					else
+					{//try unix slash
+						start2 = template.lastIndexOf("/");
+						if( start2 != -1 )
+						{
+							filename = template.substr(start2);
+						}
+					}
+					
+					if( summaryCollection[template] == null )
+					{
+						var tem:Object = {};
+						tem.Time = time;
+						tem.Filename = filename;
+						tem.Template = template;
+						summaryCollection[template] = tem;
+						summaryArrayCollection.addItem(summaryCollection[template]);
+					}
+					else
+					{
+						summaryCollection[template].Time += time;
+					}
+				}
+				
+				//this.CFTemp.dataProvider = this.summaryArrayCollection;				
+			}
+			
+			private function formatTime(item:Object, column:DataGridColumn):String
+			{
+				return item[column.dataField] +"ms";
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid 
+		id="CFTemp" 
+		dataProvider="{this.summaryArrayCollection}" 
+		width="100%" height="100%" editable="true" >
+		<mx:columns>
+			<mx:Array>
+				<mx:DataGridColumn dataField="Time" labelFunction="formatTime" width="50" editable="false" />
+				<mx:DataGridColumn dataField="Filename" width="120" editable="false" />
+				<mx:DataGridColumn dataField="Template" />
+			</mx:Array>
+		</mx:columns>
+	</mx:DataGrid>
+</mx:VBox>

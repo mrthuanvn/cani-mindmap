@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Author: Mike Nimer mnimer@gmail.com
+// Copyright 2006 Mike Nimer
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY. 
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" >
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mikenimer.components.debug.ColdFusion.TraceDebugObject;
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import com.mikenimer.components.debug.ColdFusion.TemplateDebugObject;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var summaryCollection:Object;
+			[Bindable]
+			public var summaryArrayCollection:ArrayCollection;
+			
+			private var _trace:TraceDebugObject;
+			[Bindable]
+			public function get CFTrace():TraceDebugObject
+			{
+				return this._trace;
+			}
+			public function set CFTrace(t1:TraceDebugObject):void
+			{
+				this._trace = t1;				
+			}
+			
+			private function formatTime(item:Object, column:DataGridColumn):String
+			{
+				return item[column.dataField] +"ms";
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid 
+		id="CFTraceGrid" 
+		dataProvider="{this.CFTrace.value}" 
+		width="100%" height="100%" editable="false" >
+		<mx:columns>
+			<mx:Array>
+				<mx:DataGridColumn dataField="endtime" headerText="End Time" labelFunction="formatTime" width="70" editable="false" />
+				<mx:DataGridColumn dataField="priority" headerText="Priority" width="100" editable="false" />
+				<mx:DataGridColumn dataField="category" headerText="Category" width="100" editable="false" />
+				<mx:DataGridColumn dataField="message" headerText="Message" width="200" editable="false" />
+				<mx:DataGridColumn dataField="template" headerText="Template" width="500" />
+				<mx:DataGridColumn dataField="line" headerText="Line Number" width="50" editable="false" />
+			</mx:Array>
+		</mx:columns>
+	</mx:DataGrid>
+</mx:VBox>

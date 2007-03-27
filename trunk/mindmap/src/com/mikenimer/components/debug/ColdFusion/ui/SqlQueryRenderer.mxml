@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Author: Mike Nimer mnimer@gmail.com
+// Copyright 2006 Mike Nimer
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY. 
+-->
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	verticalGap="0">
+
+	<mx:Metadata>
+		[Event(name="NEW_TAB", type="com.mikenimer.components.debug.events.DebugEvent")]		
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.utils.ObjectUtil;
+			import mx.controls.Alert;
+			import com.mikenimer.components.Debug;
+			import com.mikenimer.components.debug.events.DebugEvent;
+			import mx.collections.ArrayCollection;
+			[Bindable]
+			public var query:Object = null;
+			
+			public function viewResults():void
+			{
+				var resultView:SqlResultView = new SqlResultView();
+				resultView.label = "Results";
+				var resultSet:ArrayCollection = new ArrayCollection();
+				
+				// loop over the rows
+				for( var i:int=0; i < (query.result.serverInfo.initialData as Array).length; i++)
+				{
+					var row:Object = {};
+					// loop over the column names
+					for( var x:int=0; x < (query.result.serverInfo.columnNames as Array).length; x++)
+					{
+						//trace(query.result.serverInfo.columnNames[x] +":" +query.result.serverInfo.initialData[i][x]);
+						row[query.result.serverInfo.columnNames[x]] = query.result.serverInfo.initialData[i][x];		
+					}
+					resultSet.addItem(row);
+				}
+				resultView.resultSet = 	resultSet;
+				
+				//Alert.show(ObjectUtil.toString(resultSet));
+				
+				var e:DebugEvent = new DebugEvent(DebugEvent.NEW_TAB);
+				e.tab = resultView;
+				this.dispatchEvent(e);
+			}
+			
+		]]>
+	</mx:Script>
+
+
+	<mx:HBox>
+		<mx:VBox id="vhbox2" width="100" height="100%" horizontalGap="0" verticalGap="0" >		
+			<mx:LinkButton  label="View Results" click="viewResults();" />
+		</mx:VBox>
+		<mx:VRule height="100%" />
+		<mx:VBox id="vbox1" width="100%" height="100%" horizontalGap="0" verticalGap="0" >		
+			<mx:Label text="Name: {query.name}" />
+			<mx:Label text="Data Source: {query.datasource.length>0?query.datasource:'Query of Query'}" />
+			<mx:Label text="Cached: {query.cachedquery}" />
+			<mx:Label text="Row Count: {query.rowcount}" />
+			<mx:Label text="Column Names: {query.result.serverInfo.columnNames}" />
+		</mx:VBox>
+	</mx:HBox>
+	
+	<mx:VBox 					
+		paddingLeft="15"
+		paddingRight="15"
+		height="250" width="100%">
+		
+		<mx:TextArea 
+			id="body"
+			text="{query.body}" 
+			cornerRadius="20"
+			width="100%"
+			height="50%"/>
+			
+		<mx:Label text="Sql Parameters" visible="{(query.params as ArrayCollection).length>0}"  />
+		<mx:DataGrid 
+			id="params"
+			visible="{(query.params as ArrayCollection).length>0}" 
+			dataProvider="{query.params}"
+			width="100%" height="{(query.params as ArrayCollection).length>0?100:0}">						
+		</mx:DataGrid>
+	</mx:VBox>	
+	
+</mx:VBox>

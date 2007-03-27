@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+	creationComplete="onCreationComplete()">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mikenimer.components.Debug;
+			import pl.cani.mindmap.vo.UserVO;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			private function onCreationComplete() : void {
+				remoteObject.addEventListener( "result", onResult );
+				remoteObject.addEventListener( "fault", onFault );
+				
+				var user : UserVO = new UserVO();
+				user.forname = "test";
+				user.surname = "user";
+				user.email = "test@test.pl";
+				user.password = "testpass";
+				
+				remoteObject.registerUser( user );
+			}
+			
+			private function onResult( event : ResultEvent ) : void {
+				resultLbl.text = event.result.toString();
+				Debug.show( event.result );
+			}
+			
+			private function onFault( event : FaultEvent ) : void {
+				resultLbl.text = event.fault.toString();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:RemoteObject id="remoteObject" showBusyCursor="true"
+		destination="mindmapRegistrationServiceDestination" />
+
+	<mx:Panel width="400" height="150">
+		<mx:Label id="resultLbl" />
+	</mx:Panel>
+	
+</mx:Application>

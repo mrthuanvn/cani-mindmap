@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" 
+	xmlns:view="pl.cani.mindmap.view.*" creationComplete="onCreationComplete()">
+
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.cairngorm.view.ViewHelper;
+			import mx.core.UIComponent;
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import com.adobe.cairngorm.view.ViewLocator;
+			import pl.cani.mindmap.view.helpers.MainViewHelper;
+			import mx.controls.Alert;
+			import mx.effects.easing.*;
+			
+			private var helper : MainViewHelper;
+			
+			private function onCreationComplete() : void {
+				helper = new MainViewHelper( this );
+				ViewLocator.getInstance().register( ViewNames.MAIN, helper );
+				var so : SharedObject = SharedObject.getLocal( "mindmap" );
+				if ( so.data.rememberMe ) {
+					currentState = MainViewHelper.LOGGED_IN_STATE;
+				} else {
+					currentState = MainViewHelper.LOGGED_OUT_STATE
+					toLoginSeq.play();
+				}
+			}
+		]]>
+	</mx:Script>
+
+	<mx:states>
+		<mx:State name="loggedOut">
+			<mx:SetProperty target="{ loginAndRegistration }" name="includeInLayout"
+				value="true" />
+			<mx:SetProperty target="{ loginAndRegistration }" name="visible"
+				value="true" />
+		</mx:State>
+		<mx:State name="loggedIn">
+			<mx:SetProperty target="{ appCtrlBar }" name="includeInLayout"
+				value="true" />
+			<mx:SetProperty target="{ appCtrlBar }" name="visible"
+				value="true" />
+			<mx:AddChild position="lastChild">
+				<mx:HDividedBox x="0" y="41" width="100%" height="336">
+					<mx:Canvas width="200" height="200">
+					</mx:Canvas>
+				</mx:HDividedBox>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+
+	<mx:transitions>
+		<mx:Transition id="toLoggedOut" toState="loggedOut" fromState="*">
+			<mx:Sequence target="{ loginAndRegistration }" id="toLoginSeq">
+				<mx:SetPropertyAction name="visible" value="true" />
+	            <mx:SetPropertyAction name="includeInLayout" value="true" />
+				<mx:Move yFrom="{ -loginAndRegistration.height }"
+					duration="500"
+					easingFunction="Quintic.easeInOut" id="showLoginAndRegistration" 
+				/>
+			</mx:Sequence>
+		</mx:Transition>
+		<mx:Transition id="toLoggedInFromLoggedOut" toState="loggedIn" 
+			fromState="loggedOut">
+			<mx:Parallel>
+				<mx:Sequence target="{ loginAndRegistration }">
+					<mx:Move xTo="{ -loginAndRegistration.width }" duration="500"
+						easingFunction="Quintic.easeInOut" 
+						id="hideLoginAndRegistration" />
+					<mx:SetPropertyAction name="visible" value="false" />
+		            <mx:SetPropertyAction name="includeInLayout" value="false" />
+				</mx:Sequence>
+				<mx:Sequence target="{ appCtrlBar }">
+					<mx:SetPropertyAction name="visible" />
+		            <mx:SetPropertyAction name="includeInLayout"/>
+		            <mx:Move yFrom="{ -appCtrlBar.height }" duration="500"
+						easingFunction="Quintic.easeInOut" />
+				</mx:Sequence>
+			</mx:Parallel>
+			
+		</mx:Transition>
+	</mx:transitions>
+
+	<view:LoginRegistration id="loginAndRegistration" includeInLayout="false"
+		visible="false" verticalCenter="0" horizontalCenter="0" />
+		
+	<mx:ApplicationControlBar id="appCtrlBar" x="0" y="0" width="100%"
+		includeInLayout="false" visible="false">
+		
+		<mx:Label text="@Resource( key = 'welcomeLbl' )" id="welcomeLbl"/>
+		<mx:Spacer width="100%"/>
+		<mx:LinkButton label="@Resource( key = 'logout' )" 
+			id="logOutLnkBtn" click="helper.logout()"/>
+	</mx:ApplicationControlBar>
+
+</mx:Canvas>

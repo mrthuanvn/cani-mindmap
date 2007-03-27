@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Mindmap management" layout="absolute">
+
+	<mx:Label x="10" y="12" text="My mindmaps" id="myMindmapsLbl"/>
+	<mx:ComboBox id="mindmapsCbx" x="101" y="10"></mx:ComboBox>
+	<mx:DataGrid x="0" y="52">
+		<mx:columns>
+			<mx:DataGridColumn headerText="Column 1" dataField="col1"/>
+			<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
+			<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
+		</mx:columns>
+	</mx:DataGrid>
+	<mx:Button x="10" y="202" label="Grant privilages" id="grantPrivilagesBtn"/>
+
+</mx:Panel>

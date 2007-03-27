@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2006. Tapper, Nimer and Associates Inc
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+  * Neither the name of Tapper, Nimer, and Associates nor the names of its
+    contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+@author: Mike Nimer (mikenimer@yahoo.com)
+@ignore
+-->
+
+<comp:SizeableTitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:comp="com.adobe.ColdFusion.components.*"	
+	width="400" height="300" 
+	showCloseButton="true" 
+	title="Debug" 
+	currentState="ResultEvent" 	
+	close="PopUpManager.removePopUp(this)" 
+	keyUp="keyHandler(event)" backgroundAlpha="50"
+	creationComplete="initComponent()" >
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mikenimer.components.debug.ColdFusion.ui.StoredProcView;
+			import mx.graphics.Stroke;
+			import com.mikenimer.components.debug.ColdFusion.StoredProcedureDebugObject;
+			import com.mikenimer.components.debug.ColdFusion.ui.TimerView;
+			import com.mikenimer.components.debug.ColdFusion.CFTimerDebugObject;
+			import com.mikenimer.components.debug.ColdFusion.ui.HttpView;
+			import com.mikenimer.components.debug.ColdFusion.HttpDebugObject;
+			import com.mikenimer.components.debug.ColdFusion.ui.TraceView;
+			import com.mikenimer.components.debug.ColdFusion.TraceDebugObject;
+			import com.mikenimer.components.debug.events.DebugEvent;
+			import com.mikenimer.components.debug.TreeParent;
+			import com.mikenimer.components.debug.ColdFusion.ui.TemplateView;
+			import com.mikenimer.components.debug.ColdFusion.TemplateDebugObject;
+			import com.mikenimer.components.debug.ColdFusion.ui.SqlQueryView;
+			import com.mikenimer.components.debug.ColdFusion.SqlQueryDebugObject;
+			import com.mikenimer.components.debug.ResultEventDebugObject;
+			import mx.collections.ArrayCollection;
+			import com.mikenimer.components.Debug;
+			import mx.rpc.events.FaultEvent;
+			import mx.controls.treeClasses.ITreeDataDescriptor;
+			import mx.core.Application;
+			import mx.controls.treeClasses.DefaultDataDescriptor;
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+			import mx.utils.ObjectUtil;
+			import mx.managers.PopUpManager;
+			import mx.core.UIComponent;
+			import flash.events.Event;
+			
+
+			[Bindable]
+			private var debugObjects:ArrayCollection;
+
+			
+			private function initComponent():void
+			{
+			}
+			
+			public function keyHandler(event:KeyboardEvent):void
+			{
+				if( event.keyCode == Keyboard.ESCAPE )
+				{
+					PopUpManager.removePopUp(this);
+				}				
+				if( event.keyCode == Keyboard.ENTER )
+				{
+					PopUpManager.removePopUp(this);
+				}
+			}
+			
+			private function debugTreeLabel(item:Object):String
+			{	
+				return item.toString();	
+			}
+									
+
+			public function addObject(obj:Object, name:String=null):void
+			{
+				// make sure the arrayCollection has been initialized
+				if( this.debugObjects == null )
+				{
+					this.debugObjects = new ArrayCollection();
+				}
+				
+				// add item
+				if( obj is ResultEvent )
+				{
+					if( name != null )
+					{
+						this.debugObjects.addItem( new ResultEventDebugObject(obj as ResultEvent, name) );
+					}
+					else
+					{
+						this.debugObjects.addItem( new ResultEventDebugObject(obj as ResultEvent) );
+					}
+				}
+				else
+				{
+					if( name != null)
+					{
+						this.debugObjects.addItem(new TreeParent(name, obj));
+					}
+					this.debugObjects.addItem(obj);					
+				}
+
+			}
+			
+			private function setView(event:Event):void
+			{
+				// switch active tab back to dump tab.
+				this.resultTabs.selectedIndex = 0;
+				
+				if( TreeObject.selectedItem is SqlQueryDebugObject )
+				{
+					var sqlView:SqlQueryView = new SqlQueryView();
+					sqlView.result = this.TreeObject.selectedItem as SqlQueryDebugObject;
+					sqlView.label = "SqlQuery";
+					sqlView.addEventListener(DebugEvent.NEW_TAB, debugEventHandler);
+					this.resultTabs.addChild(sqlView);
+					this.resultTabs.selectedIndex = this.resultTabs.numChildren-1;
+				}
+				else if( TreeObject.selectedItem is StoredProcedureDebugObject )
+				{
+					var storedProcView:StoredProcView = new StoredProcView();
+					storedProcView.result = this.TreeObject.selectedItem as StoredProcedureDebugObject;
+					storedProcView.label = "Stored Procedure";
+					storedProcView.addEventListener(DebugEvent.NEW_TAB, debugEventHandler);
+					this.resultTabs.addChild(storedProcView);
+					this.resultTabs.selectedIndex = this.resultTabs.numChildren-1;
+				}
+				else if( TreeObject.selectedItem is TemplateDebugObject )
+				{
+					var tView:TemplateView = new TemplateView();
+					tView.CFTemplates = this.TreeObject.selectedItem as TemplateDebugObject;
+					tView.label = "Template";
+					tView.addEventListener(DebugEvent.NEW_TAB, debugEventHandler);
+					this.resultTabs.addChild(tView);
+					this.resultTabs.selectedIndex = this.resultTabs.numChildren-1;
+				}
+				else if( TreeObject.selectedItem is TraceDebugObject )
+				{
+					var traceView:TraceView = new TraceView();
+					traceView.CFTrace = this.TreeObject.selectedItem as TraceDebugObject;
+					traceView.label = "CFTrace";
+					traceView.addEventListener(DebugEvent.NEW_TAB, debugEventHandler);
+					this.resultTabs.addChild(traceView);
+					this.resultTabs.selectedIndex = this.resultTabs.numChildren-1;
+				}
+				else if( TreeObject.selectedItem is HttpDebugObject )
+				{
+					var httpView:HttpView = new HttpView();
+					httpView.http = this.TreeObject.selectedItem as HttpDebugObject;
+					httpView.label = "CFHttp";
+					httpView.addEventListener(DebugEvent.NEW_TAB, debugEventHandler);
+					this.resultTabs.addChild(httpView);
+					this.resultTabs.selectedIndex = this.resultTabs.numChildren-1;
+				}
+				else if( TreeObject.selectedItem is CFTimerDebugObject )
+				{
+					var timerView:TimerView = new TimerView();
+					timerView.reference = this.TreeObject.selectedItem as CFTimerDebugObject;
+					timerView.label = "CFTimer";
+					timerView.addEventListener(DebugEvent.NEW_TAB, debugEventHandler);
+					this.resultTabs.addChild(timerView);
+					this.resultTabs.selectedIndex = this.resultTabs.numChildren-1;
+				}
+				
+			}
+			
+			
+			public function debugEventHandler(e:DebugEvent):void
+			{
+				if( e.type == DebugEvent.NEW_TAB )
+				{
+					this.resultTabs.addChild(e.tab);
+					this.resultTabs.selectedIndex = this.resultTabs.numChildren-1;
+				}
+			}
+			
+
+
+			
+			
+
+			
+			public static var debugInstance:Debug = null;
+			public static function getInstance(reset:Boolean=false):Debug
+			{
+				if( debugInstance == null || reset )
+				{
+					Debug.debugInstance = new Debug();
+					Debug.debugInstance.debugObjects = new ArrayCollection();
+				}
+				
+				return Debug.debugInstance;
+			}
+						
+			public static function add(debugObject:Object, name:String=null, reset:Boolean=false):void
+			{
+				var debug:Debug	= Debug.getInstance(reset);
+				debug.addObject(debugObject, name);
+			}
+			
+			public static function show(debugObject:Object=null, name:String=null, reset:Boolean=false):void
+			{
+				var app:UIComponent = Application.application as Application;
+				var debug:Debug	= Debug.getInstance(reset);
+				debug.width = app.width * .8;
+				debug.height = app.height * .6;
+				if( debugObject != null )
+				{
+					debug.addObject(debugObject, name);
+				}
+				
+				PopUpManager.addPopUp(debug, app, false);
+				PopUpManager.centerPopUp(debug);
+			}
+			
+		]]>
+	</mx:Script>
+
+	<comp:states>
+		<mx:State name="ResultEvent">
+			<mx:RemoveChild target="{debugOutput}"/>
+			<mx:AddChild relativeTo="{hbox1}" position="lastChild">
+				<mx:HDividedBox 
+					label="Tree Output" 
+					width="100%" height="100%">
+					
+					<mx:Tree 
+						id="TreeObject" 
+						labelFunction="debugTreeLabel" 
+						dataProvider="{this.debugObjects}" 
+						change="setView(event)" 
+						width="200" height="100%"  />
+						
+
+					<mx:TabNavigator id="resultTabs" width="100%" height="100%">
+						<mx:VBox label="Dump" width="100%" height="100%">							
+							<mx:TextArea 
+								id="TreeOutput" 
+								text="{ObjectUtil.toString(TreeObject.selectedItem)}" 
+								width="100%" height="100%"  />				
+						</mx:VBox>
+					</mx:TabNavigator>
+				</mx:HDividedBox>
+			</mx:AddChild>
+		</mx:State>
+	</comp:states>
+		
+	
+		
+	<mx:HBox 
+		label="Output" 
+		width="100%" height="100%" id="hbox1">
+		
+		<mx:TextArea 
+			id="debugOutput" 
+			text="{ObjectUtil.toString(this.debugObjects)}" 
+			width="100%" height="100%"  />
+	</mx:HBox>
+
+</comp:SizeableTitleWindow>

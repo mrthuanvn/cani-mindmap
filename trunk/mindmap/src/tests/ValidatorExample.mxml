@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+     viewSourceURL="src/ValidationSimpleMXML/index.html"
+     width="500" height="200"
+>
+    <!-- 
+        Validators 
+    -->
+    
+    <!-- Name must be longer than 2 characters long -->
+    <mx:StringValidator 
+        id="nameValidator"
+        source="{nameInput}" 
+        property="text"
+        minLength="2"
+    />
+    
+    <!-- Validate phone number -->
+    <mx:PhoneNumberValidator 
+        id="phoneValidator"
+        source="{phoneInput}" property="text"
+    />
+    
+    <!-- Validate email -->
+    <mx:EmailValidator
+        id="emailValidator"
+        source="{emailInput}" property="text"
+    />
+
+    <!-- 
+        User interface 
+    -->
+    <mx:Panel title="Phone number validator">        
+        <mx:Form>
+            <mx:FormItem label="Name:">
+                <mx:TextInput 
+                    id="nameInput"
+                />
+            </mx:FormItem>
+            <mx:FormItem label="Phone: ">
+                <mx:TextInput 
+                    id="phoneInput"
+                />
+            </mx:FormItem>
+            <mx:FormItem label="Email: ">
+                <mx:TextInput 
+                    id="emailInput"
+                />
+            </mx:FormItem>
+        </mx:Form>
+    </mx:Panel>
+
+</mx:Application>
