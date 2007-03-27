@@ -52,8 +52,7 @@ package pl.cani.mindmap.commands {
 		
 		public function fault( event : Object ) : void {
 			var faultEvent : FaultEvent = event as FaultEvent;
-//			Alert.show( faultEvent.fault.toString() );
-			Debug.show( faultEvent );
+			Debug.show( faultEvent.fault );
 		}
 		
 	}

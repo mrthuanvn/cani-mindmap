@@ -5,7 +5,6 @@
 	xmlns:business="pl.cani.mindmap.business.*"
 	applicationComplete="initSWFAddress()">
 
-	
 
 	<mx:Script>
 		<![CDATA[
