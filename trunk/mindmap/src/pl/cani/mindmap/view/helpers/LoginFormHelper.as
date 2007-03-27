@@ -13,6 +13,7 @@ package pl.cani.mindmap.view.helpers {
 	import pl.cani.mindmap.events.LoggingEvent;
 	import pl.cani.mindmap.view.LoginForm;
 	import pl.cani.mindmap.events.ActivationAndLoggingEvent;
+	import mx.resources.ResourceBundle;
 
 
 	public class LoginFormHelper extends ViewHelper	{
@@ -20,6 +21,9 @@ package pl.cani.mindmap.view.helpers {
 		private var formIsValid : Boolean = false;
 		
 		private var focussedFormControl : DisplayObject;
+		
+		[ResourceBundle( "LoginForm" )]
+		private var rb : ResourceBundle;
 	
 	
 		public function LoginFormHelper( view : LoginForm ) {
@@ -43,6 +47,8 @@ package pl.cani.mindmap.view.helpers {
         	validate( view.emailValidator );
         	view.focusManager.setFocus( view.emailTxt );
         	view.emailTxt.dispatchEvent( new MouseEvent( MouseEvent.MOUSE_OVER ) );
+        	
+        	resetForm();
         }
         
         public function showUserNotActivatedError( email : String, 
@@ -88,7 +94,7 @@ package pl.cani.mindmap.view.helpers {
         }
     
     	public function resetForm() : void {
-    		view.loginBtn.label = "Log In";
+    		view.loginBtn.label = rb.getString( "loginBtn" );
     		view.loginBtn.enabled = true;
     	}
     
@@ -111,7 +117,7 @@ package pl.cani.mindmap.view.helpers {
         
 		public function login() : void {
 			var view : LoginForm = view as LoginForm;
-			view.loginBtn.label = "Logging in...";
+			view.loginBtn.label = rb.getString( "loggingBtn" );
 			view.loginBtn.enabled = false;
 			
 			if ( view.currentState != view.ACTIVATE_AND_LOG_IN_STATE ) {
