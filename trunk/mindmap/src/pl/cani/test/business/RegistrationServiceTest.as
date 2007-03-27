@@ -1,5 +1,5 @@
-package pl.cani.mindmap.business
-{
+package pl.cani.test.business {
+	
 	import flexunit.framework.TestCase;
  	import flexunit.framework.TestSuite;
  	import mx.rpc.remoting.RemoteObject;
