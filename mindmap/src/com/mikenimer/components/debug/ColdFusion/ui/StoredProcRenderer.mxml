@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Author: Mike Nimer mnimer@gmail.com
+// Copyright 2006 Mike Nimer
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY. 
+-->
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	verticalGap="0">
+
+	<mx:Metadata>
+		[Event(name="NEW_TAB", type="com.mikenimer.components.debug.events.DebugEvent")]		
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.utils.ObjectUtil;
+			import mx.controls.Alert;
+			import com.mikenimer.components.Debug;
+			import com.mikenimer.components.debug.events.DebugEvent;
+			import mx.collections.ArrayCollection;
+			[Bindable]
+			public var query:Object = null;
+									
+		]]>
+	</mx:Script>
+
+
+	<mx:HBox>
+		<mx:VBox id="vbox1" width="100%" height="100%" horizontalGap="0" verticalGap="0" >		
+			<mx:Label text="Stored Procedure Name: {query.name}" />
+			<mx:Label text="Data Source: {query.datasource.length>0?query.datasource:'Query of Query'}" />
+			<mx:Label text="Cached: {query.cachedquery}" />
+		</mx:VBox>
+	</mx:HBox>
+	
+	<mx:VBox 					
+		paddingLeft="15"
+		paddingRight="15"
+		height="250" width="100%">
+
+			
+		<mx:Label text="Sql Parameters" visible="{(query.params as ArrayCollection).length>0}"  />
+		<mx:DataGrid 
+			id="params"
+			visible="{(query.params as ArrayCollection).length>0}" 
+			dataProvider="{query.params}"
+			width="100%" height="{(query.params as ArrayCollection).length>0?100:0}">						
+		</mx:DataGrid>
+		
+		<mx:Label text="Sql Results" visible="{(query.result as ArrayCollection).length>0}"  />
+		<mx:DataGrid 
+			id="resultsets"
+			visible="{(query.result as ArrayCollection).length>0}" 
+			dataProvider="{query.result}"
+			width="100%" height="{(query.result as ArrayCollection).length>0?100:0}">						
+		</mx:DataGrid>
+	</mx:VBox>	
+	
+</mx:VBox>

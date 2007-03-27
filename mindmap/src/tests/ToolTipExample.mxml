@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
+
+    <mx:Script><![CDATA[
+        import mx.controls.ToolTip;
+        import mx.managers.ToolTipManager;
+        
+        private var errorTip:ToolTip;
+        private var myError:String;
+    
+        private function validateEntry(type:String, event:Object):void {
+            // NOTE: Validation logic would go here.
+            switch(type) {
+                case "ssn":
+                    myError="Use SSN format";
+                    break;
+                case "phone":
+                    myError="Use phone format";
+                    break;
+            }
+            // Use the target's x and y positions to set position of error tip.
+            errorTip = ToolTipManager.createToolTip(myError,                event.currentTarget.x + event.currentTarget.width,                event.currentTarget.y);
+        
+            // Apply the errorTip class selector.
+            errorTip.setStyle("styleName", "errorTip");
+        }
+    ]]></mx:Script>
+
+    <mx:TextInput id="ssn" enter="validateEntry('ssn',event)"/>
+    <mx:TextInput id="phone" enter="validateEntry('phone',event)"/>
+
+
+</mx:Application>

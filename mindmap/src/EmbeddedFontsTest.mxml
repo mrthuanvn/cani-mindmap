@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal"
+	backgroundColor="white" xmlns:local="*">
+	
+	<mx:Style>
+		@font-face {
+			fontFamily: myFont;
+			src: url( "file:///c:/windows/fonts/verdana.ttf" );
+		}
+	</mx:Style>
+	
+	
+	<mx:Label fontFamily="myFont" text="dlaczego to jest rozmazane?" />
+	
+	<local:TextRendererExample />
+	
+</mx:Application>

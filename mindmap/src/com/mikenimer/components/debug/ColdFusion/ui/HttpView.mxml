@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Author: Mike Nimer mnimer@gmail.com
+// Copyright 2006 Mike Nimer
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY. 
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" >
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mikenimer.components.debug.ColdFusion.HttpDebugObject;
+			import com.mikenimer.components.debug.ColdFusion.TraceDebugObject;
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import com.mikenimer.components.debug.ColdFusion.TemplateDebugObject;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var summaryCollection:Object;
+			[Bindable]
+			public var summaryArrayCollection:ArrayCollection;
+			
+			private var _http:HttpDebugObject;
+			[Bindable]
+			public function get http():HttpDebugObject
+			{
+				return this._http;
+			}
+			public function set http(t1:HttpDebugObject):void
+			{
+				this._http = t1;				
+			}
+			
+			private function formatTime(item:Object, column:DataGridColumn):String
+			{
+				return (item['endtime'] - item['starttime']) +"ms";
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid 
+		id="CFTraceGrid" 
+		dataProvider="{this.http.value}" 
+		width="100%" height="100%" editable="false" >
+		<mx:columns>
+			<mx:Array>
+				<mx:DataGridColumn dataField="starttime" headerText="Time" labelFunction="formatTime" width="70" editable="false" />
+				<mx:DataGridColumn dataField="url" headerText="Url" />
+				<mx:DataGridColumn dataField="template" headerText="Template" />
+				<mx:DataGridColumn dataField="line" headerText="Line Number" width="50" editable="false" />
+			</mx:Array>
+		</mx:columns>
+	</mx:DataGrid>
+</mx:VBox>

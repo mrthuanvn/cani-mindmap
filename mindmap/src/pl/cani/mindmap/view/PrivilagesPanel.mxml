@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	title="@Resource( key = 'title' )">
+	
+	<mx:TextInput x="10" y="10" id="searchTxt"/>
+	<mx:Button x="178" y="10" label="@Resource( key = 'find' )" id="findBtn"/>
+	
+	<mx:DataGrid x="10" y="40" id="usersDataGrid">
+		<mx:columns>
+			<mx:DataGridColumn headerText="@Resource( key = 'forname' )" 
+				dataField="forname" />
+			<mx:DataGridColumn headerText="@Resource( key = 'surname' )" 
+				dataField="surname"  />
+			<mx:DataGridColumn headerText="E-mail" dataField="email" />
+			
+		</mx:columns>
+	</mx:DataGrid>
+	
+</mx:Panel>

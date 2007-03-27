@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" xmlns:ns1="pl.cani.mindmap.view.*"
+	creationComplete="onCreationComplete()">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import pl.cani.mindmap.vo.UserVO;
+			
+			var user : UserVO = new UserVO();
+
+			[Bindable]
+			var users : Array = [ user ];
+			
+			var dupa : Array = [ "asdf", "asdf", "dgh" ];
+				
+			private function onCreationComplete() : void {
+				user.id = 1;
+				user.forname = "Janek";
+				user.surname = "Kłosiński";
+				user.email = "vanjan@gmail.com";
+			}
+			
+			private function labelFunction( data : UserVO, column : DataGridColumn ) : String {
+				return data.forname + " " + data.surname;
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:DataGrid id="dg" dataProvider="{ users }">
+		<mx:columns>
+			<mx:DataGridColumn labelFunction="labelFunction" headerText="Imię i nazwisko" />
+			<mx:DataGridColumn dataField="email" />
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:DataGrid>
+		<mx:ArrayCollection>
+			<mx:Object>
+				<mx:Artist>Pavement</mx:Artist>
+				<mx:Price>11.99</mx:Price>
+				<mx:Album>Slanted and Enchanted</mx:Album>
+			</mx:Object>
+			<mx:Object>
+				<mx:Artist>Pavement</mx:Artist>
+				<mx:Album>Brighten the Corners</mx:Album>
+				<mx:Price>11.99</mx:Price>
+			</mx:Object>
+		</mx:ArrayCollection>
+	</mx:DataGrid>
+	
+</mx:Application>

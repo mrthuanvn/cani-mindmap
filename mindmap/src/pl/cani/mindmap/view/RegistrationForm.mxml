@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Form label="@Resource( key = 'registrationFormTitle' )" width="100%" height="100%" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:validators="pl.cani.mindmap.validators.*"
+	defaultButton="{ registerBtn }" 
+	creationComplete="onCreationComplete()" show="resetFocus()">
+	
+	<mx:Script>
+		<![CDATA[
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import com.adobe.cairngorm.view.ViewLocator;
+			import pl.cani.mindmap.view.helpers.RegistrationFormHelper;
+			import pl.cani.mindmap.model.AppModelLocator;
+
+			[Bindable]
+			public var formIsValid : Boolean = false;
+
+			private var helper : RegistrationFormHelper;
+
+
+			private function onCreationComplete() : void {
+				AppModelLocator.getInstance().registrationForm = this;
+				
+				helper = new RegistrationFormHelper( this );
+				
+				ViewLocator.getInstance().register( 
+					ViewNames.REGISTRATION_FORM, helper ); 
+				
+				resetFocus();
+			}
+			
+			private function resetFocus() : void {
+            	focusManager.setFocus( fornameTxt );	
+            }
+            
+		]]>
+	</mx:Script>
+	
+	<mx:StringValidator id="fornameValidator" required="true" 
+		source="{ fornameTxt }" property="text" />
+	<mx:StringValidator id="surnameValidator" required="true" 
+		source="{ surnameTxt }" property="text" />
+	<validators:RegisteredEmailValidator id="registeredEmailValidator"
+		source="{ emailTxt }" property="text" />
+	<mx:StringValidator id="password1Validator" source="{ password1Txt }"
+		property="text" minLength="6" />
+	<validators:PasswordValidator id="password2Validator" source="{ password2Txt }"
+		property="text" passwordToMatch="{ password1Txt.text }" />
+	
+	
+	<mx:FormItem label="@Resource( key = 'fornameLbl' )">
+		<mx:TextInput id="fornameTxt" change="helper.validateForm( event )" />
+	</mx:FormItem>
+	<mx:FormItem label="@Resource( key = 'surnameLbl' )">
+		<mx:TextInput id="surnameTxt" change="helper.validateForm( event )" />
+	</mx:FormItem>
+	<mx:FormItem label="E-mail">
+		<mx:TextInput id="emailTxt" change="helper.validateForm( event )" />
+	</mx:FormItem>
+	<mx:FormItem label="@Resource( key = 'password1Lbl' )">
+		<mx:TextInput id="password1Txt" displayAsPassword="true"
+			change="helper.validateForm( event )" />
+	</mx:FormItem>
+	<mx:FormItem label="@Resource( key = 'password2Lbl' )">
+		<mx:TextInput id="password2Txt" displayAsPassword="true"
+			change="helper.validateForm( event )" />
+	</mx:FormItem>
+	<mx:FormItem>
+		<mx:Button label="@Resource( key = 'registerBtn' )" id="registerBtn" 
+			click="helper.register()" enabled="{ formIsValid }" />
+	</mx:FormItem>
+	
+</mx:Form>
