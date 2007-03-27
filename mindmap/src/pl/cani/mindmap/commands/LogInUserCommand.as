@@ -4,6 +4,7 @@ package pl.cani.mindmap.commands {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.adobe.cairngorm.view.ViewLocator;
+	import com.mikenimer.components.Debug;
 	
 	import flash.net.SharedObject;
 	
@@ -18,9 +19,9 @@ package pl.cani.mindmap.commands {
 	import pl.cani.mindmap.events.LoggingEvent;
 	import pl.cani.mindmap.model.AppModelLocator;
 	import pl.cani.mindmap.view.helpers.LoginFormHelper;
+	import pl.cani.mindmap.view.helpers.MainViewHelper;
 	import pl.cani.mindmap.view.helpers.ViewNames;
 	import pl.cani.mindmap.vo.UserVO;
-	import pl.cani.mindmap.view.helpers.MainViewHelper;
 
 
 	public class LogInUserCommand implements ICommand, IResponder {
@@ -86,6 +87,7 @@ package pl.cani.mindmap.commands {
 		}
 		
 		public function fault( info : Object ) : void {
+			Debug.show( info );
 		}
 		
 	}
