@@ -1,0 +1,101 @@
+<weborb servicePath="../Services">
+
+<services>
+    <service>
+        <name>flashorbHttpHandler</name>
+        <serviceId>Weborb.ORBHttpHandler</serviceId>
+    </service>
+    <service>
+        <name>weborb.tests.PrimitiveTest</name>
+        <serviceId>weborb.tests.PrimitiveTest</serviceId>
+    </service>
+    <service>
+        <name>weborb.tests.DatabaseTest</name>
+        <serviceId>weborb.tests.DatabaseTestMsSql</serviceId>
+    </service>
+</services>
+
+    <classMappings>    
+        <classMapping>
+            <clientClass>flex.messaging.messages.CommandMessage</clientClass>
+            <serverClass>Weborb.V3Types.ReqMessage</serverClass>
+        </classMapping>
+        <classMapping>
+            <clientClass>flex.messaging.messages.RemotingMessage</clientClass>
+            <serverClass>Weborb.V3Types.ReqMessage</serverClass>
+        </classMapping>
+        <classMapping>
+            <clientClass>flex.messaging.messages.AcknowledgeMessage</clientClass>
+            <serverClass>Weborb.V3Types.AckMessage</serverClass>
+        </classMapping>
+        <classMapping>
+            <clientClass>flex.data.messages.DataMessage</clientClass>
+            <serverClass>Weborb.V3Types.DataMessage</serverClass>
+        </classMapping>
+        <classMapping>
+            <clientClass>flex.data.messages.PagedMessage</clientClass>
+            <serverClass>Weborb.V3Types.PagedMessage</serverClass>
+        </classMapping>
+        <classMapping>
+            <clientClass>flex.data.messages.SequencedMessage</clientClass>
+            <serverClass>Weborb.V3Types.SeqMessage</serverClass>
+        </classMapping>        
+        <classMapping>
+            <clientClass>flex.messaging.messages.ErrorMessage</clientClass>
+            <serverClass>Weborb.V3Types.ErrMessage</serverClass>
+        </classMapping>
+        <classMapping>
+          <clientClass>flex.messaging.messages.DataErrorMessage</clientClass>
+          <serverClass>Weborb.V3Types.ErrDataMessage</serverClass>
+        </classMapping>    
+        <classMapping>
+            <clientClass>RecordSet</clientClass>
+            <serverClass>Weborb.Reader.Dataset.DataSetInfo</serverClass>
+        </classMapping>
+        <!--
+        <classMapping>
+            <clientClass>flex.data.messages.UpdateCollectionMessage</clientClass>
+            <serverClass>Weborb.V3Types.UpdateCollMessage</serverClass>
+        </classMapping>
+        <classMapping>
+            <clientClass>flex.data.UpdateCollectionRange</clientClass>
+            <serverClass>Weborb.V3Types.UpdateCollRange</serverClass>
+        </classMapping> 
+        -->        
+        
+        <!-- info service -->
+        <classMapping>
+        	<clientClass>info_service.ComputerInfo</clientClass>
+        	<serverClass>info_service.ComputerInfo</serverClass>
+        </classMapping>
+        
+        <!-- mind map -->
+        
+        <!-- VO -->
+        
+        <classMapping>
+        	<clientClass>pl.cani.mindmap.vo.UserVO</clientClass>
+        	<serverClass>pl.cani.mindmap.vo.UserVO</serverClass>
+        </classMapping>
+        
+        <!-- exceptions -->
+        
+        <classMapping>
+        	<clientClass>pl.cani.mindmap.business.exceptions.UserAlreadyExistsException</clientClass>
+        	<serverClass>pl.cani.mindmap.business.exceptions.UserAlreadyExistsException</serverClass>
+        </classMapping>
+        <classMapping>
+        	<clientClass>pl.cani.mindmap.business.exceptions.UserDoesntExistException</clientClass>
+        	<serverClass>pl.cani.mindmap.business.exceptions.UserDoesntExistException</serverClass>
+        </classMapping>
+        <classMapping>
+        	<clientClass>pl.cani.mindmap.business.exceptions.UserNotActivatedException</clientClass>
+        	<serverClass>pl.cani.mindmap.business.exceptions.UserNotActivatedException</serverClass>
+        </classMapping>
+        <classMapping>
+        	<clientClass>pl.cani.mindmap.business.exceptions.WrongPasswordException</clientClass>
+        	<serverClass>pl.cani.mindmap.business.exceptions.WrongPasswordException</serverClass>
+        </classMapping>
+        
+    </classMappings>
+</weborb>
