@@ -22,6 +22,7 @@ package pl.cani.mindmap.business {
    			var ts : TestSuite = new TestSuite();
    			
    			ts.addTest( new RegistrationServiceTest( "testRegisterUser" ) );
+   			ts.addTest( new RegistrationServiceTest( "testSayHello" ) );
 
    			return ts;
    		}
@@ -42,11 +43,24 @@ package pl.cani.mindmap.business {
 			remoteObject.registerUser( user );
    		}
    		
-   		private function onRegisterResult( result : ResultEvent ) : void {
+   		public function onRegisterResult( result : ResultEvent ) : void {
    			assertTrue( result.result is int );
+//			assertEquals( result.result, "ok" );
    		}
    		
-   		private function onFault( fault : FaultEvent ) : void {
+   		public function testSayHello() : void {
+			var remoteObject : RemoteObject = new RemoteObject( DESTINATION );
+			remoteObject.sayHello.addEventListener( ResultEvent.RESULT, 
+				addAsync( onSayHelloResult, TIMEOUT ) );
+			remoteObject.addEventListener( FaultEvent.FAULT, onFault );
+   			remoteObject.sayHello();
+   		}
+   		
+   		public function onSayHelloResult( result : ResultEvent ) : void {
+   			assertEquals( result.result, "Hello world!" );
+   		}
+   		
+   		public function onFault( fault : FaultEvent ) : void {
    			fail( fault.fault.message );
    		}
   		
