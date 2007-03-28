@@ -1,4 +1,4 @@
-package pl.cani.test.business {
+package pl.cani.mindmap.business {
 	
 	import flexunit.framework.TestCase;
  	import flexunit.framework.TestSuite;

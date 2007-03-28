@@ -7,12 +7,12 @@
 			import mx.controls.dataGridClasses.DataGridColumn;
 			import pl.cani.mindmap.vo.UserVO;
 			
-			var user : UserVO = new UserVO();
+			private var user : UserVO = new UserVO();
 
 			[Bindable]
-			var users : Array = [ user ];
+			private var users : Array = [ user ];
 			
-			var dupa : Array = [ "asdf", "asdf", "dgh" ];
+			private var dupa : Array = [ "asdf", "asdf", "dgh" ];
 				
 			private function onCreationComplete() : void {
 				user.id = 1;
