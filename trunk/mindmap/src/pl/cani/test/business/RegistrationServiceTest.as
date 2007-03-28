@@ -12,6 +12,7 @@ package pl.cani.test.business {
   		
   		private static const DESTINATION : String 
   			= "mindmapRegistrationServiceDestination";
+  		private static const TIMEOUT : Number = 5000;
   		
   	    public function RegistrationServiceTest( methodName : String ) {
    			super( methodName );
@@ -29,27 +30,24 @@ package pl.cani.test.business {
   			var user : UserVO = new UserVO();
   			user.forname = "test";
   			user.surname = "user";
-  			user.email = "test@test.pl";
+  			user.email = "test2@test.pl";
   			user.password = "testpass";
   			user.isActive = false;
   			user.activationKey = "activationKey";
   			
 			var remoteObject : RemoteObject = new RemoteObject( DESTINATION );
-			remoteObject.addEventListener( "result", onResult );
-			remoteObject.addEventListener( "fault", onFault );
+			remoteObject.registerUser.addEventListener( ResultEvent.RESULT, 
+				addAsync( onRegisterResult, TIMEOUT ) );
+			remoteObject.addEventListener( FaultEvent.FAULT, onFault );
 			remoteObject.registerUser( user );
-			
-//			fail();
    		}
    		
-   		private function onResult( event : Event ) : void {
-   			assertTrue( event is ResultEvent );
-   			var resultEvent : ResultEvent = event as ResultEvent;
-   			trace( resultEvent.result );
+   		private function onRegisterResult( result : ResultEvent ) : void {
+   			assertTrue( result.result is int );
    		}
    		
-   		private function onFault( event : Event ) : void {
-   			fail( ( event as FaultEvent ).fault.message );
+   		private function onFault( fault : FaultEvent ) : void {
+   			fail( fault.fault.message );
    		}
   		
   	}

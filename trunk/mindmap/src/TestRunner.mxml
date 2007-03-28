@@ -26,11 +26,11 @@
  				
  				// TODO: Add more tests here to test more classes
  				// by calling addTest as often as necessary
-// 				ts.addTest( RegistrationServiceTest.suite() );
+ 				ts.addTest( RegistrationServiceTest.suite() );
 // 				ts.addTest( LoginRegistrationHelperTest.suite() );
 // 				ts.addTest( SWFAddressHandlerTest.suite() );
 // 				ts.addTest( EventFactoryTest.suite() );
-				ts.addTest( LoginServiceDelegateTest.suite() );
+//				ts.addTest( LoginServiceDelegateTest.suite() );
  				
  				return ts;
  			}
