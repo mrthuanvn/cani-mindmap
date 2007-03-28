@@ -1,18 +1,22 @@
 package pl.cani.mindmap.business {
 	
+	import flash.events.Event;
+	
 	import flexunit.framework.TestCase;
- 	import flexunit.framework.TestSuite;
- 	import mx.rpc.remoting.RemoteObject;
- 	import pl.cani.mindmap.vo.UserVO;
- 	import flash.events.Event;
- 	import mx.rpc.events.ResultEvent;
- 	import mx.rpc.events.FaultEvent;
+	import flexunit.framework.TestSuite;
+	
+	import mx.rpc.events.FaultEvent;
+	import mx.rpc.events.ResultEvent;
+	import mx.rpc.remoting.RemoteObject;
+	
+	import pl.cani.mindmap.vo.UserVO;
+	import pl.cani.mindmap.business.exceptions.UserAlreadyExistsException;
  	
  	public class RegistrationServiceTest extends TestCase {
   		
   		private static const DESTINATION : String 
   			= "mindmapRegistrationServiceDestination";
-  		private static const TIMEOUT : Number = 5000;
+  		private static const TIMEOUT : Number = 10000;
   		
   	    public function RegistrationServiceTest( methodName : String ) {
    			super( methodName );
@@ -22,8 +26,7 @@ package pl.cani.mindmap.business {
    			var ts : TestSuite = new TestSuite();
    			
    			ts.addTest( new RegistrationServiceTest( "testRegisterUser" ) );
-   			ts.addTest( new RegistrationServiceTest( "testSayHello" ) );
-
+   			ts.addTest( new RegistrationServiceTest( "testUserExists" ) );
    			return ts;
    		}
   		
@@ -44,20 +47,24 @@ package pl.cani.mindmap.business {
    		}
    		
    		public function onRegisterResult( result : ResultEvent ) : void {
-   			assertTrue( result.result is int );
-//			assertEquals( result.result, "ok" );
+   			assertTrue( typeof( result.result ) + ": " + result.result, 
+   				result.result is int );
    		}
    		
-   		public function testSayHello() : void {
+   		public function testUserExists() : void {
+  			var user : UserVO = new UserVO();
+  			user.email = "van_jan@o2.pl";
+  			
 			var remoteObject : RemoteObject = new RemoteObject( DESTINATION );
-			remoteObject.sayHello.addEventListener( ResultEvent.RESULT, 
-				addAsync( onSayHelloResult, TIMEOUT ) );
+			remoteObject.registerUser.addEventListener( ResultEvent.RESULT, 
+				addAsync( onUserExistsResult, TIMEOUT ) );
 			remoteObject.addEventListener( FaultEvent.FAULT, onFault );
-   			remoteObject.sayHello();
+			remoteObject.registerUser( user );
    		}
    		
-   		public function onSayHelloResult( result : ResultEvent ) : void {
-   			assertEquals( result.result, "Hello world!" );
+   		public function onUserExistsResult( result : ResultEvent ) : void {
+   			assertTrue( typeof( result.result ) + ": " + result.result, 
+   				result.result is UserAlreadyExistsException );
    		}
    		
    		public function onFault( fault : FaultEvent ) : void {
