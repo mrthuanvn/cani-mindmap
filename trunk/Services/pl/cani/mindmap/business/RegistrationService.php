@@ -21,8 +21,10 @@ class RegistrationService {
 			$userDao->findByEmail( $user->email );
 			return new UserAlreadyExistsException( "User already exists", $user );
 		} catch ( UserNotFoundException $e ) {
-			EmailService::sendActivationEmail( $user );
-			return $userDao->addUser( $user );
+			// TODO: wlaczyc wysylanie maili na serwerze
+//			EmailService::sendActivationEmail( $user );
+			$userId = $userDao->addUser( $user );
+			return $userId;
 		}
 	}
 	
@@ -38,7 +40,7 @@ class RegistrationService {
 			return false;
 		}
 	}
-
+	
 }
 
 //$rs = new RegistrationService();
