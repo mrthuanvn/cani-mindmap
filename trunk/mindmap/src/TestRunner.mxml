@@ -4,6 +4,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.test.business.LoginServiceDelegateTest;
 			import pl.cani.test.events.EventFactoryTest;
 			import pl.cani.test.utils.SWFAddressHandlerTest;
 			import pl.cani.test.view.helper.LoginRegistrationHelperTest;
@@ -25,10 +26,11 @@
  				
  				// TODO: Add more tests here to test more classes
  				// by calling addTest as often as necessary
- 				ts.addTest( RegistrationServiceTest.suite() );
+// 				ts.addTest( RegistrationServiceTest.suite() );
 // 				ts.addTest( LoginRegistrationHelperTest.suite() );
 // 				ts.addTest( SWFAddressHandlerTest.suite() );
 // 				ts.addTest( EventFactoryTest.suite() );
+				ts.addTest( LoginServiceDelegateTest.suite() );
  				
  				return ts;
  			}
