@@ -28,8 +28,7 @@ class EmailService {
 			"Content-Type: text/plain; charset=\"utf-8\"\r\n" .
 			"Content-Transfer-Encoding: 8bit\r\n\r\n";
 
-//		TODO: włączyć wysyłanie maili na serwerze		
-//		mail( $to, $subject, $body, $headers );
+		mail( $to, $subject, $body, $headers );
 	}
 
 }
