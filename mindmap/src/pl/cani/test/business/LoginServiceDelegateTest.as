@@ -13,6 +13,8 @@ package pl.cani.test.business {
 	import pl.cani.mindmap.business.exceptions.UserDoesntExistException;
 	import pl.cani.mindmap.business.exceptions.WrongPasswordException;
 	import pl.cani.mindmap.business.exceptions.UserNotActivatedException;
+	import com.adobe.crypto.MD5;
+	import pl.cani.mindmap.vo.UserVO;
 
 	public class LoginServiceDelegateTest extends TestCase 
 	{
@@ -37,8 +39,8 @@ package pl.cani.test.business {
 		}
 		
 		public function testLoginUser() : void {
-			var email : String = "van_jan@o2.pl";
-			var password : String = "avejuve";
+			var email : String = "test@test.pl";
+			var password : String = MD5.hash( "testpass" );
 			
 			var service : RemoteObject = new RemoteObject( DESTINATION );
 			service.loginUser.addEventListener( ResultEvent.RESULT, 
@@ -47,8 +49,8 @@ package pl.cani.test.business {
 			service.loginUser( email, password );
 		}
 		
-		public function onLoginResult( data : Object ) : void {
-			assertTrue( "test login result", data is ResultEvent );
+		public function onLoginResult( result : ResultEvent ) : void {
+			assertTrue( result.result is UserVO );
 		}
 		
 		public function testWrongEmail() : void {
