@@ -16,7 +16,7 @@ package pl.cani.mindmap.business {
   		
   		private static const DESTINATION : String 
   			= "mindmapRegistrationServiceDestination";
-  		private static const TIMEOUT : Number = 10000;
+  		private static const TIMEOUT : Number = 5000;
   		
   	    public function RegistrationServiceTest( methodName : String ) {
    			super( methodName );
