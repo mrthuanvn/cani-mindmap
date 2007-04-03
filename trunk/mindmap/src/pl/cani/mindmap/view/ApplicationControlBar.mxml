@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ApplicationControlBar xmlns:mx="http://www.adobe.com/2006/mxml" width="100%"
+	creationComplete="onCreationComplete()">
+	
+	<mx:Script>
+		<![CDATA[
+			import pl.cani.mindmap.vo.UserVO;
+			import mx.utils.StringUtil;
+			import mx.resources.ResourceBundle;
+			
+			[ResourceBundle( "ApplicationControlBar" )]
+			private var rb : ResourceBundle;
+			
+			private function onCreationComplete() : void {
+				var sharedObject : SharedObject = SharedObject.getLocal( 
+				var loggedInUser : UserVO
+				
+				var welcomeLabel : String = rb.getString( "welcomeLbl" );
+				StringUtil.substitute( welcomeLabel, 
+				welcomeLbl.text = 
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Label text="@Resource( key = 'welcomeLbl' )" id="welcomeLbl"/>
+		<mx:Spacer width="100%"/>
+		<mx:LinkButton label="@Resource( key = 'logout' )" 
+			id="logOutLnkBtn" click="helper.logout()"/>
+</mx:ApplicationControlBar>
