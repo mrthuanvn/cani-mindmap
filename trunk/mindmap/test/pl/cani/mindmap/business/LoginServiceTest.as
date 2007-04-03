@@ -1,28 +1,28 @@
 package pl.cani.mindmap.business {
 	
+	import com.adobe.crypto.MD5;
+	
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;
 	
+	import mx.events.ResizeEvent;
 	import mx.rpc.IResponder;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.remoting.RemoteObject;
 	
-	import pl.cani.mindmap.business.LoginServiceDelegate;
-	import mx.events.ResizeEvent;
 	import pl.cani.mindmap.business.exceptions.UserDoesntExistException;
-	import pl.cani.mindmap.business.exceptions.WrongPasswordException;
 	import pl.cani.mindmap.business.exceptions.UserNotActivatedException;
-	import com.adobe.crypto.MD5;
+	import pl.cani.mindmap.business.exceptions.WrongPasswordException;
 	import pl.cani.mindmap.vo.UserVO;
 
-	public class LoginServiceDelegateTest extends TestCase 
+	public class LoginServiceTest extends TestCase 
 	{
 		
 		private const DESTINATION : String = "mindmapLoginServiceDestination";
 		private const TIMEOUT : Number = 5000;
 		
-		public function LoginServiceDelegateTest(methodName:String=null)
+		public function LoginServiceTest(methodName:String=null)
 		{
 			super(methodName);
 		}
@@ -30,10 +30,10 @@ package pl.cani.mindmap.business {
 		public static function suite() : TestSuite {
 			var ts : TestSuite = new TestSuite();
    			
-   			ts.addTest( new LoginServiceDelegateTest( "testLoginUser" ) );
-  			ts.addTest( new LoginServiceDelegateTest( "testWrongEmail" ) );
-  			ts.addTest( new LoginServiceDelegateTest( "testWrongPassword" ) );
-  			ts.addTest( new LoginServiceDelegateTest( "testNotActive" ) );
+   			ts.addTest( new LoginServiceTest( "testLoginUser" ) );
+  			ts.addTest( new LoginServiceTest( "testWrongEmail" ) );
+  			ts.addTest( new LoginServiceTest( "testWrongPassword" ) );
+  			ts.addTest( new LoginServiceTest( "testNotActive" ) );
 
    			return ts;
 		}

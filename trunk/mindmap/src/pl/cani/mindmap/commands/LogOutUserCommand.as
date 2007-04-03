@@ -6,14 +6,12 @@ package pl.cani.mindmap.commands {
 	import pl.cani.mindmap.view.helpers.ViewNames;
 	import pl.cani.mindmap.view.helpers.MainViewHelper;
 	import flash.net.SharedObject;
+	import pl.cani.mindmap.business.SessionAndPersitentData;
 
 	public class LogOutUserCommand implements ICommand {
 		
 		public function execute( event : CairngormEvent ) : void {
-			var so : SharedObject = SharedObject.getLocal( "mindmap" );
-			so.data.user = null;
-			so.data.rememberMe = false;
-			so.flush();
+			SessionAndPersitentData.getInstance().setRememberUser( false );
 			
 			var mainViewHelper : MainViewHelper = ViewLocator.getInstance()
 				.getViewHelper( ViewNames.MAIN ) as MainViewHelper;

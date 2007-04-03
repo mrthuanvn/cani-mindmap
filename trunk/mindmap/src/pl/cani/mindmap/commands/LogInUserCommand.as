@@ -22,6 +22,7 @@ package pl.cani.mindmap.commands {
 	import pl.cani.mindmap.view.helpers.MainViewHelper;
 	import pl.cani.mindmap.view.helpers.ViewNames;
 	import pl.cani.mindmap.vo.UserVO;
+	import pl.cani.mindmap.business.SessionAndPersitentData;
 
 
 	public class LogInUserCommand implements ICommand, IResponder {
@@ -66,11 +67,9 @@ package pl.cani.mindmap.commands {
 
 			} else if ( result is UserVO ) {
 				var user : UserVO = result as UserVO;
-
-				var sharedObject : SharedObject = SharedObject.getLocal( "mindmap" );
-				sharedObject.data.user = user;
-				sharedObject.data.rememberMe = helper.isRememberMeSet();
-				sharedObject.flush();
+                var rememberUser : Boolean = helper.isRememberMeSet();
+                SessionAndPersitentData.getInstance()
+                .setLoggedInUser( user, rememberUser );
 
 				var mainViewHelper : MainViewHelper = ViewLocator.getInstance()
 					.getViewHelper( ViewNames.MAIN ) as MainViewHelper;

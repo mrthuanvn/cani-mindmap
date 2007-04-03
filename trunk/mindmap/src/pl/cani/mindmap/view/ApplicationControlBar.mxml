@@ -4,6 +4,12 @@
 	
 	<mx:Script>
 		<![CDATA[
+		    import pl.cani.mindmap.events.LogOutEvent;
+		    import com.adobe.cairngorm.control.CairngormEventDispatcher;
+		    import pl.cani.mindmap.view.helpers.ViewNames;
+		    import com.adobe.cairngorm.view.ViewLocator;
+		    import pl.cani.mindmap.view.helpers.MainViewHelper;
+		    import pl.cani.mindmap.business.SessionAndPersitentData;
 			import pl.cani.mindmap.vo.UserVO;
 			import mx.utils.StringUtil;
 			import mx.resources.ResourceBundle;
@@ -12,12 +18,17 @@
 			private var rb : ResourceBundle;
 			
 			private function onCreationComplete() : void {
-				var sharedObject : SharedObject = SharedObject.getLocal( 
-				var loggedInUser : UserVO
+				var loggedInUser : UserVO 
+				    = SessionAndPersitentData.getInstance().getLoggedInUser();
 				
-				var welcomeLabel : String = rb.getString( "welcomeLbl" );
-				StringUtil.substitute( welcomeLabel, 
-				welcomeLbl.text = 
+				var welcomeText : String = rb.getString( "welcomeLbl" );
+				StringUtil.substitute( welcomeText, loggedInUser.forname );
+				welcomeLbl.text = welcomeText;
+			}
+			
+			private function logout() : void {
+			    CairngormEventDispatcher.getInstance().dispatchEvent(
+    				new LogOutEvent() );
 			}
 			
 		]]>
@@ -26,5 +37,5 @@
 	<mx:Label text="@Resource( key = 'welcomeLbl' )" id="welcomeLbl"/>
 		<mx:Spacer width="100%"/>
 		<mx:LinkButton label="@Resource( key = 'logout' )" 
-			id="logOutLnkBtn" click="helper.logout()"/>
+			id="logOutLnkBtn" click="logout()" />
 </mx:ApplicationControlBar>
