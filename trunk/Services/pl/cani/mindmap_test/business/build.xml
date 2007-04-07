@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<!-- This is a test script for the SQLExec task.  You will
+	want to modify this for your DB information; the alternative
+	would be to add many INPUT tasks, but I prefer to keep it simple
+	for now. -->
+	
+<project name="testSetUp" basedir="." default="populateDB">
+
+	<taskdef name="md5" classname="phing.tasks.my.MD5Task" />
+
+	<target name="populateDB">
+		<md5 str="testpass" returnProperty="password" />	
+		<sql 	  
+		 url="mysql://localhost/mindmap"
+		 userid="root" 
+		 password="" 
+		 print="true">
+			INSERT INTO users ( email, password, isActive ) 
+				VALUES ( 'test@test.pl', '${password}', 1 );
+			INSERT INTO users ( email, password, isActive ) 
+				VALUES ( 'not@active.pl', '${password}', 0 );
+		</sql>  
+	</target>
+	
+	<target name="cleanDB">	
+		<sql 	  
+		 url="mysql://localhost/mindmap"
+		 userid="root" 
+		 password="" 
+		 print="true">
+			DELETE FROM users WHERE email = 'test@test.pl';
+			DELETE FROM users WHERE email = 'not@active.pl';
+		</sql>  
+	</target>
+
+	<target name="listDB">	
+		<sql 	  
+		 url="mysql://localhost/mindmap"
+		 userid="root" 
+		 password="" 
+		 print="true">
+			SELECT * FROM users;
+		</sql>  
+	</target>
+
+</project>
