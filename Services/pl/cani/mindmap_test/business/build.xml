@@ -5,7 +5,7 @@
 	would be to add many INPUT tasks, but I prefer to keep it simple
 	for now. -->
 	
-<project name="testSetUp" basedir="." default="populateDB">
+<project name="testSetUp" basedir="." default="cleanDB">
 
 	<taskdef name="md5" classname="phing.tasks.my.MD5Task" />
 
@@ -43,5 +43,11 @@
 			SELECT * FROM users;
 		</sql>  
 	</target>
-
+<!-- 	
+	<target name="runTests" depends="populateDB">
+		<simpletest>
+			<fileset dir="tests" includes="**Test.php"/>
+		</simpletest>
+	</target>
+ -->
 </project>
