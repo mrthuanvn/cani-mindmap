@@ -47,10 +47,12 @@
 		-->
 			<mx:AddChild position="lastChild">
 			    <view:ApplicationControlBar id="appCtrlBar" x="0" y="0"  
-            	    width="100%" visible="false" />
+            	    width="100%" creationComplete="showAppCtrlBar.play()" />
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
 				<mx:HDividedBox x="0" y="41" width="100%" height="336">
+					<view:ManagementPanel>
+					</view:ManagementPanel>
 					<mx:Canvas width="200" height="200">
 					</mx:Canvas>
 				</mx:HDividedBox>
@@ -71,24 +73,20 @@
 		</mx:Transition>
 		<mx:Transition id="toLoggedInFromLoggedOut" toState="loggedIn" 
 			fromState="loggedOut">
-			<mx:Parallel>
-				<mx:Sequence target="{ loginAndRegistration }">
-					<mx:Move xTo="{ -loginAndRegistration.width }" duration="500"
-						easingFunction="Quintic.easeInOut" 
-						id="hideLoginAndRegistration" />
-					<mx:SetPropertyAction name="visible" value="false" />
-		            <mx:SetPropertyAction name="includeInLayout" value="false" />
-				</mx:Sequence>
-				<mx:Sequence target="{ appCtrlBar }">
-					<mx:SetPropertyAction name="visible" />
-		            <mx:SetPropertyAction name="includeInLayout"/>
-		            <mx:Move yFrom="{ -appCtrlBar.height }" duration="500"
-						easingFunction="Quintic.easeInOut" />
-				</mx:Sequence>
-			</mx:Parallel>
-			
+
+			<mx:Sequence target="{ loginAndRegistration }">
+				<mx:Move xTo="{ -loginAndRegistration.width }" duration="500"
+					easingFunction="Quintic.easeInOut" 
+					id="hideLoginAndRegistration" />
+				<mx:SetPropertyAction name="visible" value="false" />
+	            <mx:SetPropertyAction name="includeInLayout" value="false" />
+			</mx:Sequence>
 		</mx:Transition>
 	</mx:transitions>
+	
+	<mx:Move id="showAppCtrlBar" target="{ appCtrlBar }" 
+		yFrom="{ -appCtrlBar.height }" duration="500"
+		easingFunction="Quintic.easeInOut" />
 
 	<view:LoginRegistration id="loginAndRegistration" includeInLayout="false"
 		visible="false" verticalCenter="0" horizontalCenter="0" />

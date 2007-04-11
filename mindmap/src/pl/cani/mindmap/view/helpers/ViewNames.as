@@ -9,6 +9,8 @@ package pl.cani.mindmap.view.helpers {
 		public static const REGISTRATION_FORM : String = "registration";
 		public static const LOGIN_FORM : String = "login";
 		
+		public static const MANAGEMENT_PANEL : String = "managementPanel";
+		
 	}
 
 }

@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Mindmap management" layout="absolute">
 
-	<mx:Label x="10" y="12" text="My mindmaps" id="myMindmapsLbl"/>
-	<mx:ComboBox id="mindmapsCbx" x="101" y="10"></mx:ComboBox>
-	<mx:DataGrid x="0" y="52">
-		<mx:columns>
-			<mx:DataGridColumn headerText="Column 1" dataField="col1"/>
-			<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
-			<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
-		</mx:columns>
-	</mx:DataGrid>
-	<mx:Button x="10" y="202" label="Grant privilages" id="grantPrivilagesBtn"/>
+	<mx:Script>
+		<![CDATA[
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import com.adobe.cairngorm.view.ViewLocator;
+			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
+			
+			private var helper : ManagementPanelHelper;
+			
+			private function onCreationComplete() : void {
+				helper = new ManagementPanelHelper();
+				ViewLocator.getInstance().register( ViewNames.MANAGEMENT_PANEL, helper );
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:states>
+		<mx:State name="createMindmap">
+			<mx:AddChild relativeTo="{vbox1}" position="lastChild">
+				<mx:TextInput id="mindmapNameTxt"/>
+			</mx:AddChild>
+			<mx:SetProperty target="{createMindMapBtn}" name="label" 
+				value="@Resource( 'saveMindmap' )" />
+			<mx:SetEventHandler target="{createMindMapBtn}" name="click" 
+				handler="helper.createMindMap()"/>
+		</mx:State>
+	</mx:states>
+
+	<mx:VBox x="10" bottom="10" top="10" id="vbox1">
+		<mx:HBox width="100%">
+			<mx:Label text="@Resource( 'myMindmaps' )" id="myMindmapsLbl"/>
+			<mx:ComboBox id="mindmapsCbx"></mx:ComboBox>
+		</mx:HBox>
+		<mx:DataGrid>
+			<mx:columns>
+				<mx:DataGridColumn headerText="Column 1" dataField="col1"/>
+				<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
+				<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
+			</mx:columns>
+		</mx:DataGrid>
+		<mx:HBox width="100%">
+			<mx:Button label="@Resource( 'grantPrivilages' )" id="grantPrivilagesBtn"/>
+			<mx:Button label="@Resource( 'createMindmap' )" id="createMindMapBtn" click="currentState = 'createMindmap'"/>
+		</mx:HBox>
+	</mx:VBox>
 
 </mx:Panel>
