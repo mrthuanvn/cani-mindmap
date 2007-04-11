@@ -20,9 +20,11 @@
 			private function onCreationComplete() : void {
 				var loggedInUser : UserVO 
 				    = SessionAndPersitentData.getInstance().getLoggedInUser();
-				
+
 				var welcomeText : String = rb.getString( "welcomeLbl" );
-				StringUtil.substitute( welcomeText, loggedInUser.forname );
+				welcomeText 
+					= StringUtil.substitute( welcomeText, loggedInUser.forname );
+
 				welcomeLbl.text = welcomeText;
 			}
 			
