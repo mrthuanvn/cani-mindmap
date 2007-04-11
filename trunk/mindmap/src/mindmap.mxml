@@ -12,7 +12,6 @@
 			import com.asual.swfaddress.SWFAddress;
 			
 			private function initSWFAddress() : void {
-				trace( "applicationComplete" );
 				SWFAddress.onChange = SWFAddressHandler.handle;
 				stage.frameRate = 31;
 			}

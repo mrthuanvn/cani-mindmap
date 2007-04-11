@@ -7,13 +7,13 @@ package pl.cani.mindmap.business {
         
         private static var instance : SessionAndPersitentData = null;
         
-        private const SHARED_OBJECT_NAME : String = "mindmap";
-        
+        public static const SHARED_OBJECT_NAME : String = "mindmap";
+
         private var loggedInUser : UserVO;
         private var sharedObject : SharedObject;
         
         
-        public function SessionAndPersistentData() {
+        public function SessionAndPersitentData() {
             sharedObject = SharedObject.getLocal( SHARED_OBJECT_NAME );
             loggedInUser = sharedObject.data.user;
         }
@@ -38,7 +38,9 @@ package pl.cani.mindmap.business {
             if ( remember ) {
                 sharedObject.data.user = loggedInUser;
             } else {
-                delete sharedObject.data.user;
+            	if ( sharedObject.data != null ) {
+                	delete sharedObject.data.user;
+             	}
             }
             sharedObject.flush();
         }
