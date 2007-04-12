@@ -9,14 +9,11 @@ require_once( WebOrbServicesPath . "pl/cani/mindmap/utils/ActivationKey.php" );
 
 class MySQLUserDAO implements UserDAO {
 	
-	private $users = array();
-
 	private $instance;
 	
 	private $usersTbl;
 	
 	private function MySQLUserDAO() {
-//		$this->users = $this->createUsers();
 		$this->usersTbl = DBUtils::createTableName( "users" );
 	}
 	
@@ -102,37 +99,7 @@ class MySQLUserDAO implements UserDAO {
 		
 		return $user;
 	}
-	
-	private function createUsers() {
-		$users = array();
 		
-//		$db =& MDB2::connect( "mysql://root@localhost/test" );
-//		
-//		$res =& $db->query( "SELECT * FROM users" );
-//		while ( $row = $res->fetchRow() ) {
-//			$user = new User();
-//			$user->id = $row[ "id" ];
-//			$user->login = $row[ "login" ];
-//			$user->password = $row[ "password" ];
-//			
-//			array_push( $users, $user );
-//		}
-
-		$db = new CDB();
-		$sql = "SELECT * FROM users";
-		$db->query( $sql );
-		while ( $db->nextRecord() ) {
-			$user = new User();
-			$user->id = $db->record[ "id" ];
-			$user->login = $db->record[ "login" ];
-			$user->password = $db->record[ "password" ];
-			
-			array_push( $users, $user );
-		}
-		
-		return $users;
-	}
-	
 }
 
 
