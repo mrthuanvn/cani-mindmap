@@ -4,6 +4,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.business.MindmapServiceTest;
 			import pl.cani.mindmap.business.SessionAndPersistentDataTest;
 			import pl.cani.mindmap.business.RegistrationServiceTest;
 			import pl.cani.mindmap.business.LoginServiceTest;
@@ -29,7 +30,8 @@
 // 				ts.addTest( SWFAddressHandlerTest.suite() );
 // 				ts.addTest( EventFactoryTest.suite() );
 //				ts.addTest( LoginServiceTest.suite() );
-				ts.addTest( SessionAndPersistentDataTest.suite() );
+//				ts.addTest( SessionAndPersistentDataTest.suite() );
+				ts.addTest( MindmapServiceTest.suite() );
  				
  				return ts;
  			}
