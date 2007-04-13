@@ -7,6 +7,7 @@
  
 require_once( "../../config_test.php" );
 require_once( WebOrbServicesPath . "pl/cani/mindmap/dao/mysql/MySQLMindmapDAO.php" );
+require_once( WebOrbServicesPath . "pl/cani/mindmap/vo/UserVO.php" );
 
 require_once( "simpletest/unit_tester.php" );
 
