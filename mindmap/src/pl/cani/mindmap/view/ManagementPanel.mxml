@@ -3,14 +3,21 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.resources.ResourceBundle;
 			import pl.cani.mindmap.view.helpers.ViewNames;
 			import com.adobe.cairngorm.view.ViewLocator;
 			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
 			
 			private var helper : ManagementPanelHelper;
 			
+			[ResourceBundle( "ManagementPanel" )]
+			private var rb : ResourceBundle;
+			
+			[Bindable]
+			private var saveMindmap : String = rb.getString( "saveMindmap" );
+			
 			private function onCreationComplete() : void {
-				helper = new ManagementPanelHelper();
+				helper = new ManagementPanelHelper( this );
 				ViewLocator.getInstance().register( ViewNames.MANAGEMENT_PANEL, helper );
 			}
 			
@@ -23,9 +30,9 @@
 				<mx:TextInput id="mindmapNameTxt"/>
 			</mx:AddChild>
 			<mx:SetProperty target="{createMindMapBtn}" name="label" 
-				value="@Resource( 'saveMindmap' )" />
+				value="{ saveMindmap }" />
 			<mx:SetEventHandler target="{createMindMapBtn}" name="click" 
-				handler="helper.createMindMap()"/>
+				handler="helper.createMindmap()"/>
 		</mx:State>
 	</mx:states>
 
