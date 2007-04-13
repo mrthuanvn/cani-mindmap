@@ -1,14 +1,17 @@
 package pl.cani.mindmap.business {
 	
+	import com.adobe.crypto.MD5;
+	import com.mikenimer.components.Debug;
+	
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;
-	import pl.cani.mindmap.vo.MindmapVO;
-	import com.adobe.crypto.MD5;
-	import pl.cani.mindmap.vo.UserVO;
-	import mx.rpc.remoting.RemoteObject;
+	
 	import mx.rpc.events.FaultEvent;
-	import com.mikenimer.components.Debug;
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.remoting.RemoteObject;
+	
+	import pl.cani.mindmap.vo.MindmapVO;
+	import pl.cani.mindmap.vo.UserVO;
 
 	public class MindmapServiceTest extends TestCase {
 		
