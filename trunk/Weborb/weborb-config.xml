@@ -77,6 +77,10 @@
         	<clientClass>pl.cani.mindmap.vo.UserVO</clientClass>
         	<serverClass>pl.cani.mindmap.vo.UserVO</serverClass>
         </classMapping>
+        <classMapping>
+        	<clientClass>pl.cani.mindmap.vo.MindmapVO</clientClass>
+        	<serverClass>pl.cani.mindmap.vo.MindmapVO</serverClass>
+        </classMapping>
         
         <!-- exceptions -->
         
