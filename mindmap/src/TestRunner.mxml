@@ -13,14 +13,13 @@
 			// After everything is built, configure the test
 			// runner to use the appropriate test suite and
 			// kick off the unit tests
-			private function onCreationComplete() : void
-			{
+			private function onCreationComplete() : void {
  				testRunner.test = createSuite();
  				testRunner.startTest();
  			}
 			
 			// Creates the test suite to run
-			private function createSuite():TestSuite {
+			private function createSuite() : TestSuite {
  				var ts:TestSuite = new TestSuite();
  				
  				// TODO: Add more tests here to test more classes

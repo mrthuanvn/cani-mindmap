@@ -1,9 +1,10 @@
-package pl.cani.test.view.helper {
+package pl.cani.mindmap.view.helper {
 	
 	import flexunit.framework.TestCase;
+	import flexunit.framework.TestSuite;
+	
 	import pl.cani.mindmap.view.helpers.LoginRegistrationHelper;
 	import pl.cani.mindmap.view.helpers.ViewNames;
-	import flexunit.framework.TestSuite;
 
 	public class LoginRegistrationHelperTest extends TestCase {
 		
