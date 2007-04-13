@@ -23,7 +23,11 @@
 			<source>pl.cani.mindmap.business.LoginService</source>
 		</properties>    
     </destination>
-    
+    <destination id="mindmapMindmapServiceDestination">
+		<properties>
+			<source>pl.cani.mindmap.business.MindmapService</source>
+		</properties>    
+    </destination>
         
     <destination id="PrimitiveTest">
         <properties>
