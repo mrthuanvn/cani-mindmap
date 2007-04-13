@@ -5,8 +5,6 @@
  * @author Jan Klosinski (Can I) vanjan@gmail.com
  */
 
-require_once( WebOrbServicesPath . "pl/cani/mindmap/vo/UserVO.php" );
-
 class MindmapVO {
 
 	public $id;
