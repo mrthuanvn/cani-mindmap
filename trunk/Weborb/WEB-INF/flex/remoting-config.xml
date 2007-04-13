@@ -28,6 +28,11 @@
 			<source>pl.cani.mindmap.business.MindmapService</source>
 		</properties>    
     </destination>
+    <destination id="mindmapMockMindmapServiceDestination">
+		<properties>
+			<source>pl.cani.mindmap_test.business.MockMindmapService</source>
+		</properties>    
+    </destination>
         
     <destination id="PrimitiveTest">
         <properties>
