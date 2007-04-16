@@ -15,7 +15,7 @@ package pl.cani.mindmap.business {
 
 	public class MindmapServiceTest extends TestCase {
 		
-		private const DESTINATION : String = "mindmapMindmapServiceDestination";
+		private const DESTINATION : String = "mindmapMockMindmapServiceDestination";
 		private const TIMEOUT : Number = 5000;
 		
 		private var service : RemoteObject;
