@@ -56,9 +56,13 @@
 			<mx:SetProperty target="{ loginBtn }" name="label" 
 				value="{ rb.getString( 'activateAndLoginBtn' ) }" />
 			<mx:AddChild position="lastChild">
-				<mx:Label text="@Resource( key = 'emailNotActive' )" id="errorLbl"
-					color="red" />
+				<mx:FormItem color="#000000">
+					<mx:Button label="@Resource( key = 'loginAgain' )" 
+						id="loginAgainBtn" click="helper.showBaseState()"/>
+				</mx:FormItem>
 			</mx:AddChild>
+			<mx:SetProperty target="{logInFI}" name="label" 
+				value="{ rb.getString( 'emailNotActive' ) }"/>
 		</mx:State>
 	</mx:states>
 	

@@ -25,9 +25,18 @@ package pl.cani.mindmap.view.helpers {
 		[ResourceBundle( "LoginForm" )]
 		private var rb : ResourceBundle;
 	
+		private var concreteView : LoginForm;
 	
 		public function LoginFormHelper( view : LoginForm ) {
 			this.view = view;
+			concreteView = view;
+		}
+
+		public function showBaseState() : void {
+			concreteView.currentState = "";
+			concreteView.loginBtn.label = rb.getString( "loginBtn" );
+			concreteView.loginBtn.enabled = true;
+			concreteView.focusManager.setFocus( concreteView.loginBtn );
 		}
 		
 		public function showUserDoesntExistError( email : String ) : void {
