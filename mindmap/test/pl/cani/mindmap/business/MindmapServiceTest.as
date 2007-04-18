@@ -12,6 +12,7 @@ package pl.cani.mindmap.business {
 	
 	import pl.cani.mindmap.vo.MindmapVO;
 	import pl.cani.mindmap.vo.UserVO;
+	import mx.logging.targets.MiniDebugTarget;
 
 	public class MindmapServiceTest extends TestCase {
 		
@@ -28,6 +29,7 @@ package pl.cani.mindmap.business {
 			var ts : TestSuite = new TestSuite();
    			
 			ts.addTest( new MindmapServiceTest( "testAddMindmap" ) );
+			ts.addTest( new MindmapServiceTest( "testGetMindmapsByOwnerId" ) );			
 
    			return ts;
 		}
@@ -55,6 +57,38 @@ package pl.cani.mindmap.business {
 		private function onAddMindmapResult( result : ResultEvent ) : void {
 //			var mindmapId : uint = result.result as uint;
 			assertTrue( result.result is uint );
+		}
+		
+		public function testGetMindmapsByOwnerId() : void {
+			var ownerId : uint = 1;
+
+			service.addEventListener( ResultEvent.RESULT, onGetMindmapsByOwnerIdResult );
+			service.getMindmapsByOwnerId( ownerId );
+		}
+		
+		private function onGetMindmapsByOwnerIdResult( result : ResultEvent ) : void {
+			var ownerId : uint = 1;
+			
+			var owner : UserVO = new UserVO;
+			owner.id = ownerId;
+
+			var expectedMindmap1 : MindmapVO = new MindmapVO();
+			expectedMindmap1.name = "test mindmap 1";
+			expectedMindmap1.owner = owner;
+			
+			var expectedMindmap2 : MindmapVO = new MindmapVO();
+			expectedMindmap2.name = "test mindmap 2";
+			expectedMindmap2.owner = owner;
+			
+			var expectedMindmaps : Array = [ expectedMindmap1, expectedMindmap2 ];
+
+			var actualMindmaps : Array = result.result as Array;
+			
+			for ( var i : uint = 0; i < actualMindmaps.length; i++ ) {
+				var expectedMindmap : MindmapVO = expectedMindmaps[ i ] as MindmapVO;
+				var actualMindmap : MindmapVO = actualMindmaps[ i ] as MindmapVO;
+				assertEquals( expectedMindmap.name, actualMindmap.name );
+			}
 		}
 		
 		private function onFault( fault : FaultEvent ) : void {

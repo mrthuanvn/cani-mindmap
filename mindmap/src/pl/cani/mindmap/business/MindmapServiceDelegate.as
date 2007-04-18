@@ -25,5 +25,10 @@ package pl.cani.mindmap.business {
 			token.faultHandler = responder.fault;
 		}
 		
+		public function getMindmapsByOwnerId( ownerId : uint ) : void {
+			var token : AsyncToken = service.getMindmapsByOwnerId( ownerId );
+			token.addResponder( responder );
+		}
+		
 	}
 }
