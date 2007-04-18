@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Mindmap management" layout="absolute">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Mindmap management" layout="absolute"
+	creationComplete="onCreationComplete()">
 
 	<mx:Script>
 		<![CDATA[
@@ -25,7 +26,7 @@
 	</mx:Script>
 
 	<mx:states>
-		<mx:State name="createMindmap">
+		<mx:State name="createMindmap" enterState="focusManager.setFocus( mindmapNameTxt )">
 			<mx:AddChild relativeTo="{vbox1}" position="lastChild">
 				<mx:TextInput id="mindmapNameTxt"/>
 			</mx:AddChild>
