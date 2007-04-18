@@ -1,15 +1,15 @@
 package pl.cani.mindmap.commands {
 	
+	import com.adobe.cairngorm.business.ServiceLocator;
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.mikenimer.components.Debug;
 	
+	import mx.controls.Alert;
 	import mx.rpc.IResponder;
 	
-	import pl.cani.mindmap.events.MindmapEvent;
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
-	import com.adobe.cairngorm.business.ServiceLocator;
-	import mx.controls.Alert;
+	import pl.cani.mindmap.events.MindmapEvent;
 
 	public class AddMindmapCommand implements ICommand, IResponder {
 		

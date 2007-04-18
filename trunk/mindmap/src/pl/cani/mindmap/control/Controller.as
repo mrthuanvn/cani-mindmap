@@ -22,6 +22,8 @@ package pl.cani.mindmap.control {
 			addCommand( LOGOUT, LogOutUserCommand );
 			
 			addCommand( MindmapEvent.ADD, AddMindmapCommand );
+			addCommand( MindmapEvent.GET_BY_OWNER_ID, GetMindmapsByOwnerIdCommand );
+			addCommand( MindmapEvent.GET_BY_OWNER_ID_REFRESHED, GetMindmapsByOwnerIdCommand );
 		}
 		
 	}

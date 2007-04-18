@@ -4,6 +4,10 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import pl.cani.mindmap.business.SessionAndPersitentData;
+			import pl.cani.mindmap.events.MindmapEvent;
+			import pl.cani.mindmap.model.AppModelLocator;
 			import mx.resources.ResourceBundle;
 			import pl.cani.mindmap.view.helpers.ViewNames;
 			import com.adobe.cairngorm.view.ViewLocator;
@@ -20,6 +24,13 @@
 			private function onCreationComplete() : void {
 				helper = new ManagementPanelHelper( this );
 				ViewLocator.getInstance().register( ViewNames.MANAGEMENT_PANEL, helper );
+				
+				var mindmapEvent : MindmapEvent 
+					= new MindmapEvent( MindmapEvent.GET_BY_OWNER_ID );
+				var userId : uint = SessionAndPersitentData.getInstance()
+					.getLoggedInUser().id;
+				mindmapEvent.ownerId = userId;
+				CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
 			}
 			
 		]]>
@@ -40,7 +51,8 @@
 	<mx:VBox x="10" bottom="10" top="10" id="vbox1">
 		<mx:HBox width="100%">
 			<mx:Label text="@Resource( 'myMindmaps' )" id="myMindmapsLbl"/>
-			<mx:ComboBox id="mindmapsCbx"></mx:ComboBox>
+			<mx:ComboBox id="mindmapsCbx" 
+				dataProvider="{ AppModelLocator.getInstance().myMindmaps }" />
 		</mx:HBox>
 		<mx:DataGrid>
 			<mx:columns>

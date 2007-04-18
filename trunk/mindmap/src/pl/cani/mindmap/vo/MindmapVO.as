@@ -25,6 +25,10 @@ package pl.cani.mindmap.vo {
 			}
 		}
 		
+		public function toString() : String {
+			return name;
+		}
+		
 	}
 	
 }
