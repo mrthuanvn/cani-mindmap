@@ -78,7 +78,7 @@
     
     <destination id="InfoServiceDestination">
         <properties>
-            <source>InfoService</source>
+            <source>info_service.InfoService</source>
         </properties>
     </destination>       
     
