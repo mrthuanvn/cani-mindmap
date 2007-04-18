@@ -2,6 +2,7 @@ package pl.cani.mindmap.control {
 	
 	import com.adobe.cairngorm.control.FrontController;
 	import pl.cani.mindmap.commands.*;
+	import pl.cani.mindmap.events.MindmapEvent;
 
 	public class Controller extends FrontController	{
 		
@@ -19,6 +20,8 @@ package pl.cani.mindmap.control {
 			addCommand( ACTIVATION, ActivateUserCommand );
 			addCommand( VIEW, ShowViewCommand );
 			addCommand( LOGOUT, LogOutUserCommand );
+			
+			addCommand( MindmapEvent.ADD, AddMindmapCommand );
 		}
 		
 	}
