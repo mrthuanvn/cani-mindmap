@@ -28,6 +28,20 @@ class MindmapVO {
 	function MindmapVO() {
 		
 	}
+	
+	/**
+	 * Factory methd
+	 * @param Array array array of values to populate new object
+	 * @return MindmapVO new object
+	 */
+	public static function create( Array $array ) {
+		$mindmap = new MindmapVO();
+		$mindmap->id = $array[ "id" ];
+		$mindmap->name = $array[ "name" ];
+		$mindmap->requiresPssword = $array[ "requiresPassword" ];
+		$mindmap->password = $array[ "password" ];
+		return $mindmap;
+	}
 
 }
 

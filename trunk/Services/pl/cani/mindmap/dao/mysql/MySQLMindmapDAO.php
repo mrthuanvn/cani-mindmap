@@ -46,6 +46,26 @@ class MySQLMindmapDAO implements MindmapDAO {
 		
 		return $db->lastInsertId(); 		
 	}
+	
+	/**
+	 * @see pl.cani.mindmap.dao.MindmapDAO#getMindmapsByOwnerId
+	 */
+	public function getMindmapsByOwnerId( $ownerId ) {
+		$mindmaps = array();
+		
+		$db = new CDB();
+		$sql = sprintf( "SELECT * FROM %s WHERE ownerId = %d",
+			$this->mindmapsTbl, $ownerId );
+
+		$db->query( $sql );
+
+		while ( $db->nextRecord() ) {
+			$mindmap = MindmapVO::create( $db->record );
+			array_push( $mindmaps, $mindmap );
+		}
+		
+		return $mindmaps;
+	}
 
 }
 

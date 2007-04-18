@@ -21,6 +21,10 @@ class MockMindmapDAO implements MindmapDAO {
 		array_push( $this->mindmaps, $mindmap );
 		return sizeof( $this->mindmaps );
 	}
+	
+	public function getMindmapsByOwnerId( $ownerId ) {
+		return $this->mindmaps;
+	}
 
 }
 

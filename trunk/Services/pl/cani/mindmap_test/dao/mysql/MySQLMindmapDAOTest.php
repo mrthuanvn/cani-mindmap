@@ -14,6 +14,8 @@ require_once( "simpletest/unit_tester.php" );
 class MySQLMindmapDAOTest extends UnitTestCase {
 
 	private $dao;
+	
+	private $testUserId = 72;
 
 	function MySQLMindmapDAOTest() {
 		parent::__construct();
@@ -21,7 +23,7 @@ class MySQLMindmapDAOTest extends UnitTestCase {
 	
 	function setUp() {
 		$this->dao = MySQLMindmapDAO::getInstance();
-		$this->populateDB();
+//		$this->populateDB();
 	}
 	
 	public function testAddMindmap() {
@@ -53,17 +55,59 @@ class MySQLMindmapDAOTest extends UnitTestCase {
 			$this->fail( "Mindmap not added" );
 		}
 	}
+	
+	public function testGetMindmapsByOwnerId() {
+		$expectedMindmaps = array();
+		
+		$expectedMindmap1 = new MindmapVO();
+		$expectedMindmap1->name = "test mindmap 1";
+		array_push( $expectedMindmaps, $expectedMindmap1 );
+		
+		$expectedMindmap2 = new MindmapVO();
+		$expectedMindmap2->name = "test mindmap 2";
+		array_push( $expectedMindmaps, $expectedMindmap2 );
+		
+		$actualMindmaps = $this->dao->getMindmapsByOwnerId( $this->testUserId );
+
+		for ( $i = 0; $i < sizeof( $actualMindmaps ); $i++ ) {
+			$actualMindmap = $actualMindmaps[ $i ];
+			$expectedMindmap = $expectedMindmaps[ $i ];
+			$this->assertEqual( $expectedMindmap->name, $actualMindmap->name, 
+				"mindmap $i" );
+		}
+	}
 
 	function tearDown() {
-		$this->cleanDB();
+//		$this->cleanDB();
 	}
 	
 	private function populateDB() {
+		$db = new CDB();
+		$usersTbl = DBUtils::createTableName( "users" );
+		$mindmapsTbl = DBUtils::createTableName( "mindmaps" );
 		
+		// adding test user
+		$sql = "INSERT INTO $usersTbl ( forname ) VALUES ( 'test user' )";
+		$db->query( $sql );
+		
+		$this->testUserId = $db->lastInsertId();
+		
+		// adding test mindmaps
+		$sql = "INSERT INTO $mindmapsTbl ( name, ownerId, requiresPassword, password ) " .
+				"VALUES ( '%s', %d, %d, '%s' )";
+		$db->query( sprintf( $sql, "test mindmap 1", $this->testUserId, 
+			1, md5( "testpass" ) ) );
+		$db->query( sprintf( $sql, "test mindmap 2", $this->testUserId, 
+			0, "" ) );
 	}
 
 	private function cleanDB() {
+		$db = new CDB();
+		$usersTbl = DBUtils::createTableName( "users" );
+		$mindmapsTbl = DBUtils::createTableName( "mindmaps" );
 		
+		$db->query( "DELETE FROM $usersTbl WHERE id = " . $this->testUserId );
+		$db->query( "DELETE FROM $mindmapsTbl WHERE ownerId = " . $this->testUserId );
 	}
 
 }
