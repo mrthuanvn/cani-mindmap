@@ -23,6 +23,14 @@ class MindmapService {
 		return $this->mindmapDao->addMindmap( $mindmap );
 	}
 	
+	/**
+	 * @param Integer ownerId
+	 * @return Array list of MindmapVO's
+	 */
+	public function getMindmapsByOwnerId( $ownerId ) {
+		return $this->mindmapDao->getMindmapsByOwnerId( $ownerId );
+	}
+	
 	public function setMindmapDAO( MindmapDAO $mindmapDao ) {
 		$this->mindmapDao = $mindmapDao;
 	}

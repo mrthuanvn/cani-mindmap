@@ -35,14 +35,42 @@ class MindmapServiceTest extends UnitTestCase {
 //		$owner->surname = "kraweznik";
 //		$mindmap->owner = $owner;
 		
-		$expectedId = 1;
+		$expectedId = sizeof( $this->createMindmaps() ) + 1;
 		$actualId = $this->service->addMindmap( $mindmap );
 		
 		$this->assertEqual( $expectedId, $actualId );
 	}
 	
+	public function testGetMindmapsByOwnerId() {
+		$ownerId = 1;
+		$expectedMindmaps = $this->createMindmaps();
+		
+		$actualMindmaps = $this->service->getMindmapsByOwnerId( $ownerId );
+		
+		for ( $i = 0; $i < sizeof( $actualMindmaps ); $i++ ) {
+			$actualMindmap = $actualMindmaps[ $i ];
+			$expectedMindmap = $expectedMindmaps[ $i ];
+			$this->assertEqual( $expectedMindmap->name, $actualMindmap->name, 
+				"mindmap $i" );
+		}
+	}
+	
 	private function createMindmaps() {
 		$mindmaps = array();
+		
+		$owner = new UserVO();
+		$owner->id = 1;
+		
+		$mindmap1 = new MindmapVO();
+		$mindmap1->name = "test mindmap 1";
+		$mindmap1->owner = $owner;
+		array_push( $mindmaps, $mindmap1 );
+		
+		$mindmap2 = new MindmapVO();
+		$mindmap2->owner = $owner;
+		$mindmap2->name = "test mindmap 2";
+		array_push( $mindmaps, $mindmap2 );
+		
 		return $mindmaps;
 	}
 
