@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Button xmlns:mx="http://www.adobe.com/2006/mxml" label="{enabledLabel}">
+
+	<mx:Script>
+		<![CDATA[
+			
+			[Inspectable]
+			[Bindable]
+			public var enabledLabel : String = "enabled";
+			
+			[Inspectable]
+			[Bindable]
+			public var disabledLabel : String = "disabled...";
+			
+		]]>
+	</mx:Script>
+
+	<mx:states>
+		<mx:State name="disabled">
+			<mx:SetProperty name="label" value="{disabledLabel}"/>
+			<mx:SetProperty name="enabled" value="false"/>
+		</mx:State>
+	</mx:states>
+	
+</mx:Button>

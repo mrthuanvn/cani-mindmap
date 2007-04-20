@@ -3,10 +3,10 @@ package pl.cani.mindmap.control {
 	import com.adobe.cairngorm.control.FrontController;
 	import pl.cani.mindmap.commands.*;
 	import pl.cani.mindmap.events.MindmapEvent;
+	import pl.cani.mindmap.events.RegistrationEvent;
 
 	public class Controller extends FrontController	{
 		
-		public static const REGISTRATION : String = "registration";
 		public static const LOGGING : String = "logging";
 		public static const ACTIVATION_AND_LOGGING : String = "activationAndLogging";
 		public static const ACTIVATION : String = "activation";
@@ -14,7 +14,7 @@ package pl.cani.mindmap.control {
 		public static const LOGOUT : String = "logout";
 
 		public function Controller() {
-			addCommand( REGISTRATION, RegisterUserCommand );
+			addCommand( RegistrationEvent.REGISTER_USER, RegisterUserCommand );
 			addCommand( LOGGING, LogInUserCommand );
 			addCommand( ACTIVATION_AND_LOGGING, ActivateAndLogInUserSequenceCommand );
 			addCommand( ACTIVATION, ActivateUserCommand );
