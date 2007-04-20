@@ -2,14 +2,14 @@ package pl.cani.mindmap.commands {
 	
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.mikenimer.components.Debug;
 	
+	import mx.collections.ArrayCollection;
 	import mx.rpc.IResponder;
 	
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
 	import pl.cani.mindmap.events.MindmapEvent;
-	import mx.collections.ArrayCollection;
 	import pl.cani.mindmap.model.AppModelLocator;
-	import com.mikenimer.components.Debug;
 
 	public class GetMindmapsByOwnerIdCommand implements ICommand, IResponder {
 		

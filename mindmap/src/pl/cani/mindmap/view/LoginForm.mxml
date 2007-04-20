@@ -81,7 +81,7 @@
 	<validators:LoginEmailValidator id="emailValidator" source="{ emailTxt }" 
 		property="text" />
 	<validators:PasswordValidator id="passwordValidator" source="{ passwordTxt }" 
-		property="text"	minLength="6" />
+		property="text"	minLength="6" email="{ emailTxt.text }" />
 	<validators:ActivationKeyValidator id="activationKeyValidator"
 		source="{ activationKeyTxt }" property="text" email="{ emailTxt.text }" />
 

@@ -4,6 +4,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.validators.PasswordValidatorTest;
+			import pl.cani.mindmap.utils.ArrayListUtilsTest;
 			import pl.cani.mindmap.business.MindmapServiceTest;
 			import pl.cani.mindmap.business.SessionAndPersistentDataTest;
 			import pl.cani.mindmap.business.RegistrationServiceTest;
@@ -22,15 +24,16 @@
 			private function createSuite() : TestSuite {
  				var ts:TestSuite = new TestSuite();
  				
- 				// TODO: Add more tests here to test more classes
- 				// by calling addTest as often as necessary
 // 				ts.addTest( RegistrationServiceTest.suite() );
 // 				ts.addTest( LoginRegistrationHelperTest.suite() );
 // 				ts.addTest( SWFAddressHandlerTest.suite() );
 // 				ts.addTest( EventFactoryTest.suite() );
 //				ts.addTest( LoginServiceTest.suite() );
 //				ts.addTest( SessionAndPersistentDataTest.suite() );
-				ts.addTest( MindmapServiceTest.suite() );
+//				ts.addTest( MindmapServiceTest.suite() );
+
+//				ts.addTest( ArrayListUtilsTest.suite() );
+				ts.addTest( PasswordValidatorTest.suite() );
  				
  				return ts;
  			}

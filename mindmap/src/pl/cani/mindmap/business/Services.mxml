@@ -13,8 +13,6 @@
 		fault="event.token.faultHandler( event );" />
 		
 	<mx:RemoteObject id="mindmapService" showBusyCursor="true"
-		destination="mindmapMindmapServiceDestination"
-		result="event.token.resultHandler( event );"
-		fault="event.token.faultHandler( event );" />
+		destination="mindmapMindmapServiceDestination" />
 	
 </ServiceLocator>
