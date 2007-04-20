@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:validators="pl.cani.mindmap.validators.*"
 	defaultButton="{ registerBtn }" 
-	creationComplete="onCreationComplete()" show="resetFocus()">
+	creationComplete="onCreationComplete()" show="resetFocus()" xmlns:controls="pl.cani.mindmap.controls.*">
 	
 	<mx:Script>
 		<![CDATA[
@@ -66,8 +66,10 @@
 			change="helper.validateForm( event )" />
 	</mx:FormItem>
 	<mx:FormItem>
-		<mx:Button label="@Resource( key = 'registerBtn' )" id="registerBtn" 
-			click="helper.register()" enabled="{ formIsValid }" />
+		<controls:RemotingButton id="registerBtn" 
+			enabledLabel="@Resource( key = 'registerBtn' )"
+			disabledLabel="@Resource( key = 'registering' )"
+			click="helper.register()" enabled="{ formIsValid }"/>
 	</mx:FormItem>
 	
 </mx:Form>
