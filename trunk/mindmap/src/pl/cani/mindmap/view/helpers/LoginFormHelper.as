@@ -8,17 +8,20 @@ package pl.cani.mindmap.view.helpers {
 	import flash.events.MouseEvent;
 	
 	import mx.events.ValidationResultEvent;
+	import mx.resources.ResourceBundle;
 	import mx.validators.Validator;
 	
-	import pl.cani.mindmap.events.LoggingEvent;
-	import pl.cani.mindmap.view.LoginForm;
 	import pl.cani.mindmap.events.ActivationAndLoggingEvent;
-	import mx.resources.ResourceBundle;
+	import pl.cani.mindmap.events.LoggingEvent;
+	import pl.cani.mindmap.validators.EmailPasswordPair;
+	import pl.cani.mindmap.view.LoginForm;
 
 
 	public class LoginFormHelper extends ViewHelper	{
 	
 		private var formIsValid : Boolean = false;
+		private var passwordIsValid : Boolean = true;
+		private var passwordHadFocus : Boolean = false;
 		
 		private var focussedFormControl : DisplayObject;
 		
@@ -91,7 +94,10 @@ package pl.cani.mindmap.view.helpers {
 
         	view.currentState = "";
         	
-        	view.passwordValidator.addWrongPassword( wrongPassword );
+        	var emailPasswordPair : EmailPasswordPair = new EmailPasswordPair();
+        	emailPasswordPair.email = concreteView.emailTxt.text;
+        	emailPasswordPair.password = wrongPassword;
+        	view.passwordValidator.addWrongPassword( emailPasswordPair );
         	focussedFormControl = view.passwordTxt;
         	validate( view.passwordValidator );
 
@@ -100,6 +106,8 @@ package pl.cani.mindmap.view.helpers {
 
         	view.focusManager.setFocus( view.passwordTxt );
             view.formIsValid = false;
+            
+            concreteView.loginBtn.label = rb.getString( "loginBtn" );
         }
     
     	public function resetForm() : void {
@@ -110,7 +118,8 @@ package pl.cani.mindmap.view.helpers {
 	    public function validateForm( event : Event ) : void {       
             var view : LoginForm = view as LoginForm;
 
-            focussedFormControl = event.target as DisplayObject;    
+            focussedFormControl = event.target as DisplayObject;
+            passwordHadFocus = focussedFormControl == concreteView.passwordTxt;
 
             formIsValid = true;            
 
@@ -160,12 +169,22 @@ package pl.cani.mindmap.view.helpers {
             
             var suppressEvents : Boolean 
             	= ( validatorSource != focussedFormControl );
+            	
+            if ( validatorSource == concreteView.passwordTxt 
+            	&& passwordIsValid == false ) {
+            
+        		suppressEvents = false;
+        	}
             
             var event : ValidationResultEvent
             	= validator.validate( null, suppressEvents ); 
                             
             var currentControlIsValid : Boolean 
              	= ( event.type == ValidationResultEvent.VALID );
+             	
+            if ( validatorSource == concreteView.passwordTxt && passwordHadFocus ) {
+            	passwordIsValid = currentControlIsValid;
+            }
              
             formIsValid = formIsValid && currentControlIsValid;
              

@@ -1,18 +1,26 @@
 package pl.cani.mindmap.validators {
 
-	import flexunit.utils.ArrayList;
+	import com.adobe.crypto.MD5;
 	
+	import flexunit.utils.ArrayList;
+	import flexunit.utils.CollectionIterator;
+	
+	import mx.controls.treeClasses.ITreeDataDescriptor;
 	import mx.resources.ResourceBundle;
 	import mx.validators.StringValidator;
 	import mx.validators.ValidationResult;
-	import com.adobe.crypto.MD5;
+	
+	import pl.cani.mindmap.utils.ArrayListUtils;
 
 	public class PasswordValidator extends StringValidator {
 		
 		[Inspectable]
 		public var passwordToMatch : String;
 		
-		[ResourceBundle( name = "PasswordValidator" )]
+		[Inspectable]
+		public var email : String;
+		
+		[ ResourceBundle( name = "PasswordValidator" ) ]
 		private var rb : ResourceBundle;
 		
 		// passwords are MD5 hashed
@@ -29,7 +37,19 @@ package pl.cani.mindmap.validators {
                 return results;
    			}
 
-			var enteredPassword : String = value as String;
+			results = doCustomValidation( value as String );
+			
+			return results;
+		}
+		
+		public function addWrongPassword( emailPasswordPair : EmailPasswordPair ) : void {
+			wrongPasswords.addItem( emailPasswordPair );
+		}
+		
+		internal function doCustomValidation( value : String ) : Array {
+			var results : Array = new Array();
+			
+			var enteredPassword : String = value;
 
 			if ( passwordToMatch != null ) {
 				if ( enteredPassword != passwordToMatch ) {
@@ -40,11 +60,24 @@ package pl.cani.mindmap.validators {
 					return results;
 				}
 			} else {
-				for ( var i : uint = 0; i < wrongPasswords.length(); i++ ) {
-					var wrongPassword : String 
-						= wrongPasswords.getItemAt( i ) as String;
+				trace( "PasswordValidator::doCustomValidation" );
+				var emailPasswordPairs : ArrayList 
+					= ArrayListUtils.getByKey( wrongPasswords, "email", email );
+				trace( "emailPasswordPairs.length: " + emailPasswordPairs.length() );
+				var iterator : CollectionIterator 
+					= new CollectionIterator( emailPasswordPairs );
+
+				while ( iterator.hasNext() ) {
+					var emailPasswordPair : EmailPasswordPair 
+						= iterator.next() as EmailPasswordPair;
+
+					var wrongPassword : String = emailPasswordPair.password;
 					var hashedEnteredPassword : String
 						= MD5.hash( enteredPassword );
+
+					trace( "wrong password: " + wrongPassword );
+					trace( "hashed entered password: " + hashedEnteredPassword );
+
 					if ( hashedEnteredPassword == wrongPassword ) {
 						result = new ValidationResult( true, null,
 							"wrongPassword", rb.getString( "wrongPassword" ) );
@@ -54,12 +87,8 @@ package pl.cani.mindmap.validators {
 					}
 				}
 			}
-			
+
 			return results;
-		}
-		
-		public function addWrongPassword( wrongPassword : String ) : void {
-			wrongPasswords.addItem( wrongPassword );
 		}
 		
 	}

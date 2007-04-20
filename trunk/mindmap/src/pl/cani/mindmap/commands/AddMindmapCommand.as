@@ -1,7 +1,6 @@
 package pl.cani.mindmap.commands {
 	
-	import com.adobe.cairngorm.business.ServiceLocator;
-	import com.adobe.cairngorm.commands.ICommand;
+	import com.adobe.cairngorm.commands.SequenceCommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.mikenimer.components.Debug;
 	
@@ -11,19 +10,25 @@ package pl.cani.mindmap.commands {
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
 	import pl.cani.mindmap.events.MindmapEvent;
 
-	public class AddMindmapCommand implements ICommand, IResponder {
+	public class AddMindmapCommand extends SequenceCommand implements IResponder {
 		
-		public function execute( event : CairngormEvent ) : void {
+		override public function execute( event : CairngormEvent ) : void {
 			var mindmapEvent : MindmapEvent = event as MindmapEvent;
 			
 			var delegate : MindmapServiceDelegate = new MindmapServiceDelegate( this );
 			
 			delegate.addMindmap( mindmapEvent.mindmap );
+			
+			var nextMindmapEvent : MindmapEvent 
+				= new MindmapEvent( MindmapEvent.GET_BY_OWNER_ID_REFRESHED );
+			nextMindmapEvent.ownerId = mindmapEvent.mindmap.owner.id;
+			
+			nextEvent = nextMindmapEvent;
 		}
 		
 		public function result( data : Object ) : void {
 			var mindmapId : uint = data.result as uint;
-			Alert.show( "added mindmap id " + mindmapId );
+			executeNextCommand();
 		}
 		
 		public function fault( info : Object ) : void {

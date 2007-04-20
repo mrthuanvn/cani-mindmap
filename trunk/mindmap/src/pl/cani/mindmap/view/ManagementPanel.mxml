@@ -30,7 +30,14 @@
 				var userId : uint = SessionAndPersitentData.getInstance()
 					.getLoggedInUser().id;
 				mindmapEvent.ownerId = userId;
+	
 				CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
+			}
+			
+			private function onKeyDown( event : KeyboardEvent ) : void {
+				if ( event.keyCode == Keyboard.ENTER ) {
+					helper.createMindmap();
+				}
 			}
 			
 		]]>
@@ -39,7 +46,7 @@
 	<mx:states>
 		<mx:State name="createMindmap" enterState="focusManager.setFocus( mindmapNameTxt )">
 			<mx:AddChild relativeTo="{vbox1}" position="lastChild">
-				<mx:TextInput id="mindmapNameTxt"/>
+				<mx:TextInput id="mindmapNameTxt" keyDown="onKeyDown( event )" />
 			</mx:AddChild>
 			<mx:SetProperty target="{createMindMapBtn}" name="label" 
 				value="{ saveMindmap }" />

@@ -13,9 +13,11 @@ package pl.cani.mindmap.events {
 		public var mindmap : MindmapVO;
 		public var ownerId : uint;
 		
-		public function MindmapEvent( type : String, mindmap : MindmapVO = null ) {
+		public function MindmapEvent( type : String, mindmap : MindmapVO = null, 
+				ownerId : uint = 0 ) {
 			super( type );
 			this.mindmap = mindmap;
+			this.ownerId = ownerId;
 		}
 		
 	}

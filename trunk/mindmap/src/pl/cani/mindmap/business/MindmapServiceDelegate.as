@@ -21,8 +21,7 @@ package pl.cani.mindmap.business {
 		
 		public function addMindmap( mindmap : MindmapVO ) : void {
 			var token : AsyncToken = service.addMindmap( mindmap );
-			token.resultHandler = responder.result;
-			token.faultHandler = responder.fault;
+			token.addResponder( responder );
 		}
 		
 		public function getMindmapsByOwnerId( ownerId : uint ) : void {
