@@ -14,5 +14,8 @@
 		
 	<mx:RemoteObject id="mindmapService" showBusyCursor="true"
 		destination="mindmapMindmapServiceDestination" />
+		
+	<mx:RemoteObject id="userService" showBusyCursor="true"
+		destination="mindmapUserServiceDestination" />
 	
 </ServiceLocator>

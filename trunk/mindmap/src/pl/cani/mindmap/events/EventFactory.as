@@ -25,6 +25,9 @@ package pl.cani.mindmap.events {
 				case Controller.ACTIVATION:
 					var activationKey : String = params[ "activationKey" ];
 					return new ActivationEvent( activationKey );
+				
+				case ViewNames.PRIVILAGES:
+					return new ViewEvent( section );
 					
 				}
 			}

@@ -4,6 +4,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.model.AppModelLocator;
 		    import pl.cani.mindmap.vo.UserVO;
 		    import pl.cani.mindmap.business.SessionAndPersitentData;
 			import com.adobe.cairngorm.view.ViewHelper;
@@ -17,6 +18,8 @@
 			private var helper : MainViewHelper;
 			
 			private function onCreationComplete() : void {
+				AppModelLocator.getInstance().mainView = this;
+				
 				helper = new MainViewHelper( this );
 				ViewLocator.getInstance().register( ViewNames.MAIN, helper );
 				var loggedInUser : UserVO
@@ -51,11 +54,16 @@
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
 				<mx:HDividedBox x="0" y="41" width="100%" height="336">
-					<view:ManagementPanel>
-					</view:ManagementPanel>
-					<mx:Canvas width="200" height="200">
+					<view:ManagementPanel id="managementPanel" />
+					<mx:Canvas width="200" height="200" id="canvas1">
 					</mx:Canvas>
 				</mx:HDividedBox>
+			</mx:AddChild>
+		</mx:State>
+		<mx:State name="privilages" basedOn="loggedIn">
+			<mx:AddChild relativeTo="{canvas1}" position="before">
+				<view:PrivilagesPanel id="privilagesPanel">
+				</view:PrivilagesPanel>
 			</mx:AddChild>
 		</mx:State>
 	</mx:states>
@@ -73,7 +81,6 @@
 		</mx:Transition>
 		<mx:Transition id="toLoggedInFromLoggedOut" toState="loggedIn" 
 			fromState="loggedOut">
-
 			<mx:Sequence target="{ loginAndRegistration }">
 				<mx:Move xTo="{ -loginAndRegistration.width }" duration="500"
 					easingFunction="Quintic.easeInOut" 
@@ -82,10 +89,18 @@
 	            <mx:SetPropertyAction name="includeInLayout" value="false" />
 			</mx:Sequence>
 		</mx:Transition>
+		<mx:Transition id="toPrivilagesFromAny" toState="privilages" fromState="*">
+			<mx:Zoom target="{ privilagesPanel }" zoomHeightFrom="0" zoomWidthFrom="0"
+				duration="500" />
+		</mx:Transition>
 	</mx:transitions>
 	
 	<mx:Move id="showAppCtrlBar" target="{ appCtrlBar }" 
 		yFrom="{ -appCtrlBar.height }" duration="500"
+		easingFunction="Quintic.easeInOut" />
+		
+	<mx:Zoom id="showManagementPanel" target="{ managementPanel }"
+		zoomHeightFrom="0" zoomWidthFrom="0" duration="500"
 		easingFunction="Quintic.easeInOut" />
 
 	<view:LoginRegistration id="loginAndRegistration" includeInLayout="false"

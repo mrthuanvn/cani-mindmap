@@ -7,6 +7,8 @@ package pl.cani.mindmap.commands {
 	import pl.cani.mindmap.model.AppModelLocator;
 	import com.adobe.cairngorm.view.ViewLocator;
 	import pl.cani.mindmap.view.helpers.LoginRegistrationHelper;
+	import pl.cani.mindmap.view.helpers.MainViewHelper;
+	import com.adobe.cairngorm.model.ModelLocator;
 
 	public class ShowViewCommand implements ICommand {
 		
@@ -35,6 +37,12 @@ package pl.cani.mindmap.commands {
 
 				loginRegistrationHelper.showForm( ViewNames.REGISTRATION_FORM );
 				break;
+						
+			case ViewNames.PRIVILAGES:
+				AppModelLocator.getInstance().mainView.currentState 
+					= ViewNames.PRIVILAGES;
+				break;
+			
 			}
 			
 		}
