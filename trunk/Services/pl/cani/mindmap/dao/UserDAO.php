@@ -6,7 +6,9 @@ interface UserDAO {
 	
 	public function findByActivationKey( $activationKey );
 	
-	public function addUser( $user );
+	public function findUsersByFornameSurnameOrEmail( $queryStr );
+	
+	public function addUser( UserVO $user );
 	
 }
 

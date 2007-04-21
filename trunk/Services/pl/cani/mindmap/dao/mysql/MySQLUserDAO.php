@@ -11,7 +11,7 @@ class MySQLUserDAO implements UserDAO {
 	
 	private $instance;
 	
-	private $usersTbl;
+	public $usersTbl;
 	
 	private function MySQLUserDAO() {
 		$this->usersTbl = DBUtils::createTableName( "users" );
@@ -22,6 +22,24 @@ class MySQLUserDAO implements UserDAO {
 			$instance = new MySQLUserDAO();
 		}
 		return $instance;
+	}
+	
+	public function findUsersByFornameSurnameOrEmail( $queryStr ) {
+		$users = array();
+		
+		$sql = sprintf( "SELECT DISTINCT * FROM %s WHERE forname LIKE '%%%s%%' " .
+				"OR surname LIKE '%%%s%%' OR email LIKE '%%%s%%'",
+				$this->usersTbl, $queryStr, $queryStr, $queryStr );
+//		print $sql;
+
+		$db = new CDB();
+		$db->query( $sql );		
+		while ( $db->nextRecord() ) {
+			$user = $this->createUserFromRecord( $db->record );
+			array_push( $users, $user );
+		}
+		
+		return $users;
 	}
 	
 	function findByEmail( $email ) {
@@ -62,7 +80,7 @@ class MySQLUserDAO implements UserDAO {
 		$db->query( $sql );
 	}
 	
-	public function addUser( $user ) {
+	public function addUser( UserVO $user ) {
 		if ( ( $user instanceof UserVO ) == false ) {
 			throw new Exception( "it's not an instance of UserVO" );
 		}
