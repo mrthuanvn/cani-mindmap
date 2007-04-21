@@ -7,11 +7,14 @@ package pl.cani.mindmap.model {
 	import pl.cani.mindmap.view.LoginForm;
 	import pl.cani.mindmap.view.LoginRegistration;
 	import pl.cani.mindmap.view.RegistrationForm;
+	import pl.cani.mindmap.view.MainView;
 
 	[Bindable]
 	public class AppModelLocator implements ModelLocator {
 		
 		private static var instance : AppModelLocator;
+		
+		public var mainView : MainView;
 		
 		public var loginAndRegistrationView : LoginRegistration;
 		public var loginForm : LoginForm;

@@ -3,6 +3,9 @@
 
 	<mx:Script>
 		<![CDATA[
+
+			public static const STATE_ENABLED : String = "";
+			public static const STATE_DISABLED : String = "disabled";
 			
 			[Inspectable]
 			[Bindable]

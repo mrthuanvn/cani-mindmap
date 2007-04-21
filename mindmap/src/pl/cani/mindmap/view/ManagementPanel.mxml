@@ -4,6 +4,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.asual.swfaddress.SWFAddress;
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import pl.cani.mindmap.business.SessionAndPersitentData;
 			import pl.cani.mindmap.events.MindmapEvent;
@@ -12,6 +13,8 @@
 			import pl.cani.mindmap.view.helpers.ViewNames;
 			import com.adobe.cairngorm.view.ViewLocator;
 			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
+			
+			import mx.effects.easing.*;
 			
 			private var helper : ManagementPanelHelper;
 			
@@ -32,6 +35,8 @@
 				mindmapEvent.ownerId = userId;
 	
 				CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
+				
+				show.play();
 			}
 			
 			private function onKeyDown( event : KeyboardEvent ) : void {
@@ -40,8 +45,20 @@
 				}
 			}
 			
+			private function onGrantPrivilagesBtnClick() : void {
+				SWFAddress.setStatus( "privilages" );
+				AppModelLocator.getInstance().mainView.currentState = 'privilages';
+			}
+			
 		]]>
 	</mx:Script>
+
+	<mx:Sequence id="show" target="{this}">
+		<mx:SetPropertyAction name="visible" value="false" />
+		<mx:Zoom zoomHeightFrom="0" zoomWidthFrom="0" duration="500"
+			easingFunction="Quintic.easeInOut"
+			tweenStart="this.visible = true" />
+	</mx:Sequence>
 
 	<mx:states>
 		<mx:State name="createMindmap" enterState="focusManager.setFocus( mindmapNameTxt )">
@@ -69,7 +86,8 @@
 			</mx:columns>
 		</mx:DataGrid>
 		<mx:HBox width="100%">
-			<mx:Button label="@Resource( 'grantPrivilages' )" id="grantPrivilagesBtn"/>
+			<mx:Button label="@Resource( 'grantPrivilages' )" id="grantPrivilagesBtn"
+				click="onGrantPrivilagesBtnClick()"/>
 			<mx:Button label="@Resource( 'createMindmap' )" id="createMindMapBtn" click="currentState = 'createMindmap'"/>
 		</mx:HBox>
 	</mx:VBox>
