@@ -38,9 +38,9 @@
 	<mx:Accordion width="90%" height="90%" id="container" 
 		change="changeAddress()">
 	
-		<view:LoginForm />
+		<view:LoginForm id="loginForm" />
 		
-		<view:RegistrationForm />
+		<view:RegistrationForm id="registrationForm" />
 		
 	</mx:Accordion>
 	

@@ -21,6 +21,9 @@ package pl.cani.mindmap.view.helpers {
 		public function ManagementPanelHelper( view : ManagementPanel )	{
 			super();
 			this.view = this.concreteView = view;
+			
+			CairngormEventDispatcher.getInstance().addEventListener(
+				MindmapEvent.ADDED, onMindmapAdded );
 		}
 		
 		public function createMindmap() : void {
@@ -34,10 +37,10 @@ package pl.cani.mindmap.view.helpers {
 			concreteView.createMindMapBtn.enabled = false;
 			concreteView.createMindMapBtn.label = rb.getString( "addingMindmap" );
 				
-//			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
+			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
 		}
 		
-		private function onMindmapAdded() : void {
+		private function onMindmapAdded( event : MindmapEvent ) : void {
 			concreteView.createMindMapBtn.enabled = true;
 			concreteView.createMindMapBtn.label = rb.getString( "saveMindmap" );
 		}

@@ -30,10 +30,10 @@
 // 				ts.addTest( EventFactoryTest.suite() );
 //				ts.addTest( LoginServiceTest.suite() );
 //				ts.addTest( SessionAndPersistentDataTest.suite() );
-//				ts.addTest( MindmapServiceTest.suite() );
+				ts.addTest( MindmapServiceTest.suite() );
 
 //				ts.addTest( ArrayListUtilsTest.suite() );
-				ts.addTest( PasswordValidatorTest.suite() );
+//				ts.addTest( PasswordValidatorTest.suite() );
  				
  				return ts;
  			}

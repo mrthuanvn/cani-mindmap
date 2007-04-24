@@ -15,6 +15,7 @@ package pl.cani.mindmap.view.helpers {
 	import pl.cani.mindmap.events.LoggingEvent;
 	import pl.cani.mindmap.validators.EmailPasswordPair;
 	import pl.cani.mindmap.view.LoginForm;
+	import pl.cani.mindmap.events.RegistrationEvent;
 
 
 	public class LoginFormHelper extends ViewHelper	{
@@ -33,6 +34,14 @@ package pl.cani.mindmap.view.helpers {
 		public function LoginFormHelper( view : LoginForm ) {
 			this.view = view;
 			concreteView = view;
+			
+			CairngormEventDispatcher.getInstance().addEventListener( 
+        		RegistrationEvent.REGISTRATION_COMPLETE, 
+        		onRegistrationComplete );
+		}
+		
+		public function onRegistrationComplete( event : RegistrationEvent ) : void {
+			concreteView.emailValidator.removeNotRegisteredEmail( event.user.email );
 		}
 
 		public function showBaseState() : void {
@@ -43,17 +52,6 @@ package pl.cani.mindmap.view.helpers {
 		}
 		
 		public function showUserDoesntExistError( email : String ) : void {
-        	/* var point : Point = emailTxt.localToGlobal( new Point() );
-        	var x : int = point.x + emailTxt.width;
-        	var y : int = point.y;
-        	var borderStyle : String = "errorTipRight";
-        	var toolTip : ToolTip = ToolTipManager.createToolTip( 
-        		"User doesn't exist", x, y, borderStyle, emailTxt );
-        	toolTip.setStyle( "styleName", "errorTip" );
-        	var errorColor : Object = emailTxt.getStyle( "errorColor" );
-        	emailTxt.setStyle( "borderColor", errorColor );
-        	emailTxt.setStyle( "themeColor", errorColor ); */
-        
         	view.emailValidator.addNotRegisteredEmail( email );
         	focussedFormControl = view.emailTxt;
         	validate( view.emailValidator );

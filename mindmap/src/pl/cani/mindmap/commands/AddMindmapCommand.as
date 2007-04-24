@@ -9,6 +9,7 @@ package pl.cani.mindmap.commands {
 	
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
 	import pl.cani.mindmap.events.MindmapEvent;
+	import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 	public class AddMindmapCommand extends SequenceCommand implements IResponder {
 		
@@ -28,6 +29,10 @@ package pl.cani.mindmap.commands {
 		
 		public function result( data : Object ) : void {
 			var mindmapId : uint = data.result as uint;
+
+			var event : MindmapEvent = new MindmapEvent( MindmapEvent.ADDED );
+			CairngormEventDispatcher.getInstance().dispatchEvent( event );
+
 			executeNextCommand();
 		}
 		

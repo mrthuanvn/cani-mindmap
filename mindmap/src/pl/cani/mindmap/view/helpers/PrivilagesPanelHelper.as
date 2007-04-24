@@ -30,6 +30,7 @@ package pl.cani.mindmap.view.helpers {
 		
 		private function onUsersFound( event : UserServiceEvent ) : void {
 			concreteView.findBtn.currentState = RemotingButton.STATE_ENABLED;
+			concreteView.users = event.users;
 		}
 		
 	}

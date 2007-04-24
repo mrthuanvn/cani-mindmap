@@ -7,6 +7,7 @@ package pl.cani.mindmap.events {
 	public class MindmapEvent extends CairngormEvent {
 		
 		public static const ADD : String = "add";
+		public static const ADDED : String = "mindmapAdded";
 		public static const GET_BY_OWNER_ID : String= "getByOwnerId";
 		public static const GET_BY_OWNER_ID_REFRESHED : String = "getByOwnerIdRefreshed";
 		

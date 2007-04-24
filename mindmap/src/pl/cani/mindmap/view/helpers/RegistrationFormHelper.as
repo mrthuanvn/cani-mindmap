@@ -7,15 +7,15 @@ package pl.cani.mindmap.view.helpers {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import mx.controls.Alert;
 	import mx.events.ValidationResultEvent;
+	import mx.resources.ResourceBundle;
 	import mx.validators.Validator;
 	
+	import pl.cani.mindmap.commands.RegisterUserCommand;
 	import pl.cani.mindmap.events.RegistrationEvent;
 	import pl.cani.mindmap.view.RegistrationForm;
 	import pl.cani.mindmap.vo.UserVO;
-	import mx.resources.ResourceBundle;
-	import mx.controls.Alert;
-	import pl.cani.mindmap.commands.RegisterUserCommand;
 
 	public class RegistrationFormHelper extends ViewHelper {
 		
@@ -31,6 +31,14 @@ package pl.cani.mindmap.view.helpers {
 		public function RegistrationFormHelper( view : RegistrationForm ) {
 			this.view = view;
 			concreteView = view;
+			
+			CairngormEventDispatcher.getInstance().addEventListener( 
+				RegistrationEvent.REGISTRATION_COMPLETE, 
+				onRegistrationComplete );
+			
+			CairngormEventDispatcher.getInstance().addEventListener( 
+				RegistrationEvent.USER_ALREADY_EXISTS, 
+				onUserAlreadyExists );				
 		}
 		
 		public function register() : void {

@@ -52,6 +52,12 @@ package pl.cani.mindmap.validators {
 			notRegisteredEmails.addItem( email );
 		}
 		
+		public function removeNotRegisteredEmail( email : String ) : void {
+			if ( notRegisteredEmails.contains( email ) ) {
+				notRegisteredEmails.removeItem( email );
+			}
+		}
+		
 		public function addNotActivatedEmail( email : String ) : void {
 			notActivatedEmails.addItem( email );
 		}
