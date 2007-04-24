@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Mindmap management" layout="absolute"
-	creationComplete="onCreationComplete()">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Mindmap management" 
+	layout="absolute" creationComplete="onCreationComplete()">
 
 	<mx:Script>
 		<![CDATA[
@@ -28,6 +28,8 @@
 				helper = new ManagementPanelHelper( this );
 				ViewLocator.getInstance().register( ViewNames.MANAGEMENT_PANEL, helper );
 				
+				AppModelLocator.getInstance().mindmapUsersDataGrid = mindmapUsersDataGrid;
+				
 				var mindmapEvent : MindmapEvent 
 					= new MindmapEvent( MindmapEvent.GET_BY_OWNER_ID );
 				var userId : uint = SessionAndPersitentData.getInstance()
@@ -46,7 +48,7 @@
 			}
 			
 			private function onGrantPrivilagesBtnClick() : void {
-				SWFAddress.setStatus( "privilages" );
+				SWFAddress.setValue( ViewNames.PRIVILAGES );
 				AppModelLocator.getInstance().mainView.currentState = 'privilages';
 			}
 			
@@ -72,17 +74,26 @@
 		</mx:State>
 	</mx:states>
 
-	<mx:VBox x="10" bottom="10" top="10" id="vbox1">
+	<mx:transitions>
+		<mx:Transition id="toCreateMindmap" toState="createMindmap">
+			<mx:Resize target="{this}" duration="200" />
+		</mx:Transition>
+		<mx:Transition id="toBaseState" toState="">
+			<mx:Resize target="{this}" duration="200" />
+		</mx:Transition>
+	</mx:transitions>
+
+	<mx:VBox bottom="10" top="10" id="vbox1" right="10" left="10">
 		<mx:HBox width="100%">
 			<mx:Label text="@Resource( 'myMindmaps' )" id="myMindmapsLbl"/>
 			<mx:ComboBox id="mindmapsCbx" 
 				dataProvider="{ AppModelLocator.getInstance().myMindmaps }" />
 		</mx:HBox>
-		<mx:DataGrid>
+		<mx:DataGrid id="mindmapUsersDataGrid" dropEnabled="true">
 			<mx:columns>
-				<mx:DataGridColumn headerText="Column 1" dataField="col1"/>
-				<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
-				<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
+				<mx:DataGridColumn headerText="@Resource( 'forname' )" dataField="forname"/>
+				<mx:DataGridColumn headerText="@Resource( 'surname' )" dataField="surname"/>
+				<mx:DataGridColumn headerText="E-mail" dataField="email"/>
 			</mx:columns>
 		</mx:DataGrid>
 		<mx:HBox width="100%">

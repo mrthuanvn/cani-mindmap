@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
 	title="@Resource( key = 'title' )" xmlns:controls="pl.cani.mindmap.controls.*"
-	creationComplete="onCreationComplete()">
+	creationComplete="onCreationComplete()" xmlns:controls1="pl.cani.controls.*">
 	
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.model.AppModelLocator;
 		
 			import pl.cani.mindmap.view.helpers.ViewNames;
 			import com.adobe.cairngorm.view.ViewLocator;
 			import pl.cani.mindmap.view.helpers.PrivilagesPanelHelper;
 			
 			private var helper : PrivilagesPanelHelper;
+			
+			[Bindable]
+			public var users : Array;
 			
 			private function onCreationComplete() : void {
 				focusManager.setFocus( searchTxt );
@@ -33,14 +37,17 @@
 			</mx:HBox>
 		</mx:Form>
 		
-		<mx:DataGrid x="10" y="40" id="usersDataGrid">
+		<controls1:DragAndDropNoRepeat source="{usersDataGrid}" destination="
+			{AppModelLocator.getInstance().mindmapUsersDataGrid}" />
+		
+		<mx:DataGrid x="10" y="40" id="usersDataGrid" dataProvider="{users}"
+			dragEnabled="true" allowMultipleSelection="true">
 			<mx:columns>
 				<mx:DataGridColumn headerText="@Resource( key = 'forname' )" 
 					dataField="forname" />
 				<mx:DataGridColumn headerText="@Resource( key = 'surname' )" 
 					dataField="surname"  />
 				<mx:DataGridColumn headerText="E-mail" dataField="email" />
-				
 			</mx:columns>
 		</mx:DataGrid>
 	</mx:VBox>

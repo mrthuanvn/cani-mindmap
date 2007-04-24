@@ -7,6 +7,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.events.RegistrationEvent;
+			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import mx.resources.ResourceBundle;
 
 			import mx.effects.easing.Quadratic;
@@ -56,13 +58,12 @@
 			<mx:SetProperty target="{ loginBtn }" name="label" 
 				value="{ rb.getString( 'activateAndLoginBtn' ) }" />
 			<mx:AddChild position="lastChild">
-				<mx:FormItem color="#000000">
-					<mx:Button label="@Resource( key = 'loginAgain' )" 
-						id="loginAgainBtn" click="helper.showBaseState()"/>
-				</mx:FormItem>
+				<mx:Label text="{ rb.getString( 'emailNotActive' ) }"/>
 			</mx:AddChild>
-			<mx:SetProperty target="{logInFI}" name="label" 
-				value="{ rb.getString( 'emailNotActive' ) }"/>
+			<mx:AddChild relativeTo="{hBox}" position="lastChild">
+				<mx:Button label="@Resource( key = 'loginAgain' )" 
+					id="loginAgainBtn" click="helper.showBaseState()"/>
+			</mx:AddChild>
 		</mx:State>
 	</mx:states>
 	
@@ -71,7 +72,7 @@
 			<mx:Sequence effectEnd="invalidateDisplayList(); invalidateSize()">
 				<mx:Fade alphaTo="0" duration="0" target="{ activationKeyFI }" />
 				<mx:Move duration="200" easingFunction="Quadratic.easeOut"
-					targets="{ [ rememberMeFI, logInFI ] }" />
+					targets="{ [ rememberMeFI, hBox ] }" />
 				<mx:Fade alphaTo="100" target="{ activationKeyFI }" duration="100" />
 			</mx:Sequence>
 		</mx:Transition>
@@ -96,9 +97,8 @@
 	<mx:FormItem id="rememberMeFI">
 		<mx:CheckBox label="@Resource( key = 'rememberMeChb' )" id="remeberMeChb"/>
 	</mx:FormItem>
-	<mx:FormItem id="logInFI">
+	<mx:HBox horizontalAlign="center" width="100%" id="hBox">
 		<mx:Button label="@Resource( key = 'loginBtn' )" id="loginBtn" 
 			click="helper.login()" enabled="{ formIsValid }" />
-	</mx:FormItem>
-	
+	</mx:HBox>
 </mx:Form>
