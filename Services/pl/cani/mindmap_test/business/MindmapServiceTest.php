@@ -7,6 +7,7 @@
 
 require_once( "../config_test.php" );
 require_once( WebOrbServicesPath . "pl/cani/mindmap/business/MindmapService.php" );
+require_once( WebOrbServicesPath . "pl/cani/mindmap/business/MindmapPrivilages.php" );
 require_once( WebOrbServicesPath . "pl/cani/mindmap_test/business/MockMindmapDAO.php" );
 
 require_once( "simpletest/unit_tester.php" );
@@ -14,6 +15,9 @@ require_once( "simpletest/unit_tester.php" );
 class MindmapServiceTest extends UnitTestCase {
 
 	private $service = null;
+	
+	private $testUserId;
+	private $testMindmapId;
 
 	function MindmapServiceTest() {
 		parent::__construct();
@@ -24,6 +28,9 @@ class MindmapServiceTest extends UnitTestCase {
 		$mindmapDao = new MockMindmapDAO();
 		$mindmapDao->mindmaps = $this->createMindmaps();
 		$this->service->setMindmapDAO( $mindmapDao );
+		
+		$this->createTestUser();
+		$this->createTestMindmap();
 	}
 
 	public function testAddMindmap() {
@@ -55,6 +62,28 @@ class MindmapServiceTest extends UnitTestCase {
 		}
 	}
 	
+	public function testSetPrivilagesForUser() {
+		$mindmap = new MindmapVO();
+		$mindmap->id = $this->testMindmapId;
+		
+		$user = new UserVO();
+		$user->id = $this->testUserId;
+		
+		$privilages = MindmapPrivilages::READ;
+
+		$this->service->setMindmapDAO( MySQLMindmapDAO::getInstance() );		
+		$this->service->setPrivilagesForUser( $mindmap, $user, $privilages );
+		
+		$db = new CDB();
+		$mindmapUsersTbl = DBUtils::createTableName( "mindmap_users" );
+		$sql = "SELECT * FROM $mindmapUsersTbl WHERE mindmapId = $mindmap->id " .
+				"AND userId = $user->id";
+		$db->query( $sql );
+		$db->nextRecord();
+		
+		$this->assertEqual( $privilages, $db->record[ "privilages" ] );
+	}
+	
 	private function createMindmaps() {
 		$mindmaps = array();
 		
@@ -72,6 +101,39 @@ class MindmapServiceTest extends UnitTestCase {
 		array_push( $mindmaps, $mindmap2 );
 		
 		return $mindmaps;
+	}
+	
+	private function createTestUser() {
+		$db = new CDB();
+		$usersTbl = DBUtils::createTableName( "users" );
+		$sql = "SELECT * FROM $usersTbl WHERE forname = 'test' AND surname = 'test'";
+		$db->query( $sql );
+		if ( $db->nextRecord() ) {
+			$this->testUserId = $db->record[ "id" ];
+			return;
+		}
+		
+		$password = md5( "testpass" );
+		$sql = "INSERT INTO $usersTbl ( forname, surname, email, password, isActive ) " .
+				"VALUES ( 'test', 'test', 'test@test.pl', '$password', 1 )";
+		$db->query( $sql );
+		$this->testUserId = $db->lastInsertId();
+	}
+	
+	private function createTestMindmap() {
+		$db = new CDB();
+		$mindmapsTbl = DBUtils::createTableName( "mindmaps" );
+		$sql = "SELECT * FROM $mindmapsTbl WHERE name = 'test mindmap'";
+		$db->query( $sql );
+		if ( $db->nextRecord() ) {
+			$this->testMindmapId = $db->record[ "id" ];
+			return;
+		}
+		
+		$sql = "INSERT INTO $mindmapsTbl ( name, ownerId ) " .
+				"VALUES ( 'test', 1 )";
+		$db->query( $sql );
+		$this->testMindmapId = $db->lastInsertId();
 	}
 
 }

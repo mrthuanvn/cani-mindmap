@@ -12,6 +12,7 @@ require_once( WebOrbServicesPath . "pl/cani/mindmap/dao/MindmapDAO.php" );
 class MockMindmapDAO implements MindmapDAO {
 
 	public $mindmaps = array();
+	public $privilages = array();
 
 	function MockMindmapDAO() {
 		
@@ -24,6 +25,10 @@ class MockMindmapDAO implements MindmapDAO {
 	
 	public function getMindmapsByOwnerId( $ownerId ) {
 		return $this->mindmaps;
+	}
+
+	public function setPrivilagesForUser( $mindmapId, $userId, $privilages ) {
+		$this->privilages[ $mindmapId ][ $userId ] = $privilages;
 	}
 
 }

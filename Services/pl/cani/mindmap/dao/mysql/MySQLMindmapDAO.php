@@ -17,9 +17,11 @@ class MySQLMindmapDAO implements MindmapDAO {
 	private static $instance;
 	
 	private $mindmapsTbl;
+	private $mindmapUsersTbl;
 	
 	private function MySQLMindmapDAO() {
 		$this->mindmapsTbl = DBUtils::createTableName( "mindmaps" );
+		$this->mindmapUsersTbl = DBUtils::createTableName( "mindmap_users" );
 	}
 	
 	public static function getInstance() {
@@ -65,6 +67,28 @@ class MySQLMindmapDAO implements MindmapDAO {
 		}
 		
 		return $mindmaps;
+	}
+	
+	/**
+	 * @see pl.cani.mindmap.dao.MindmapDAO#setPrivilagesForUser
+	 */
+	public function setPrivilagesForUser( $mindmapId, $userId, $privilages ) {
+		$sql = sprintf( 
+			"SELECT * FROM %s WHERE mindmapId = $mindmapId AND userId = $userId",
+			$this->mindmapUsersTbl );
+		
+		$db = new CDB();
+		$db->query( $sql );
+	
+		$sql = $db->nextRecord() 
+			? sprintf( "UPDATE %s SET privilages = $privilages " .
+					"WHERE mindmapId = $mindmapId AND userId = $userId", 
+					$this->mindmapUsersTbl )
+			: sprintf( "INSERT INTO %s ( mindmapId, userId, privilages ) " .
+					"VALUES( $mindmapId, $userId, $privilages )", 
+					$this->mindmapUsersTbl );
+	
+		$db->query( $sql );
 	}
 
 }
