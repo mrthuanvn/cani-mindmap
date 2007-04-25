@@ -7,6 +7,7 @@ package pl.cani.mindmap.business {
 	import mx.rpc.remoting.RemoteObject;
 	
 	import pl.cani.mindmap.vo.MindmapVO;
+	import pl.cani.mindmap.vo.UserVO;
 	
 	public class MindmapServiceDelegate	{
 		
@@ -26,6 +27,14 @@ package pl.cani.mindmap.business {
 		
 		public function getMindmapsByOwnerId( ownerId : uint ) : void {
 			var token : AsyncToken = service.getMindmapsByOwnerId( ownerId );
+			token.addResponder( responder );
+		}
+		
+		public function setPrivilagesForUser( mindmap : MindmapVO, user : UserVO,
+				privilages : uint ) : void {
+
+			var token : AsyncToken = service.setPrivilagesForUser( mindmap,
+				user, privilages );
 			token.addResponder( responder );
 		}
 		

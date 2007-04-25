@@ -21,8 +21,10 @@ package pl.cani.mindmap.vo {
 		public var isActive : Boolean;
 		public var activationKey : String;
 		
-		public function UserVO() {
+		public function UserVO( forname : String = null, surname : String = null ) {
 			registerClassAlias( "pl.cani.mindmap.vo.UserVO", UserVO );
+			this.forname = forname;
+			this.surname = surname;
 		}
 		
 		public function toString() : String {

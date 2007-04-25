@@ -13,16 +13,18 @@ package pl.cani.mindmap.commands {
 	import mx.rpc.events.ResultEvent;
 	
 	import pl.cani.mindmap.business.LoginServiceDelegate;
+	import pl.cani.mindmap.business.SessionAndPersitentData;
 	import pl.cani.mindmap.business.exceptions.UserDoesntExistException;
 	import pl.cani.mindmap.business.exceptions.UserNotActivatedException;
 	import pl.cani.mindmap.business.exceptions.WrongPasswordException;
 	import pl.cani.mindmap.events.LoggingEvent;
 	import pl.cani.mindmap.model.AppModelLocator;
+	import pl.cani.mindmap.utils.SWFAddressHandler;
 	import pl.cani.mindmap.view.helpers.LoginFormHelper;
 	import pl.cani.mindmap.view.helpers.MainViewHelper;
 	import pl.cani.mindmap.view.helpers.ViewNames;
 	import pl.cani.mindmap.vo.UserVO;
-	import pl.cani.mindmap.business.SessionAndPersitentData;
+	import com.asual.swfaddress.SWFAddress;
 
 
 	public class LogInUserCommand implements ICommand, IResponder {
@@ -71,15 +73,22 @@ package pl.cani.mindmap.commands {
                 SessionAndPersitentData.getInstance()
                 .setLoggedInUser( user, rememberUser );
 
-				var mainViewHelper : MainViewHelper = ViewLocator.getInstance()
-					.getViewHelper( ViewNames.MAIN ) as MainViewHelper;
 					
-				mainViewHelper.setState( MainViewHelper.LOGGED_IN_STATE );
-				
 				var loginFormHelper : LoginFormHelper = ViewLocator.getInstance()
 					.getViewHelper( ViewNames.LOGIN_FORM ) as LoginFormHelper;
 					
 				loginFormHelper.resetForm();
+
+				
+
+				if ( SWFAddress.getValue() != null && SWFAddress.getValue() != "" ) {
+					SWFAddressHandler.handle();
+				} else {
+	 				var mainViewHelper : MainViewHelper = ViewLocator.getInstance()
+						.getViewHelper( ViewNames.MAIN ) as MainViewHelper;
+	
+					mainViewHelper.setState( MainViewHelper.LOGGED_IN_STATE );
+				}
 			} else {
 				Alert.show( "coś nie pykło" );
 			}
