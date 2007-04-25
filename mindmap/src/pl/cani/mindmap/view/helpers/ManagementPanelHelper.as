@@ -40,6 +40,10 @@ package pl.cani.mindmap.view.helpers {
 			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
 		}
 		
+		public function getSelectedMindmap() : MindmapVO {
+			return concreteView.mindmapsCbx.selectedItem as MindmapVO;
+		}
+		
 		private function onMindmapAdded( event : MindmapEvent ) : void {
 			concreteView.createMindMapBtn.enabled = true;
 			concreteView.createMindMapBtn.label = rb.getString( "saveMindmap" );

@@ -3,16 +3,10 @@
  **/
 package pl.cani.controls {
 	
-	import flash.events.Event;
-	
 	import mx.collections.ArrayCollection;
-	import mx.controls.Alert;
-	import mx.controls.DataGrid;
 	import mx.controls.listClasses.ListBase;
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
-	import mx.events.FlexEvent;
-	import mx.validators.ValidationResult;
 	
 	/**
 	 * Allows for draging'n'droping elements from <code>source</code> to <code>
@@ -33,25 +27,33 @@ package pl.cani.controls {
 	 
 	public class DragAndDropNoRepeat extends UIComponent {
 		
-		[Inspectable]
-		public var source : ListBase;
-		
-		[Inspectable]
-		public var destination : ListBase;
+		private var _source : ListBase;
+		private var _destination : ListBase;
 		
 		private var supressEvents : Boolean = false;
 		private var allowedItems : Array;
 		private var disallowedItems : Array;
 		
-		public function DragAndDropNoRepeat() {
-			addEventListener( FlexEvent.CREATION_COMPLETE, onCreationComplete );
+
+		public function set source( value : ListBase ) : void {
+			_source = value;
+			_source.addEventListener( DragEvent.DRAG_COMPLETE, clearInfo )
 		}
 		
-		private function onCreationComplete( event : FlexEvent ) : void {
-			destination.addEventListener( DragEvent.DRAG_ENTER, onDestinationDragEnter );
-			source.addEventListener( DragEvent.DRAG_COMPLETE, clearInfo )
+		public function get source() : ListBase {
+			return _source;
 		}
 		
+		public function set destination( value : ListBase ) : void {
+			_destination = value;
+			_destination.addEventListener( DragEvent.DRAG_ENTER, onDestinationDragEnter );
+		}
+		
+		public function get destination() : ListBase {
+			return _destination;
+		}
+		
+
 		private function onDestinationDragEnter( event : DragEvent ) : void {
 			if ( supressEvents == false ) {
 				var items : Array = 

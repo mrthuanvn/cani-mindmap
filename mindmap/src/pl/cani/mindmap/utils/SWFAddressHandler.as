@@ -9,6 +9,11 @@ package pl.cani.mindmap.utils {
 	import pl.cani.mindmap.events.ActivationEvent;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import pl.cani.mindmap.events.EventFactory;
+	import pl.cani.mindmap.events.LoggingEvent;
+	import pl.cani.mindmap.control.Controller;
+	import pl.cani.mindmap.events.ViewEvent;
+	import pl.cani.mindmap.vo.UserVO;
+	import pl.cani.mindmap.business.SessionAndPersitentData;
 	
 	
 	public class SWFAddressHandler {
@@ -21,6 +26,22 @@ package pl.cani.mindmap.utils {
 			var params : Array = getParams();
 			
 			var event : CairngormEvent = EventFactory.createEvent( sections, params );
+
+			// redirect if not logged in
+			var viewEvent : ViewEvent = event as ViewEvent;
+			var loggedInUser : UserVO = SessionAndPersitentData.getInstance()
+				.getLoggedInUser();
+			if ( viewEvent != null ) {
+
+				var isLoginOrRegistration : Boolean = 
+					viewEvent.section == ViewNames.LOGIN_FORM 
+					|| viewEvent.section == ViewNames.REGISTRATION_FORM;
+
+				if ( isLoginOrRegistration == false && loggedInUser == null ) {
+					event = new ViewEvent( "login" );
+				}
+			}
+
 			if ( event != null ) {
 				CairngormEventDispatcher.getInstance().dispatchEvent( event );
 			}

@@ -16,6 +16,7 @@ package pl.cani.mindmap.view.helpers {
 	import pl.cani.mindmap.validators.EmailPasswordPair;
 	import pl.cani.mindmap.view.LoginForm;
 	import pl.cani.mindmap.events.RegistrationEvent;
+	import pl.cani.mindmap.events.ViewEvent;
 
 
 	public class LoginFormHelper extends ViewHelper	{
@@ -30,6 +31,8 @@ package pl.cani.mindmap.view.helpers {
 		private var rb : ResourceBundle;
 	
 		private var concreteView : LoginForm;
+		
+		private var _pendingEvent : ViewEvent;
 	
 		public function LoginFormHelper( view : LoginForm ) {
 			this.view = view;
@@ -187,6 +190,14 @@ package pl.cani.mindmap.view.helpers {
             formIsValid = formIsValid && currentControlIsValid;
              
             return currentControlIsValid;
+       }
+       
+       public function set pendingEvent( value : ViewEvent ) : void {
+       		_pendingEvent = pendingEvent;
+       }
+       
+       public function get pendingEvent() : ViewEvent {
+       		return _pendingEvent;
        }
 	
 	}

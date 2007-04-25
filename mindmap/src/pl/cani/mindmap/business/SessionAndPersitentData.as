@@ -45,6 +45,11 @@ package pl.cani.mindmap.business {
             sharedObject.flush();
         }
         
+        public function logoutUser() : void {
+        	loggedInUser = null;
+        	setRememberUser( false );
+        }
+        
     }
     
 }

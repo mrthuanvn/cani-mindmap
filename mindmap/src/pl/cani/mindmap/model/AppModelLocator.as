@@ -9,6 +9,7 @@ package pl.cani.mindmap.model {
 	import pl.cani.mindmap.view.LoginRegistration;
 	import pl.cani.mindmap.view.MainView;
 	import pl.cani.mindmap.view.RegistrationForm;
+	import pl.cani.mindmap.view.ManagementPanel;
 
 	[Bindable]
 	public class AppModelLocator implements ModelLocator {
@@ -21,6 +22,7 @@ package pl.cani.mindmap.model {
 		public var loginForm : LoginForm;
 		public var registrationForm : RegistrationForm;
 		
+		public var managementPanel : ManagementPanel;
 		public var myMindmaps : ArrayCollection;
 		public var mindmapUsersDataGrid : DataGrid;
 		

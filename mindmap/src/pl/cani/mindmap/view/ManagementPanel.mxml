@@ -4,6 +4,9 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.cairngorm.model.ModelLocator;
+			import mx.managers.PopUpManager;
+			import mx.events.DragEvent;
 			import com.asual.swfaddress.SWFAddress;
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import pl.cani.mindmap.business.SessionAndPersitentData;
@@ -29,6 +32,7 @@
 				ViewLocator.getInstance().register( ViewNames.MANAGEMENT_PANEL, helper );
 				
 				AppModelLocator.getInstance().mindmapUsersDataGrid = mindmapUsersDataGrid;
+//				AppModelLocator.getInstance().managementPanel = this;
 				
 				var mindmapEvent : MindmapEvent 
 					= new MindmapEvent( MindmapEvent.GET_BY_OWNER_ID );
@@ -50,6 +54,15 @@
 			private function onGrantPrivilagesBtnClick() : void {
 				SWFAddress.setValue( ViewNames.PRIVILAGES );
 				AppModelLocator.getInstance().mainView.currentState = 'privilages';
+			}
+			
+			public function onDragDrop( event : DragEvent ) : void {
+				var privilagesWindow : PrivilagesWindow = new PrivilagesWindow();
+				privilagesWindow.dataProvider 
+					= event.dragSource.dataForFormat( "items" );
+				PopUpManager.addPopUp( privilagesWindow, 
+					AppModelLocator.getInstance().mainView, true );
+				PopUpManager.centerPopUp( privilagesWindow );
 			}
 			
 		]]>
@@ -89,7 +102,8 @@
 			<mx:ComboBox id="mindmapsCbx" 
 				dataProvider="{ AppModelLocator.getInstance().myMindmaps }" />
 		</mx:HBox>
-		<mx:DataGrid id="mindmapUsersDataGrid" dropEnabled="true">
+		<mx:DataGrid id="mindmapUsersDataGrid" dropEnabled="true"
+			dragDrop="onDragDrop( event )">
 			<mx:columns>
 				<mx:DataGridColumn headerText="@Resource( 'forname' )" dataField="forname"/>
 				<mx:DataGridColumn headerText="@Resource( 'surname' )" dataField="surname"/>
@@ -102,5 +116,5 @@
 			<mx:Button label="@Resource( 'createMindmap' )" id="createMindMapBtn" click="currentState = 'createMindmap'"/>
 		</mx:HBox>
 	</mx:VBox>
-
+	
 </mx:Panel>

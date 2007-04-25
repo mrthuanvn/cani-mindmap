@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal"
+	title="Set Permissions">
+	
+	<mx:Script>
+		<![CDATA[
+			import pl.cani.mindmap.events.MindmapEvent;
+			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import com.adobe.cairngorm.view.ViewLocator;
+			import pl.cani.mindmap.vo.MindmapVO;
+			import pl.cani.mindmap.vo.UserVO;
+			import com.mikenimer.components.Debug;
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import mx.controls.CheckBox;
+			
+			[Bindable]
+			public var dataProvider : Object;
+			
+			private function close() : void {
+				dispatchEvents();
+				PopUpManager.removePopUp( this );
+			}
+			
+			private function dispatchEvents() : void {
+				var i : uint = 0;
+				for each ( var user : UserVO in dataProvider ) {
+					var readCbx : CheckBox = read[ i ];
+					var writeCbx : CheckBox = write[ i ];
+
+					var privilages : uint = readCbx.selected ? 1 : 0;
+					privilages += writeCbx.selected ? 1 : 0;
+
+					var helper : ManagementPanelHelper = ViewLocator.getInstance()
+						.getViewHelper( ViewNames.MANAGEMENT_PANEL ) 
+						as ManagementPanelHelper;
+
+					var mindmap : MindmapVO = helper.getSelectedMindmap();
+					
+					var event : MindmapEvent = new MindmapEvent(
+						MindmapEvent.SET_PRIVILAGES_FOR_USER );
+					event.mindmap = mindmap;
+					event.user = user;
+					event.privilages = privilages;
+					
+					CairngormEventDispatcher.getInstance().dispatchEvent( event );
+					
+					i++;
+				}
+			}
+			
+			private function setReadCbx( index : uint ) : void {
+				var readCbx : CheckBox = read[ index ];
+				var writeCbx : CheckBox = write[ index ];
+				if ( writeCbx.selected == true ) {
+					readCbx.selected = true;
+				}
+			}
+			
+			private function setWriteCbx( index : uint ) : void {
+				var readCbx : CheckBox = read[ index ];
+				var writeCbx : CheckBox = write[ index ];
+				if ( readCbx.selected == false ) {
+					writeCbx.selected = false;
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:HBox verticalAlign="middle" horizontalGap="20" label="dupa">
+		<mx:Spacer width="0" />
+		<mx:Image source="@Embed( '../../../../../assets/icons/user_add.png' )" />
+		<mx:Grid>
+			<mx:GridRow fontWeight="bold">
+				<mx:GridItem><mx:Label text="User" /></mx:GridItem>
+				<mx:GridItem><mx:Label text="Read" /></mx:GridItem>
+				<mx:GridItem><mx:Label text="Write" /></mx:GridItem>								
+			</mx:GridRow>
+			<mx:Repeater id="rp" dataProvider="{dataProvider}">
+				<mx:GridRow>
+					<mx:GridItem><mx:Label text="{rp.currentItem}" /></mx:GridItem>
+					<mx:GridItem horizontalAlign="center">
+						<mx:CheckBox id="read" selected="true"
+							click="setWriteCbx( event.target.instanceIndices )" />
+					</mx:GridItem>
+					<mx:GridItem horizontalAlign="center">
+						<mx:CheckBox id="write" 
+							click="setReadCbx( event.target.instanceIndices )" />
+					</mx:GridItem>
+				</mx:GridRow>
+			</mx:Repeater>
+		</mx:Grid>
+	</mx:HBox>
+	<mx:ControlBar>
+		<mx:Spacer width="100%" />
+		<mx:Button id="okBtn" label="OK" click="close()" />
+	</mx:ControlBar>
+</mx:TitleWindow>

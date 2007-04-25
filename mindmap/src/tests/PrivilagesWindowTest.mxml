@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" xmlns:view="pl.cani.mindmap.view.*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import pl.cani.mindmap.vo.UserVO;
+			
+			[Bindable]
+			public var users : ArrayCollection = new ArrayCollection( [
+				new UserVO( "Jan", "Kłosiński" ),
+				new UserVO( "Mietek", "Krawężnik" ),
+				new UserVO( "kuzyn", "Mietka" )
+			] );
+			
+			[Bindable]
+			private var user : UserVO = new UserVO( "Jan", "Kłosiński" );
+			
+		]]>
+	</mx:Script>
+	
+	<view:PrivilagesWindow id="widnow" dataProvider="{users}" />
+	
+</mx:Application>
