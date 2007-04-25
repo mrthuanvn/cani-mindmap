@@ -34,13 +34,15 @@ class CDatabase
     		if ( 0 == $this->linkId ) 
     		{
 			$this->linkId = mysql_pconnect($host, $user, $password);
+   			
+   			mysql_query( "SET NAMES 'utf8'" );
       			
       			if (!$this->linkId)
-        			new CException(sprintf("pconnect('%s', '%s', \$password) nie uzyska³ po³±czenia", $host, $user), __FILE__, __LINE__);
+        			new CException(sprintf("pconnect('%s', '%s', \$password) nie uzyskaï¿½ poï¿½ï¿½czenia", $host, $user), __FILE__, __LINE__);
       		}
 
       		if (!@mysql_select_db($database,$this->linkId)) 
-       			new CException(sprintf("nie mogê u¿yæ bazy '%s'", $database), __FILE__, __LINE__);
+       			new CException(sprintf("nie mogï¿½ uï¿½yï¿½ bazy '%s'", $database), __FILE__, __LINE__);
 
     		return $this->linkId;
   	}
@@ -94,7 +96,7 @@ class CDatabase
     		if ($status)
       			$this->row = $pos;
     		else
-    			new CException(sprintf("seek(%d) zawiód³: wynik ma %d wiersz(y)", $pos, $this->numRows()), __FILE__, __LINE__);
+    			new CException(sprintf("seek(%d) zawiï¿½dï¿½: wynik ma %d wiersz(y)", $pos, $this->numRows()), __FILE__, __LINE__);
 
     		return;
   	}
@@ -105,7 +107,7 @@ class CDatabase
     		$res = @mysql_query("lock tables $table $mode", $this->Link_ID);
     		
     		if (!$res)
-    			new CException(sprintf("lock('%s', '%s') zawiód³", $table, $mode), __FILE__, __LINE__);
+    			new CException(sprintf("lock('%s', '%s') zawiï¿½dï¿½", $table, $mode), __FILE__, __LINE__);
     		
     		return $res;
   	}
@@ -114,7 +116,7 @@ class CDatabase
   	{
     		$res = @mysql_query("unlock tables");
     		if (!$res)
-  			new CException("unlock('%s', '%s') zawiód³", __FILE__, __LINE__);
+  			new CException("unlock('%s', '%s') zawiï¿½dï¿½", __FILE__, __LINE__);
     		
     		return $res;
   	}
