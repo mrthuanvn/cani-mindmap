@@ -69,7 +69,6 @@ package pl.cani.mindmap.view.helpers {
 		
 		private function onMindmapUsersFound( event : MindmapEvent ) : void {
 			concreteView.mindmapUsersDataGrid.dataProvider = event.mindmapUserPairs;
-			Debug.show( event.mindmapUserPairs );
 		}
 		
 		private function onMindmapsFound( event : MindmapEvent ) : void {

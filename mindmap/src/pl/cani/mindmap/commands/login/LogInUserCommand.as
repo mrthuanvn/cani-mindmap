@@ -1,4 +1,4 @@
-package pl.cani.mindmap.commands {
+package pl.cani.mindmap.commands.login {
 	
 	import com.adobe.cairngorm.business.ServiceLocator;
 	import com.adobe.cairngorm.commands.ICommand;

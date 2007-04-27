@@ -3,6 +3,8 @@ package pl.cani.mindmap.control {
 	import com.adobe.cairngorm.control.FrontController;
 	
 	import pl.cani.mindmap.commands.*;
+	import pl.cani.mindmap.commands.login.*;
+	import pl.cani.mindmap.commands.mindmap.*;
 	import pl.cani.mindmap.events.MindmapEvent;
 	import pl.cani.mindmap.events.RegistrationEvent;
 	import pl.cani.mindmap.events.UserServiceEvent;

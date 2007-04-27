@@ -1,7 +1,8 @@
-package pl.cani.mindmap.commands {
+package pl.cani.mindmap.commands.mindmap {
 	
 	import com.adobe.cairngorm.commands.SequenceCommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.adobe.cairngorm.control.CairngormEventDispatcher;
 	import com.mikenimer.components.Debug;
 	
 	import mx.controls.Alert;
@@ -9,7 +10,6 @@ package pl.cani.mindmap.commands {
 	
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
 	import pl.cani.mindmap.events.MindmapEvent;
-	import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 	public class AddMindmapCommand extends SequenceCommand implements IResponder {
 		
