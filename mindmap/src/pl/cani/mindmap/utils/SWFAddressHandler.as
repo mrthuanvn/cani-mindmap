@@ -1,19 +1,20 @@
 package pl.cani.mindmap.utils {
 
+	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.adobe.cairngorm.control.CairngormEventDispatcher;
 	import com.asual.swfaddress.SWFAddress;
 	
 	import mx.controls.Alert;
-	import pl.cani.mindmap.view.helpers.ViewNames;
-	import pl.cani.mindmap.events.RegistrationEvent;
-	import com.adobe.cairngorm.control.CairngormEventDispatcher;
+	
+	import pl.cani.mindmap.business.SessionAndPersitentData;
+	import pl.cani.mindmap.control.Controller;
 	import pl.cani.mindmap.events.ActivationEvent;
-	import com.adobe.cairngorm.control.CairngormEvent;
 	import pl.cani.mindmap.events.EventFactory;
 	import pl.cani.mindmap.events.LoggingEvent;
-	import pl.cani.mindmap.control.Controller;
+	import pl.cani.mindmap.events.RegistrationEvent;
 	import pl.cani.mindmap.events.ViewEvent;
+	import pl.cani.mindmap.view.helpers.ViewNames;
 	import pl.cani.mindmap.vo.UserVO;
-	import pl.cani.mindmap.business.SessionAndPersitentData;
 	
 	
 	public class SWFAddressHandler {

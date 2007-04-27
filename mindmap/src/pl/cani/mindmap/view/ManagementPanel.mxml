@@ -4,6 +4,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.model.MindmapUserPair;
 			import com.adobe.cairngorm.model.ModelLocator;
 			import mx.managers.PopUpManager;
 			import mx.events.DragEvent;
@@ -29,9 +30,11 @@
 			
 			private function onCreationComplete() : void {
 				helper = new ManagementPanelHelper( this );
-				ViewLocator.getInstance().register( ViewNames.MANAGEMENT_PANEL, helper );
+				ViewLocator.getInstance().register( ViewNames.MANAGEMENT_PANEL, 
+					helper );
 				
-				AppModelLocator.getInstance().mindmapUsersDataGrid = mindmapUsersDataGrid;
+				AppModelLocator.getInstance().mindmapUsersDataGrid 
+					= mindmapUsersDataGrid;
 //				AppModelLocator.getInstance().managementPanel = this;
 				
 				var mindmapEvent : MindmapEvent 
@@ -63,6 +66,16 @@
 				PopUpManager.addPopUp( privilagesWindow, 
 					AppModelLocator.getInstance().mainView, true );
 				PopUpManager.centerPopUp( privilagesWindow );
+			}
+			
+			private function displayUserName( pair : MindmapUserPair, 
+					column : DataGridColumn ) : String {
+				return pair.user.forname + " " + pair.user.surname;
+			}
+			
+			private function displayUserEmail( pair : MindmapUserPair,
+					column : DataGridColumn ) : String {
+				return pair.user.email;
 			}
 			
 		]]>
@@ -97,24 +110,39 @@
 	</mx:transitions>
 
 	<mx:VBox bottom="10" top="10" id="vbox1" right="10" left="10">
+	
 		<mx:HBox width="100%">
 			<mx:Label text="@Resource( 'myMindmaps' )" id="myMindmapsLbl"/>
-			<mx:ComboBox id="mindmapsCbx" 
-				dataProvider="{ AppModelLocator.getInstance().myMindmaps }" />
+			<mx:ComboBox id="mindmapsCbx" change="helper.findMindmapUsers( event )"
+				dataProvider="{ AppModelLocator.getInstance().myMindmaps }"
+				 />
 		</mx:HBox>
-		<mx:DataGrid id="mindmapUsersDataGrid" dropEnabled="true"
+	
+		<mx:DataGrid id="mindmapUsersDataGrid" dropEnabled="true" editable="true"
 			dragDrop="onDragDrop( event )">
 			<mx:columns>
-				<mx:DataGridColumn headerText="@Resource( 'forname' )" dataField="forname"/>
-				<mx:DataGridColumn headerText="@Resource( 'surname' )" dataField="surname"/>
-				<mx:DataGridColumn headerText="E-mail" dataField="email"/>
+				<mx:DataGridColumn labelFunction="displayUserName" 
+					headerText="@Resource( key = 'fullname', bundle = 'Generic' )" 
+					rendererIsEditor="true" />
+				<mx:DataGridColumn labelFunction="displayUserEmail"
+					headerText="E-mail" rendererIsEditor="true" />
+				<mx:DataGridColumn dataField="canRead" 
+					headerText="@Resource( key = 'read', bundle = 'Generic' )"
+					rendererIsEditor="true" itemRenderer="mx.controls.CheckBox"
+					editorDataField="selected" />
+				<mx:DataGridColumn dataField="canWrite" 
+					headerText="@Resource( key = 'write', bundle = 'Generic' )"
+					rendererIsEditor="true" itemRenderer="mx.controls.CheckBox"
+					editorDataField="selected" />
 			</mx:columns>
 		</mx:DataGrid>
+	
 		<mx:HBox width="100%">
 			<mx:Button label="@Resource( 'grantPrivilages' )" id="grantPrivilagesBtn"
 				click="onGrantPrivilagesBtnClick()"/>
 			<mx:Button label="@Resource( 'createMindmap' )" id="createMindMapBtn" click="currentState = 'createMindmap'"/>
 		</mx:HBox>
+	
 	</mx:VBox>
 	
 </mx:Panel>

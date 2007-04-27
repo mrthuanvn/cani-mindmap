@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" xmlns:ns1="pl.cani.mindmap.view.*"
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" 
 	creationComplete="onCreationComplete()">
 
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.model.MindmapUserPair;
+			import mx.controls.listClasses.IListItemRenderer;
+			import mx.events.ListEvent;
+			import mx.controls.Alert;
+			import mx.controls.CheckBox;
+			import com.mikenimer.components.Debug;
+			import pl.cani.mindmap.model.MindmapPrivilages;
 			import mx.controls.dataGridClasses.DataGridColumn;
 			import pl.cani.mindmap.vo.UserVO;
 			
@@ -12,17 +19,45 @@
 			[Bindable]
 			private var users : Array = [ user ];
 			
+			[Bindable]
+			private var readWrite : uint = 2;
+			
 			private var dupa : Array = [ "asdf", "asdf", "dgh" ];
+			
+			[Bindable]
+			private var pairs : Array = [
+				new MindmapUserPair( null, 
+					new UserVO( "Jan", "Kłosiński", "janek@cani.pl" ), 
+					MindmapPrivilages.READ_WRITE ),
+				new MindmapUserPair( null, 
+					new UserVO( "Mietek", "Krawężnik", "mietek@kraweznik.pl" ), 
+					MindmapPrivilages.READ ),
+				new MindmapUserPair( null, 
+					new UserVO( "Kuzyn", "Mietka", "kuzyn@mietka.pl" ), 
+					MindmapPrivilages.READ )
+			];
 				
 			private function onCreationComplete() : void {
 				user.id = 1;
 				user.forname = "Janek";
 				user.surname = "Kłosiński";
 				user.email = "vanjan@gmail.com";
+				
+//				Debug.show( pairs );
 			}
 			
 			private function labelFunction( data : UserVO, column : DataGridColumn ) : String {
 				return data.forname + " " + data.surname;
+			}
+			
+			private function displayUserName( pair : MindmapUserPair, 
+					column : DataGridColumn ) : String {
+				return pair.user.forname + " " + pair.user.surname;
+			}
+			
+			private function displayUserEmail( pair : MindmapUserPair,
+					column : DataGridColumn ) : String {
+				return pair.user.email;
 			}
 			
 		]]>
@@ -30,8 +65,24 @@
 
 	<mx:DataGrid id="dg" dataProvider="{ users }">
 		<mx:columns>
-			<mx:DataGridColumn labelFunction="labelFunction" headerText="Imię i nazwisko" />
+			<mx:DataGridColumn labelFunction="labelFunction" 
+				headerText="Imię i nazwisko" />
 			<mx:DataGridColumn dataField="email" />
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:DataGrid id="dg2" dataProvider="{ pairs }" editable="true">
+		<mx:columns>
+			<mx:DataGridColumn labelFunction="displayUserName" 
+				headerText="Imię i nazwisko" rendererIsEditor="true" />
+			<mx:DataGridColumn labelFunction="displayUserEmail"
+				headerText="Email" rendererIsEditor="true" />
+			<mx:DataGridColumn dataField="canRead" headerText="Read"
+				rendererIsEditor="true" itemRenderer="mx.controls.CheckBox"
+				editorDataField="selected" />
+			<mx:DataGridColumn dataField="canWrite" headerText="Write"
+				rendererIsEditor="true" itemRenderer="mx.controls.CheckBox"
+				editorDataField="selected" />
 		</mx:columns>
 	</mx:DataGrid>
 	

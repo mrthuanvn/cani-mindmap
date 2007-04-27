@@ -10,6 +10,7 @@ package pl.cani.mindmap.commands {
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
 	import pl.cani.mindmap.events.MindmapEvent;
 	import pl.cani.mindmap.model.AppModelLocator;
+	import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 	public class GetMindmapsByOwnerIdCommand implements ICommand, IResponder {
 		
@@ -37,6 +38,12 @@ package pl.cani.mindmap.commands {
 			var mindmaps : Array = data.result;
 			cachedMindmaps = new ArrayCollection( mindmaps );
 			AppModelLocator.getInstance().myMindmaps = cachedMindmaps;
+			
+			var mindmapEvent : MindmapEvent = new MindmapEvent(
+				MindmapEvent.MINDMAPS_FOUND );
+			mindmapEvent.mindmaps = mindmaps;
+			
+			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
 		}
 		
 		public function fault( info : Object ) : void {

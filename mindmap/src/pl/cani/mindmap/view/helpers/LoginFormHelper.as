@@ -13,10 +13,10 @@ package pl.cani.mindmap.view.helpers {
 	
 	import pl.cani.mindmap.events.ActivationAndLoggingEvent;
 	import pl.cani.mindmap.events.LoggingEvent;
-	import pl.cani.mindmap.validators.EmailPasswordPair;
-	import pl.cani.mindmap.view.LoginForm;
 	import pl.cani.mindmap.events.RegistrationEvent;
 	import pl.cani.mindmap.events.ViewEvent;
+	import pl.cani.mindmap.validators.EmailPasswordPair;
+	import pl.cani.mindmap.view.LoginForm;
 
 
 	public class LoginFormHelper extends ViewHelper	{

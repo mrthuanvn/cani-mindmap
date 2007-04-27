@@ -8,7 +8,7 @@ package pl.cani.mindmap.vo {
 	
 	[Bindable]
 	[RemoteClass( alias = "pl.cani.mindmap.vo.UserVO" )]
-	public class UserVO implements IValueObject, IUID	{
+	public class UserVO implements IValueObject /* , IUID */	{
 		
 		public var id : uint;
 
@@ -21,24 +21,28 @@ package pl.cani.mindmap.vo {
 		public var isActive : Boolean;
 		public var activationKey : String;
 		
-		public function UserVO( forname : String = null, surname : String = null ) {
+		public function UserVO( forname : String = null, surname : String = null,
+				email : String = null ) {
+
 			registerClassAlias( "pl.cani.mindmap.vo.UserVO", UserVO );
+
 			this.forname = forname;
 			this.surname = surname;
+			this.email = email;
 		}
 		
 		public function toString() : String {
 			return forname + " " + surname + ", " + email;
 		}
 		
-		public function get uid() : String {
+/*		public function get uid() : String {
 			return String(id);
 		}
 		
 		public function set uid( value : String ) : void {
 			id = int(value);
 		}
-		
+*/		
 	}
 	
 }

@@ -38,5 +38,10 @@ package pl.cani.mindmap.business {
 			token.addResponder( responder );
 		}
 		
+		public function findMindmapUsers( mindmap : MindmapVO ) : void {
+			var token : AsyncToken = service.findMindmapUsers( mindmap );
+			token.addResponder( responder );
+		}
+		
 	}
 }
