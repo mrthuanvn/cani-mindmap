@@ -1,6 +1,7 @@
 package pl.cani.mindmap.control {
 	
 	import com.adobe.cairngorm.control.FrontController;
+	
 	import pl.cani.mindmap.commands.*;
 	import pl.cani.mindmap.events.MindmapEvent;
 	import pl.cani.mindmap.events.RegistrationEvent;
@@ -26,6 +27,7 @@ package pl.cani.mindmap.control {
 			addCommand( MindmapEvent.GET_BY_OWNER_ID, GetMindmapsByOwnerIdCommand );
 			addCommand( MindmapEvent.GET_BY_OWNER_ID_REFRESHED, GetMindmapsByOwnerIdCommand );
 			addCommand( MindmapEvent.SET_PRIVILAGES_FOR_USER, SetPrivilagesForUserCommand );
+			addCommand( MindmapEvent.FIND_MINDMAP_USERS, FindMindmapUsersCommand );
 			
 			addCommand( UserServiceEvent.FIND_USERS, FindUsersCommand );
 		}

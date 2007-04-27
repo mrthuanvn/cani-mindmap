@@ -4,6 +4,7 @@ package pl.cani.mindmap.commands {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.adobe.cairngorm.view.ViewLocator;
+	import com.asual.swfaddress.SWFAddress;
 	import com.mikenimer.components.Debug;
 	
 	import flash.net.SharedObject;
@@ -24,7 +25,6 @@ package pl.cani.mindmap.commands {
 	import pl.cani.mindmap.view.helpers.MainViewHelper;
 	import pl.cani.mindmap.view.helpers.ViewNames;
 	import pl.cani.mindmap.vo.UserVO;
-	import com.asual.swfaddress.SWFAddress;
 
 
 	public class LogInUserCommand implements ICommand, IResponder {
