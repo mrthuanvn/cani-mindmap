@@ -1,4 +1,4 @@
-package pl.cani.mindmap.commands {
+package pl.cani.mindmap.commands.mindmap {
 	
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
@@ -9,8 +9,8 @@ package pl.cani.mindmap.commands {
 	
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
 	import pl.cani.mindmap.events.MindmapEvent;
-	import pl.cani.mindmap.vo.MindmapVO;
 	import pl.cani.mindmap.model.MindmapUserPair;
+	import pl.cani.mindmap.vo.MindmapVO;
 
 	public class FindMindmapUsersCommand implements ICommand, IResponder {
 		
