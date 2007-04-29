@@ -2,24 +2,28 @@ package pl.cani.mindmap.view.helpers {
 	
 	import com.adobe.cairngorm.control.CairngormEventDispatcher;
 	import com.adobe.cairngorm.view.ViewHelper;
+	import com.adobe.cairngorm.view.ViewLocator;
 	import com.mikenimer.components.Debug;
 	
+	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
+	import mx.controls.DataGrid;
+	import mx.events.CollectionEvent;
 	import mx.events.DataGridEvent;
+	import mx.events.DragEvent;
 	import mx.events.ListEvent;
+	import mx.managers.PopUpManager;
 	import mx.resources.ResourceBundle;
 	
 	import pl.cani.mindmap.business.SessionAndPersitentData;
 	import pl.cani.mindmap.events.MindmapEvent;
+	import pl.cani.mindmap.model.AppModelLocator;
+	import pl.cani.mindmap.model.MindmapPrivilages;
+	import pl.cani.mindmap.model.MindmapUserPair;
 	import pl.cani.mindmap.view.ManagementPanel;
+	import pl.cani.mindmap.view.PrivilagesWindow;
 	import pl.cani.mindmap.vo.MindmapVO;
 	import pl.cani.mindmap.vo.UserVO;
-	import pl.cani.mindmap.model.MindmapUserPair;
-	import pl.cani.mindmap.model.MindmapPrivilages;
-	import pl.cani.mindmap.model.AppModelLocator;
-	import mx.collections.ArrayCollection;
-	import mx.events.CollectionEvent;
-	import mx.controls.DataGrid;
 
 	public class ManagementPanelHelper extends ViewHelper {
 		
@@ -123,6 +127,34 @@ package pl.cani.mindmap.view.helpers {
 		
 		public function getMindmapUsersDataGrid() : DataGrid {
 			return concreteView.mindmapUsersDataGrid;
+		}
+		
+		public function popUpPrivilagesWindow( event : DragEvent ) : void {
+			var privilagesWindow : PrivilagesWindow = new PrivilagesWindow();
+
+			var pairs : Array = convertToPairs( 
+					event.dragSource.dataForFormat( "items" ) as Array );
+
+			privilagesWindow.dataProvider = pairs;
+			event.dragSource.addData( pairs, "items" );
+
+			PopUpManager.addPopUp( privilagesWindow, 
+				AppModelLocator.getInstance().mainView, true );
+			PopUpManager.centerPopUp( privilagesWindow );
+			
+			var privilagesHelper : PrivilagesPanelHelper 
+				= ViewLocator.getInstance().getViewHelper( ViewNames.PRIVILAGES )
+				as PrivilagesPanelHelper;
+				
+			privilagesHelper.resetInfo();
+		}
+		
+		public function deleteSelectedUser() : void {
+			var selectedIndex : uint 
+				= concreteView.mindmapUsersDataGrid.selectedIndex;
+
+			ArrayCollection( concreteView.mindmapUsersDataGrid.dataProvider )
+			.removeItemAt( selectedIndex );
 		}
 		
 	}

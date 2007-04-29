@@ -19,11 +19,11 @@ package pl.cani.mindmap.commands.login {
 	import pl.cani.mindmap.view.RegistrationForm;
 	import pl.cani.mindmap.vo.UserVO;
 
-	[ Event( name = "registrationComplete", 
-		type = "pl.cani.mindmap.events.RegistrationEvent" ) ]
+	[Event( name = "registrationComplete", 
+		type = "pl.cani.mindmap.events.RegistrationEvent" )]
 
-	[ Event( name = "userAleradyExists", 
-		type = "pl.cani.mindmap.events.RegistrationEvent" ) ]
+	[Event( name = "userAleradyExists", 
+		type = "pl.cani.mindmap.events.RegistrationEvent" )]
 
 	public class RegisterUserCommand extends EventDispatcher 
 		implements ICommand, IResponder {

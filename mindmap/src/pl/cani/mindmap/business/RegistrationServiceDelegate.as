@@ -21,14 +21,12 @@ package pl.cani.mindmap.business {
 		
 		public function registerUser( user : UserVO ) : void {
 			var token : AsyncToken = service.registerUser( user );
-			token.resultHandler = responder.result;
-			token.faultHandler = responder.fault;
+			token.addResponder( responder );
 		}
 		
 		public function activateUser( activationKey : String ) : void {
 			var token : AsyncToken = service.activateUser( activationKey );
-			token.resultHandler = responder.result;
-			token.faultHandler = responder.fault;
+			token.addResponder( responder );
 		}
 		
 	}

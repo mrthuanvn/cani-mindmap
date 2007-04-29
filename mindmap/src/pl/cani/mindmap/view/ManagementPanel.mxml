@@ -5,29 +5,18 @@
 
 	<mx:Script>
 		<![CDATA[
-			import com.mikenimer.components.Debug;
-			import mx.controls.listClasses.IListItemRenderer;
-			import mx.collections.ArrayCollection;
-			import mx.events.CollectionEvent;
-			import mx.controls.Alert;
-			import pl.cani.mindmap.model.MindmapPrivilages;
-			import mx.events.DataGridEvent;
-			import pl.cani.mindmap.view.helpers.PrivilagesPanelHelper;
-			import pl.cani.mindmap.model.MindmapUserPair;
-			import com.adobe.cairngorm.model.ModelLocator;
-			import mx.managers.PopUpManager;
-			import mx.events.DragEvent;
-			import com.asual.swfaddress.SWFAddress;
-			import com.adobe.cairngorm.control.CairngormEventDispatcher;
-			import pl.cani.mindmap.business.SessionAndPersitentData;
-			import pl.cani.mindmap.events.MindmapEvent;
-			import pl.cani.mindmap.model.AppModelLocator;
-			import mx.resources.ResourceBundle;
-			import pl.cani.mindmap.view.helpers.ViewNames;
 			import com.adobe.cairngorm.view.ViewLocator;
-			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
+			import com.asual.swfaddress.SWFAddress;
 			
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import pl.cani.mindmap.model.AppModelLocator;
+			import pl.cani.mindmap.model.MindmapUserPair;
+			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
+
+			import mx.controls.dataGridClasses.DataGridColumn;
 			import mx.effects.easing.*;
+			import mx.resources.ResourceBundle;
+			
 			
 			private var helper : ManagementPanelHelper;
 			
@@ -62,26 +51,6 @@
 				AppModelLocator.getInstance().mainView.currentState = 'privilages';
 			}
 			
-			public function onDragDrop( event : DragEvent ) : void {
-				var privilagesWindow : PrivilagesWindow = new PrivilagesWindow();
-
-				var pairs : Array = helper.convertToPairs( 
-						event.dragSource.dataForFormat( "items" ) as Array );
-
-				privilagesWindow.dataProvider = pairs;
-				event.dragSource.addData( pairs, "items" );
-
-				PopUpManager.addPopUp( privilagesWindow, 
-					AppModelLocator.getInstance().mainView, true );
-				PopUpManager.centerPopUp( privilagesWindow );
-				
-				var privilagesHelper : PrivilagesPanelHelper 
-					= ViewLocator.getInstance().getViewHelper( ViewNames.PRIVILAGES )
-					as PrivilagesPanelHelper;
-					
-				privilagesHelper.resetInfo();
-			}
-			
 			private function displayUserName( pair : MindmapUserPair, 
 					column : DataGridColumn ) : String {
 				return pair.user.forname + " " + pair.user.surname;
@@ -90,30 +59,6 @@
 			private function displayUserEmail( pair : MindmapUserPair,
 					column : DataGridColumn ) : String {
 				return pair.user.email;
-			}
-			
-			private function onItemEditEnd( event : DataGridEvent ) : void {
-  				var dataGrid : DataGrid = event.target as DataGrid;
-  				var itemEditorInstance : IListItemRenderer 
-					= event.target.itemEditorInstance;
-  				var column : DataGridColumn = dataGrid.columns[ event.columnIndex ];
-  				var newValue : Boolean = itemEditorInstance[ column.editorDataField ];
-  				
-  				Debug.show( "praży to?" );
-  				
-//  				if ( event.dataField == "canRead" && newValue == false ) {
-//  					( dataGrid.dataProvider as ArrayCollection )
-//  					.removeItemAt( event.rowIndex );
-//  				} //else {
-	  				var pair : MindmapUserPair = dataGrid.dataProvider[ event.rowIndex ];
-	  				pair[ event.dataField ] = newValue;
-	  				
-	  				var mindmapEvent : MindmapEvent = new MindmapEvent(
-	  					MindmapEvent.SET_PRIVILAGES_FOR_USER );
-	  				mindmapEvent.mindmapUserPair = pair;
-					// TODO: włączyć eventa  				
-//	  				CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
-//	  			}
 			}
 			
 		]]>
@@ -150,14 +95,14 @@
 		</mx:HBox>
 	
 		<mx:DataGrid id="mindmapUsersDataGrid" dropEnabled="true"
-			dragDrop="onDragDrop( event )" itemEditEnd="onItemEditEnd( event )">
+			dragDrop="helper.popUpPrivilagesWindow( event )">
 			<mx:columns>
 				<mx:DataGridColumn labelFunction="displayUserName" 
 					headerText="@Resource( key = 'fullname', bundle = 'Generic' )" 
 					 />
 				<mx:DataGridColumn labelFunction="displayUserEmail"
 					headerText="E-mail" />
-				<mx:DataGridColumn dataField="canRead" 
+				<mx:DataGridColumn dataField="canRead" width="50"
 					headerText="@Resource( key = 'read', bundle = 'Generic' )">
 					<mx:itemRenderer>
 						<mx:Component>
@@ -165,7 +110,7 @@
 						</mx:Component>
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
-				<mx:DataGridColumn dataField="canWrite" 
+				<mx:DataGridColumn dataField="canWrite" width="50"
 					headerText="@Resource( key = 'write', bundle = 'Generic' )">
 					<mx:itemRenderer>
 						<mx:Component>

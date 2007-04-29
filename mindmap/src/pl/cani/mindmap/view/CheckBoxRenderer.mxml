@@ -4,28 +4,66 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import pl.cani.mindmap.view.helpers.ViewNames;
 			import com.adobe.cairngorm.view.ViewLocator;
-			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
+
+			import mx.controls.Alert;
 			import mx.controls.DataGrid;
-			import com.mikenimer.components.Debug;
+			import mx.resources.ResourceBundle;
+			import mx.events.CloseEvent;
+
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
 			import pl.cani.mindmap.model.MindmapUserPair;
+			import pl.cani.mindmap.events.MindmapEvent;
 			
 			public var dataField : String;
+
+			[ResourceBundle( "CheckBoxRenderer" )]
+			private var rb : ResourceBundle;
+			
+			[ResourceBundle( "Generic" )]
+			private var genericRB : ResourceBundle;
+
+			private var helper : ManagementPanelHelper = ViewLocator.getInstance()
+				.getViewHelper( ViewNames.MANAGEMENT_PANEL ) 
+				as ManagementPanelHelper;
+				
+			private var newValue : Boolean;
 			
 			private function onClick( event : MouseEvent ) : void {
-				data[ dataField ] = event.target.selected;
+				newValue = event.target.selected;
 				
-				var helper : ManagementPanelHelper = ViewLocator.getInstance()
-					.getViewHelper( ViewNames.MANAGEMENT_PANEL )
-					as ManagementPanelHelper;
-
+				if ( dataField == "canRead" && newValue == false ) {
+					Alert.yesLabel = genericRB.getString( "yes" );
+					Alert.noLabel = genericRB.getString( "no" );
+					Alert.show( rb.getString( "monit" ), rb.getString( "title" ),
+						Alert.YES | Alert.NO, this, alertClickHandler );
+				} else {
+					updateValue();
+				}
+			}
+			
+			private function alertClickHandler( event : CloseEvent ) : void {
+				if ( event.detail == Alert.YES ) {
+					updateValue();
+					helper.deleteSelectedUser();
+				} else {
+					checkBox.selected = true;
+				}
+			}
+			
+			private function updateValue() : void {
+				data[ dataField ] = newValue;
 				helper.getMindmapUsersDataGrid().invalidateList();
+
+				var event : MindmapEvent = new MindmapEvent( 
+					MindmapEvent.SET_PRIVILAGES_FOR_USER );
+				event.mindmapUserPair = data as MindmapUserPair;
+				event.dispatch();
 			}
 		]]>
 	</mx:Script>
-	
-	<mx:CheckBox id="checkBox" click="onClick( event )" 
+	<mx:CheckBox id="checkBox" click="onClick( event )" horizontalCenter="5"
 		selected="{ data[ dataField ] }" />
 	
 </mx:HBox>

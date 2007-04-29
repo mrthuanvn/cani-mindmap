@@ -4,15 +4,17 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import com.adobe.cairngorm.view.ViewLocator;
+			import com.mikenimer.components.Debug;
+
 			import pl.cani.mindmap.model.MindmapUserPair;
 			import pl.cani.mindmap.events.MindmapEvent;
-			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
 			import pl.cani.mindmap.view.helpers.ViewNames;
-			import com.adobe.cairngorm.view.ViewLocator;
 			import pl.cani.mindmap.vo.MindmapVO;
 			import pl.cani.mindmap.vo.UserVO;
-			import com.mikenimer.components.Debug;
+
 			import mx.controls.Alert;
 			import mx.managers.PopUpManager;
 			import mx.controls.CheckBox;
@@ -22,6 +24,7 @@
 			
 			private function close() : void {
 				dispatchEvents();
+				refreshDataGrid();
 				PopUpManager.removePopUp( this );
 			}
 			
@@ -37,6 +40,14 @@
 					
 					CairngormEventDispatcher.getInstance().dispatchEvent( event );
 				}
+			}
+			
+			private function refreshDataGrid() : void {
+				var helper : ManagementPanelHelper = ViewLocator.getInstance()
+					.getViewHelper( ViewNames.MANAGEMENT_PANEL )
+					as ManagementPanelHelper;
+				
+				helper.getMindmapUsersDataGrid().invalidateList();
 			}
 			
 			private function setRead( event : Object ) : void {

@@ -1,16 +1,12 @@
 package pl.cani.mindmap.vo {
 	
-	import as3.util.Comparable;
-	
 	import com.adobe.cairngorm.vo.IValueObject;
 	
 	import flash.net.registerClassAlias;
 	
-	import mx.core.IUID;
-	
 	[Bindable]
 	[RemoteClass( alias = "pl.cani.mindmap.vo.UserVO" )]
-	public class UserVO implements IValueObject /* , IUID */	{
+	public class UserVO implements IValueObject {
 		
 		public var id : uint;
 
@@ -47,14 +43,6 @@ package pl.cani.mindmap.vo {
 					&& user.activationKey == activationKey;
 		}
 		
-/*		public function get uid() : String {
-			return String(id);
-		}
-		
-		public function set uid( value : String ) : void {
-			id = int(value);
-		}
-*/		
 	}
 	
 }
