@@ -23,8 +23,7 @@ package pl.cani.mindmap.business {
 		
 		public function loginUser( email : String, password : String ) : void {
 			var token : AsyncToken = service.loginUser( email, password );
-			token.resultHandler = responder.result;
-			token.faultHandler = responder.fault;
+			token.addResponder( responder );
 		}
 		
 	}

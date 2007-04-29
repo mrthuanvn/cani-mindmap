@@ -3,14 +3,10 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml">
 	
 	<mx:RemoteObject id="registrationService" showBusyCursor="true"
-		destination="mindmapRegistrationServiceDestination"
-		result="event.token.resultHandler( event );"
-		fault="event.token.faultHandler( event );" />
+		destination="mindmapRegistrationServiceDestination" />
 		
 	<mx:RemoteObject id="loginService" showBusyCursor="true"
-		destination="mindmapLoginServiceDestination"
-		result="event.token.resultHandler( event );"
-		fault="event.token.faultHandler( event );" />
+		destination="mindmapLoginServiceDestination" />
 		
 	<mx:RemoteObject id="mindmapService" showBusyCursor="true"
 		destination="mindmapMindmapServiceDestination" />
