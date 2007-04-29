@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" xmlns:view="pl.cani.mindmap.view.*">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" 
+	xmlns:view="pl.cani.mindmap.view.*">
 
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.model.MindmapPrivilages;
+			import pl.cani.mindmap.model.MindmapUserPair;
 			import mx.collections.ArrayCollection;
 			import pl.cani.mindmap.vo.UserVO;
 			
 			[Bindable]
 			public var users : ArrayCollection = new ArrayCollection( [
-				new UserVO( "Jan", "Kłosiński" ),
-				new UserVO( "Mietek", "Krawężnik" ),
-				new UserVO( "kuzyn", "Mietka" )
+				new MindmapUserPair( null, new UserVO( "Jan", "Kłosiński" ), 
+					MindmapPrivilages.READ ),
+				new MindmapUserPair( null, new UserVO( "Mietek", "Krawężnik" ),
+					MindmapPrivilages.READ ),
+				new MindmapUserPair( null, new UserVO( "kuzyn", "Mietka" ),
+					MindmapPrivilages.READ )
 			] );
 			
 			[Bindable]

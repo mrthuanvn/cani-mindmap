@@ -2,7 +2,6 @@ package pl.cani.mindmap.validators {
 
 	import com.adobe.crypto.MD5;
 	
-	import flexunit.utils.ArrayList;
 	import flexunit.utils.CollectionIterator;
 	
 	import mx.controls.treeClasses.ITreeDataDescriptor;
@@ -10,7 +9,8 @@ package pl.cani.mindmap.validators {
 	import mx.validators.StringValidator;
 	import mx.validators.ValidationResult;
 	
-	import pl.cani.mindmap.utils.ArrayListUtils;
+	import pl.cani.collections.ArrayList;
+	import pl.cani.utils.ArrayListUtils;
 
 	public class PasswordValidator extends StringValidator {
 		

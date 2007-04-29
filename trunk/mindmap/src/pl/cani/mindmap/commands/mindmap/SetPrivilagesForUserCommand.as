@@ -8,19 +8,20 @@ package pl.cani.mindmap.commands.mindmap {
 	
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
 	import pl.cani.mindmap.events.MindmapEvent;
+	import pl.cani.mindmap.model.MindmapUserPair;
 
 	public class SetPrivilagesForUserCommand implements ICommand, IResponder {
 		
 		public function execute( event : CairngormEvent ) : void {
 			var mindmapEvent : MindmapEvent = event as MindmapEvent;
+			var pair : MindmapUserPair = mindmapEvent.mindmapUserPair;
 			
 			var delegate : MindmapServiceDelegate = new MindmapServiceDelegate( this );
-			delegate.setPrivilagesForUser( mindmapEvent.mindmap, mindmapEvent.user,
-				mindmapEvent.privilages );
+			delegate.setPrivilagesForUser( pair.mindmap, pair.user,	pair.privilages );
 		}
 		
 		public function result( data : Object ) : void {
-			
+			// do nothing
 		}
 		
 		public function fault( info : Object ) : void {

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" 
+	horizontalAlign="center">
+	
+	<mx:Script>
+		<![CDATA[
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import com.adobe.cairngorm.view.ViewLocator;
+			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
+			import mx.controls.DataGrid;
+			import com.mikenimer.components.Debug;
+			import pl.cani.mindmap.model.MindmapUserPair;
+			
+			public var dataField : String;
+			
+			private function onClick( event : MouseEvent ) : void {
+				data[ dataField ] = event.target.selected;
+				
+				var helper : ManagementPanelHelper = ViewLocator.getInstance()
+					.getViewHelper( ViewNames.MANAGEMENT_PANEL )
+					as ManagementPanelHelper;
+
+				helper.getMindmapUsersDataGrid().invalidateList();
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:CheckBox id="checkBox" click="onClick( event )" 
+		selected="{ data[ dataField ] }" />
+	
+</mx:HBox>

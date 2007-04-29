@@ -11,6 +11,8 @@ package pl.cani.mindmap.commands.mindmap {
 	import pl.cani.mindmap.business.MindmapServiceDelegate;
 	import pl.cani.mindmap.events.MindmapEvent;
 	import pl.cani.mindmap.model.AppModelLocator;
+	import pl.cani.mindmap.vo.MindmapVO;
+	import pl.cani.mindmap.business.SessionAndPersitentData;
 
 	public class GetMindmapsByOwnerIdCommand implements ICommand, IResponder {
 		
@@ -36,6 +38,8 @@ package pl.cani.mindmap.commands.mindmap {
 		
 		public function result( data : Object ) : void {
 			var mindmaps : Array = data.result;
+			mindmaps.forEach( fillMindmaps );
+			
 			cachedMindmaps = new ArrayCollection( mindmaps );
 			AppModelLocator.getInstance().myMindmaps = cachedMindmaps;
 			
@@ -44,6 +48,11 @@ package pl.cani.mindmap.commands.mindmap {
 			mindmapEvent.mindmaps = mindmaps;
 			
 			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
+		}
+		
+		private function fillMindmaps( item : *, index : int, array : Array ) : void {
+			var mindmap : MindmapVO = item;
+			mindmap.owner = SessionAndPersitentData.getInstance().getLoggedInUser();
 		}
 		
 		public function fault( info : Object ) : void {

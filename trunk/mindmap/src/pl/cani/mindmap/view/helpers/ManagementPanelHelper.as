@@ -13,6 +13,13 @@ package pl.cani.mindmap.view.helpers {
 	import pl.cani.mindmap.events.MindmapEvent;
 	import pl.cani.mindmap.view.ManagementPanel;
 	import pl.cani.mindmap.vo.MindmapVO;
+	import pl.cani.mindmap.vo.UserVO;
+	import pl.cani.mindmap.model.MindmapUserPair;
+	import pl.cani.mindmap.model.MindmapPrivilages;
+	import pl.cani.mindmap.model.AppModelLocator;
+	import mx.collections.ArrayCollection;
+	import mx.events.CollectionEvent;
+	import mx.controls.DataGrid;
 
 	public class ManagementPanelHelper extends ViewHelper {
 		
@@ -62,13 +69,26 @@ package pl.cani.mindmap.view.helpers {
 			var mindmapEvent : MindmapEvent = new MindmapEvent( 
 				MindmapEvent.FIND_MINDMAP_USERS );
 				
-			mindmapEvent.mindmap = event.currentTarget.selectedItem;
+			AppModelLocator.getInstance().selectedMindmap =
+				mindmapEvent.mindmap = event.currentTarget.selectedItem;
 			
 			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
 		}
 		
 		private function onMindmapUsersFound( event : MindmapEvent ) : void {
-			concreteView.mindmapUsersDataGrid.dataProvider = event.mindmapUserPairs;
+			concreteView.mindmapUsersDataGrid.dataProvider
+				= event.mindmapUserPairs;
+		}
+		
+		public function findMindmaps() : void {
+			var mindmapEvent : MindmapEvent 
+				= new MindmapEvent( MindmapEvent.GET_BY_OWNER_ID );
+				
+			var userId : uint = SessionAndPersitentData.getInstance()
+				.getLoggedInUser().id;
+			mindmapEvent.ownerId = userId;
+
+			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
 		}
 		
 		private function onMindmapsFound( event : MindmapEvent ) : void {
@@ -78,10 +98,33 @@ package pl.cani.mindmap.view.helpers {
 			var mindmapEvent : MindmapEvent = new MindmapEvent( 
 				MindmapEvent.FIND_MINDMAP_USERS );
 				
-			mindmapEvent.mindmap = event.mindmaps[ 0 ];
+			AppModelLocator.getInstance().selectedMindmap =
+				mindmapEvent.mindmap = event.mindmaps[ 0 ];
 			
 			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
 		}
 		
+		public function convertToPairs( users : Array ) : Array {
+			var pairs : Array = new Array();
+
+			var mindmap : MindmapVO = getSelectedMindmap();
+
+			for ( var i : uint = 0; i < users.length; i++ ) {
+				var user : UserVO = users[ i ] as UserVO;
+
+				var pair : MindmapUserPair = new MindmapUserPair( mindmap, user,
+					MindmapPrivilages.READ );
+
+				pairs.push( pair );
+			}
+
+			return pairs;
+		}
+		
+		public function getMindmapUsersDataGrid() : DataGrid {
+			return concreteView.mindmapUsersDataGrid;
+		}
+		
 	}
+
 }

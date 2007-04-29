@@ -1,14 +1,15 @@
 package pl.cani.mindmap.commands {
 	
-	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.adobe.cairngorm.commands.ICommand;
-	import pl.cani.mindmap.events.ViewEvent;
-	import pl.cani.mindmap.view.helpers.ViewNames;
-	import pl.cani.mindmap.model.AppModelLocator;
+	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.adobe.cairngorm.model.ModelLocator;
 	import com.adobe.cairngorm.view.ViewLocator;
+	
+	import pl.cani.mindmap.events.ViewEvent;
+	import pl.cani.mindmap.model.AppModelLocator;
 	import pl.cani.mindmap.view.helpers.LoginRegistrationHelper;
 	import pl.cani.mindmap.view.helpers.MainViewHelper;
-	import com.adobe.cairngorm.model.ModelLocator;
+	import pl.cani.mindmap.view.helpers.ViewNames;
 
 	public class ShowViewCommand implements ICommand {
 		

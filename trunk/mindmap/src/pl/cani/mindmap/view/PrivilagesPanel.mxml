@@ -5,6 +5,11 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.resources.ResourceBundle;
+			import pl.cani.mindmap.vo.UserVO;
+			import pl.cani.controls.DragAndDropNoRepeatEvent;
+			import pl.cani.mindmap.utils.ObjectConverter;
+			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
 			import pl.cani.mindmap.model.AppModelLocator;
 		
 			import pl.cani.mindmap.view.helpers.ViewNames;
@@ -16,6 +21,10 @@
 			[Bindable]
 			public var users : Array;
 			
+			[ResourceBundle( "PrivilagesPanel" )]
+			private var rb : ResourceBundle;
+			
+			
 			private function onCreationComplete() : void {
 				focusManager.setFocus( searchTxt );
 				
@@ -23,10 +32,29 @@
 				ViewLocator.getInstance().register( ViewNames.PRIVILAGES, helper );
 			}
 			
+			private function onDisallowedItems( event : DragAndDropNoRepeatEvent ) : void {
+				var info : String = "";
+				for ( var i : uint = 0; i < event.disallowedItems.length; i++ ) {
+					var separator : String = 
+						i == event.allowedItems.length - 1 ? " " : ", ";
+					var user : UserVO = event.disallowedItems[ i ];
+					info += user.toString() + separator;
+				}
+				var concjunction : String = event.disallowedItems.length > 1 
+					? rb.getString( "are" )
+					: rb.getString( "is" );
+				info += concjunction + " " + rb.getString( "alreadyOnTheList" );
+				infoLbl.text = info;
+			}
+			
+			public function resetInfo() : void {
+				infoLbl.text = rb.getString( "info" );
+			}
+			
 		]]>
 	</mx:Script>
 	
-	<mx:VBox>
+	<mx:VBox left="5" right="5" bottom="5" top="5">
 		<mx:Form defaultButton="{findBtn}">
 			<mx:HBox>
 				<mx:TextInput id="searchTxt" />
@@ -38,10 +66,13 @@
 		</mx:Form>
 		
 		<controls1:DragAndDropNoRepeat source="{usersDataGrid}" destination="
-			{AppModelLocator.getInstance().mindmapUsersDataGrid}" />
+			{AppModelLocator.getInstance().mindmapUsersDataGrid}"
+			conversionFunction="{ ObjectConverter.convertUserVOtoMindmapUserPair }"
+			disallowedItems="onDisallowedItems( event )"
+		 />
 		
 		<mx:DataGrid x="10" y="40" id="usersDataGrid" dataProvider="{users}"
-			dragEnabled="true" allowMultipleSelection="true">
+			dragEnabled="true" allowMultipleSelection="true" width="100%">
 			<mx:columns>
 				<mx:DataGridColumn headerText="@Resource( key = 'forname' )" 
 					dataField="forname" />
@@ -50,6 +81,8 @@
 				<mx:DataGridColumn headerText="E-mail" dataField="email" />
 			</mx:columns>
 		</mx:DataGrid>
+		<mx:Text text="@Resource( 'info' )" id="infoLbl" maxWidth="300"
+			selectable="false" />
 	</mx:VBox>
 	
 </mx:Panel>

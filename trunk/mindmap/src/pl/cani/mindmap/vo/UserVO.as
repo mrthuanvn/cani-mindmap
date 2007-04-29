@@ -1,5 +1,7 @@
 package pl.cani.mindmap.vo {
 	
+	import as3.util.Comparable;
+	
 	import com.adobe.cairngorm.vo.IValueObject;
 	
 	import flash.net.registerClassAlias;
@@ -33,6 +35,16 @@ package pl.cani.mindmap.vo {
 		
 		public function toString() : String {
 			return forname + " " + surname + ", " + email;
+		}
+		
+		public function equals( user : UserVO ) : Boolean {
+			return user.id == id
+					&& user.forname == forname
+					&& user.surname == surname
+					&& user.email == email
+					&& user.password == password
+					&& user.isActive == isActive
+					&& user.activationKey == activationKey;
 		}
 		
 /*		public function get uid() : String {
