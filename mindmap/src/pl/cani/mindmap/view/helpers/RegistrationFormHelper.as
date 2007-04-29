@@ -12,7 +12,7 @@ package pl.cani.mindmap.view.helpers {
 	import mx.resources.ResourceBundle;
 	import mx.validators.Validator;
 	
-	import pl.cani.mindmap.commands.RegisterUserCommand;
+	import pl.cani.mindmap.commands.login.RegisterUserCommand;
 	import pl.cani.mindmap.events.RegistrationEvent;
 	import pl.cani.mindmap.view.RegistrationForm;
 	import pl.cani.mindmap.vo.UserVO;

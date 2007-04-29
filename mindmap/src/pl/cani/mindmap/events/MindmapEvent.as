@@ -4,6 +4,7 @@ package pl.cani.mindmap.events {
 	
 	import pl.cani.mindmap.vo.MindmapVO;
 	import pl.cani.mindmap.vo.UserVO;
+	import pl.cani.mindmap.model.MindmapUserPair;
 
 	public class MindmapEvent extends CairngormEvent {
 		
@@ -25,6 +26,7 @@ package pl.cani.mindmap.events {
 		public var privilages : uint;
 		public var mindmapUserPairs : Array;
 		public var mindmaps : Array;
+		public var mindmapUserPair : MindmapUserPair;
 		
 		public function MindmapEvent( type : String, mindmap : MindmapVO = null, 
 				ownerId : uint = 0 ) {

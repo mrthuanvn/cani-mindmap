@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" 
-	creationComplete="onCreationComplete()">
+	creationComplete="onCreationComplete()" xmlns:view="pl.cani.mindmap.view.*">
 
 	<mx:Script>
 		<![CDATA[
-			import pl.cani.mindmap.model.MindmapUserPair;
+			import mx.validators.ValidationResult;
+			import mx.collections.ArrayCollection;
 			import mx.controls.listClasses.IListItemRenderer;
+			import mx.events.DataGridEvent;
+			import pl.cani.mindmap.model.MindmapUserPair;
 			import mx.events.ListEvent;
 			import mx.controls.Alert;
 			import mx.controls.CheckBox;
@@ -46,10 +49,6 @@
 //				Debug.show( pairs );
 			}
 			
-			private function labelFunction( data : UserVO, column : DataGridColumn ) : String {
-				return data.forname + " " + data.surname;
-			}
-			
 			private function displayUserName( pair : MindmapUserPair, 
 					column : DataGridColumn ) : String {
 				return pair.user.forname + " " + pair.user.surname;
@@ -60,45 +59,61 @@
 				return pair.user.email;
 			}
 			
+			[Bindable]
+			private var debug : String = "";
+			
+			private function onItemEditEnd( event : DataGridEvent ) : void {
+  				var dataGrid : DataGrid = event.target as DataGrid;
+  				var itemEditorInstance : IListItemRenderer 
+					= event.target.itemEditorInstance;
+  				var column : DataGridColumn = dataGrid.columns[ event.columnIndex ];
+  				var newValue : Object = itemEditorInstance[ column.editorDataField ];
+  				
+				debug = event.target.dataProvider[ event.rowIndex ].user.forname + "\n";
+				debug += event.dataField + " changed from " 
+					+ event.target.dataProvider[ event.rowIndex ][ event.dataField ]
+					+ " to " + newValue;
+					
+				deleteItem();
+			}
+			
+			private function deleteItem() : void {
+				( dg2.dataProvider as ArrayCollection ).removeItemAt( 1 );
+			}
+			
+			private function onClick( event : MouseEvent ) : void {
+				debug = "click";
+			}
+			
 		]]>
 	</mx:Script>
-
-	<mx:DataGrid id="dg" dataProvider="{ users }">
-		<mx:columns>
-			<mx:DataGridColumn labelFunction="labelFunction" 
-				headerText="Imię i nazwisko" />
-			<mx:DataGridColumn dataField="email" />
-		</mx:columns>
-	</mx:DataGrid>
 	
-	<mx:DataGrid id="dg2" dataProvider="{ pairs }" editable="true">
+	<mx:Button id="delBtn" click="deleteItem()" label="del" />
+
+	<mx:DataGrid id="dg2" dataProvider="{ pairs }">
 		<mx:columns>
 			<mx:DataGridColumn labelFunction="displayUserName" 
-				headerText="Imię i nazwisko" rendererIsEditor="true" />
+				headerText="Imię i nazwisko" rendererIsEditor="true" 
+				editorDataField="text" dataField="user" />
 			<mx:DataGridColumn labelFunction="displayUserEmail"
-				headerText="Email" rendererIsEditor="true" />
+				headerText="Email" rendererIsEditor="true" 
+				editorDataField="text" dataField="user" />
 			<mx:DataGridColumn dataField="canRead" headerText="Read"
 				rendererIsEditor="true" itemRenderer="mx.controls.CheckBox"
 				editorDataField="selected" />
 			<mx:DataGridColumn dataField="canWrite" headerText="Write"
 				rendererIsEditor="true" itemRenderer="mx.controls.CheckBox"
 				editorDataField="selected" />
+			<mx:DataGridColumn id="newCol" dataField="canWrite">
+				<mx:itemRenderer>
+					<mx:Component>
+						<view:CheckBoxRenderer dataField="canWrite" />
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
 		</mx:columns>
 	</mx:DataGrid>
 	
-	<mx:DataGrid>
-		<mx:ArrayCollection>
-			<mx:Object>
-				<mx:Artist>Pavement</mx:Artist>
-				<mx:Price>11.99</mx:Price>
-				<mx:Album>Slanted and Enchanted</mx:Album>
-			</mx:Object>
-			<mx:Object>
-				<mx:Artist>Pavement</mx:Artist>
-				<mx:Album>Brighten the Corners</mx:Album>
-				<mx:Price>11.99</mx:Price>
-			</mx:Object>
-		</mx:ArrayCollection>
-	</mx:DataGrid>
+	<mx:TextArea id="debugTxt" text="{debug}" width="100%" />
 	
 </mx:Application>

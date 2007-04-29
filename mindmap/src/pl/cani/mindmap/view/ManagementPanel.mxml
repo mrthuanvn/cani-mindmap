@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Mindmap management" 
-	layout="absolute" creationComplete="onCreationComplete()">
+	layout="absolute" creationComplete="onCreationComplete()" 
+	resizeEffect="{resizeEffect}" xmlns:view="pl.cani.mindmap.view.*">
 
 	<mx:Script>
 		<![CDATA[
+			import com.mikenimer.components.Debug;
+			import mx.controls.listClasses.IListItemRenderer;
+			import mx.collections.ArrayCollection;
+			import mx.events.CollectionEvent;
+			import mx.controls.Alert;
+			import pl.cani.mindmap.model.MindmapPrivilages;
+			import mx.events.DataGridEvent;
+			import pl.cani.mindmap.view.helpers.PrivilagesPanelHelper;
 			import pl.cani.mindmap.model.MindmapUserPair;
 			import com.adobe.cairngorm.model.ModelLocator;
 			import mx.managers.PopUpManager;
@@ -28,6 +37,7 @@
 			[Bindable]
 			private var saveMindmap : String = rb.getString( "saveMindmap" );
 			
+			
 			private function onCreationComplete() : void {
 				helper = new ManagementPanelHelper( this );
 				ViewLocator.getInstance().register( ViewNames.MANAGEMENT_PANEL, 
@@ -35,16 +45,9 @@
 				
 				AppModelLocator.getInstance().mindmapUsersDataGrid 
 					= mindmapUsersDataGrid;
-//				AppModelLocator.getInstance().managementPanel = this;
 				
-				var mindmapEvent : MindmapEvent 
-					= new MindmapEvent( MindmapEvent.GET_BY_OWNER_ID );
-				var userId : uint = SessionAndPersitentData.getInstance()
-					.getLoggedInUser().id;
-				mindmapEvent.ownerId = userId;
-	
-				CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
-				
+				helper.findMindmaps();
+							
 				show.play();
 			}
 			
@@ -61,11 +64,22 @@
 			
 			public function onDragDrop( event : DragEvent ) : void {
 				var privilagesWindow : PrivilagesWindow = new PrivilagesWindow();
-				privilagesWindow.dataProvider 
-					= event.dragSource.dataForFormat( "items" );
+
+				var pairs : Array = helper.convertToPairs( 
+						event.dragSource.dataForFormat( "items" ) as Array );
+
+				privilagesWindow.dataProvider = pairs;
+				event.dragSource.addData( pairs, "items" );
+
 				PopUpManager.addPopUp( privilagesWindow, 
 					AppModelLocator.getInstance().mainView, true );
 				PopUpManager.centerPopUp( privilagesWindow );
+				
+				var privilagesHelper : PrivilagesPanelHelper 
+					= ViewLocator.getInstance().getViewHelper( ViewNames.PRIVILAGES )
+					as PrivilagesPanelHelper;
+					
+				privilagesHelper.resetInfo();
 			}
 			
 			private function displayUserName( pair : MindmapUserPair, 
@@ -78,8 +92,34 @@
 				return pair.user.email;
 			}
 			
+			private function onItemEditEnd( event : DataGridEvent ) : void {
+  				var dataGrid : DataGrid = event.target as DataGrid;
+  				var itemEditorInstance : IListItemRenderer 
+					= event.target.itemEditorInstance;
+  				var column : DataGridColumn = dataGrid.columns[ event.columnIndex ];
+  				var newValue : Boolean = itemEditorInstance[ column.editorDataField ];
+  				
+  				Debug.show( "praży to?" );
+  				
+//  				if ( event.dataField == "canRead" && newValue == false ) {
+//  					( dataGrid.dataProvider as ArrayCollection )
+//  					.removeItemAt( event.rowIndex );
+//  				} //else {
+	  				var pair : MindmapUserPair = dataGrid.dataProvider[ event.rowIndex ];
+	  				pair[ event.dataField ] = newValue;
+	  				
+	  				var mindmapEvent : MindmapEvent = new MindmapEvent(
+	  					MindmapEvent.SET_PRIVILAGES_FOR_USER );
+	  				mindmapEvent.mindmapUserPair = pair;
+					// TODO: włączyć eventa  				
+//	  				CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
+//	  			}
+			}
+			
 		]]>
 	</mx:Script>
+
+	<mx:Resize id="resizeEffect" duration="200" easingFunction="Quintic.easeInOut" />
 
 	<mx:Sequence id="show" target="{this}">
 		<mx:SetPropertyAction name="visible" value="false" />
@@ -100,40 +140,39 @@
 		</mx:State>
 	</mx:states>
 
-	<mx:transitions>
-		<mx:Transition id="toCreateMindmap" toState="createMindmap">
-			<mx:Resize target="{this}" duration="200" />
-		</mx:Transition>
-		<mx:Transition id="toBaseState" toState="">
-			<mx:Resize target="{this}" duration="200" />
-		</mx:Transition>
-	</mx:transitions>
-
 	<mx:VBox bottom="10" top="10" id="vbox1" right="10" left="10">
 	
 		<mx:HBox width="100%">
 			<mx:Label text="@Resource( 'myMindmaps' )" id="myMindmapsLbl"/>
 			<mx:ComboBox id="mindmapsCbx" change="helper.findMindmapUsers( event )"
 				dataProvider="{ AppModelLocator.getInstance().myMindmaps }"
-				 />
+				resizeEffect="{resizeEffect}" />
 		</mx:HBox>
 	
-		<mx:DataGrid id="mindmapUsersDataGrid" dropEnabled="true" editable="true"
-			dragDrop="onDragDrop( event )">
+		<mx:DataGrid id="mindmapUsersDataGrid" dropEnabled="true"
+			dragDrop="onDragDrop( event )" itemEditEnd="onItemEditEnd( event )">
 			<mx:columns>
 				<mx:DataGridColumn labelFunction="displayUserName" 
 					headerText="@Resource( key = 'fullname', bundle = 'Generic' )" 
-					rendererIsEditor="true" />
+					 />
 				<mx:DataGridColumn labelFunction="displayUserEmail"
-					headerText="E-mail" rendererIsEditor="true" />
+					headerText="E-mail" />
 				<mx:DataGridColumn dataField="canRead" 
-					headerText="@Resource( key = 'read', bundle = 'Generic' )"
-					rendererIsEditor="true" itemRenderer="mx.controls.CheckBox"
-					editorDataField="selected" />
+					headerText="@Resource( key = 'read', bundle = 'Generic' )">
+					<mx:itemRenderer>
+						<mx:Component>
+							<view:CheckBoxRenderer dataField="canRead" />
+						</mx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
 				<mx:DataGridColumn dataField="canWrite" 
-					headerText="@Resource( key = 'write', bundle = 'Generic' )"
-					rendererIsEditor="true" itemRenderer="mx.controls.CheckBox"
-					editorDataField="selected" />
+					headerText="@Resource( key = 'write', bundle = 'Generic' )">
+					<mx:itemRenderer>
+						<mx:Component>
+							<view:CheckBoxRenderer dataField="canWrite" />
+						</mx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
 			</mx:columns>
 		</mx:DataGrid>
 	

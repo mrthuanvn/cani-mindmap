@@ -4,6 +4,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.utils.MindmapUserPairComparatorTest;
+			import pl.cani.collections.ArrayListTest;
 			import pl.cani.mindmap.model.MindmapUserPairTest;
 			import pl.cani.mindmap.validators.PasswordValidatorTest;
 			import pl.cani.mindmap.utils.ArrayListUtilsTest;
@@ -36,7 +38,10 @@
 //				ts.addTest( ArrayListUtilsTest.suite() );
 //				ts.addTest( PasswordValidatorTest.suite() );
 
-				ts.addTest( MindmapUserPairTest.suite() );
+//				ts.addTest( MindmapUserPairTest.suite() );
+//				ts.addTest( ArrayCollectionTest.suite() );
+				ts.addTest( ArrayListTest.suite() );
+				ts.addTest( MindmapUserPairComparatorTest.suite() );
  				
  				return ts;
  			}

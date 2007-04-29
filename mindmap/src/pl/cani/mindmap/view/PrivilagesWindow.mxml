@@ -4,6 +4,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import pl.cani.mindmap.model.MindmapUserPair;
 			import pl.cani.mindmap.events.MindmapEvent;
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import pl.cani.mindmap.view.helpers.ManagementPanelHelper;
@@ -25,45 +26,40 @@
 			}
 			
 			private function dispatchEvents() : void {
-				var i : uint = 0;
-				for each ( var user : UserVO in dataProvider ) {
-					var readCbx : CheckBox = read[ i ];
-					var writeCbx : CheckBox = write[ i ];
+				for each ( var pair : MindmapUserPair in dataProvider ) {
 
-					var privilages : uint = readCbx.selected ? 1 : 0;
-					privilages += writeCbx.selected ? 1 : 0;
-
-					var helper : ManagementPanelHelper = ViewLocator.getInstance()
-						.getViewHelper( ViewNames.MANAGEMENT_PANEL ) 
-						as ManagementPanelHelper;
-
-					var mindmap : MindmapVO = helper.getSelectedMindmap();
-					
 					var event : MindmapEvent = new MindmapEvent(
 						MindmapEvent.SET_PRIVILAGES_FOR_USER );
-					event.mindmap = mindmap;
-					event.user = user;
-					event.privilages = privilages;
+
+					event.mindmap = pair.mindmap;
+					event.user = pair.user;
+					event.privilages = pair.privilages;
 					
 					CairngormEventDispatcher.getInstance().dispatchEvent( event );
-					
-					i++;
 				}
 			}
 			
-			private function setReadCbx( index : uint ) : void {
-				var readCbx : CheckBox = read[ index ];
-				var writeCbx : CheckBox = write[ index ];
-				if ( writeCbx.selected == true ) {
-					readCbx.selected = true;
+			private function setRead( event : Object ) : void {
+				var index : uint = event.target.instanceIndices;
+				var selected : Boolean = event.target.selected;
+				var pair : MindmapUserPair = dataProvider[ index ];
+				pair.canRead = selected;
+
+				var writeCheckBox : CheckBox = write[ index ];
+				if ( selected == false ) {
+					writeCheckBox.selected = false;
 				}
 			}
 			
-			private function setWriteCbx( index : uint ) : void {
-				var readCbx : CheckBox = read[ index ];
-				var writeCbx : CheckBox = write[ index ];
-				if ( readCbx.selected == false ) {
-					writeCbx.selected = false;
+			private function setWrite( event : Object ) : void {
+				var index : uint = event.target.instanceIndices;
+				var selected : Boolean = event.target.selected;
+				var pair : MindmapUserPair = dataProvider[ index ];
+				pair.canWrite = selected;
+				
+				var readCheckBox : CheckBox = read[ index ];
+				if ( selected ) {
+					readCheckBox.selected = true;
 				}
 			}
 			
@@ -79,16 +75,16 @@
 				<mx:GridItem><mx:Label text="Read" /></mx:GridItem>
 				<mx:GridItem><mx:Label text="Write" /></mx:GridItem>								
 			</mx:GridRow>
-			<mx:Repeater id="rp" dataProvider="{dataProvider}">
+			<mx:Repeater id="rp" dataProvider="{ dataProvider }">
 				<mx:GridRow>
-					<mx:GridItem><mx:Label text="{rp.currentItem}" /></mx:GridItem>
+					<mx:GridItem><mx:Label text="{ rp.currentItem.user }" /></mx:GridItem>
 					<mx:GridItem horizontalAlign="center">
-						<mx:CheckBox id="read" selected="true"
-							click="setWriteCbx( event.target.instanceIndices )" />
+						<mx:CheckBox id="read" selected="{ rp.currentItem.canRead }"
+							click="setRead( event )" />
 					</mx:GridItem>
 					<mx:GridItem horizontalAlign="center">
-						<mx:CheckBox id="write" 
-							click="setReadCbx( event.target.instanceIndices )" />
+						<mx:CheckBox id="write" selected="{ rp.currentItem.canWrite }"
+							click="setWrite( event )" />
 					</mx:GridItem>
 				</mx:GridRow>
 			</mx:Repeater>

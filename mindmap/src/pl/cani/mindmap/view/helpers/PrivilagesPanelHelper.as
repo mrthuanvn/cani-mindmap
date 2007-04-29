@@ -33,5 +33,9 @@ package pl.cani.mindmap.view.helpers {
 			concreteView.users = event.users;
 		}
 		
+		public function resetInfo() : void {
+			concreteView.resetInfo();
+		}
+		
 	}
 }
