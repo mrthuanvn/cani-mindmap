@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
+
+	<mx:Script>
+		<![CDATA[
+			import pl.cani.mindmap.model.Mindmap;
+			
+			public var mindmap : Mindmap;
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Tree id="tree" height="100%">
+        <mx:XMLListCollection id="mindmapData" source="{ mindmap.mindmapData }" />
+	</mx:Tree>
+	
+	<mx:VBox>
+		<mx:Form>
+			<mx:Text text="@Resource( 'editInfo' )" />
+			<mx:FormItem label="@Resource( 'nameLbl' )">
+				<mx:TextInput id="nameTxt"/>
+			</mx:FormItem>
+			<mx:Button id="updateBtn" 
+				label="@Resource( key = 'update', bundle = 'Generic' )" />
+		</mx:Form>
+
+		<mx:Form>
+			<mx:Label text="@Resource( 'addInfo' )" />
+			<mx:FormItem label="@Resource( 'nameLbl' )">
+				<mx:TextInput id="newItemTxt" />
+			</mx:FormItem>
+			<mx:Button id="addBtn" label="@Resource( key = 'add', bundle = 'Generic' )" />
+		</mx:Form>
+
+		<mx:Button id="saveBtn"
+				label="@Resource( key = 'save', bundle = 'Generic' )" />
+	</mx:VBox>
+	
+</mx:Panel>
