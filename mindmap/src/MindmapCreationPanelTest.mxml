@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" 
+	xmlns:model="pl.cani.mindmap.model.*" xmlns:view="pl.cani.mindmap.view.*"
+	creationComplete="mindmapService.send()">
+
+	<mx:HTTPService id="mindmapService" url="http://localhost/mindmap/mindmaps/113.xml" 
+		resultFormat="e4x" showBusyCursor="true" />
+
+	<mx:XMLList id="xmlList">
+		<mindmap name="113">
+			<branch name="pierwsza gałąź">
+				<branch name="podgałąź" />
+			</branch>
+			<branch name="druga gałąź"/>
+		</mindmap>
+	</mx:XMLList>
+
+	<mx:XMLListCollection id="xmlListCollection" source="{ xmlList }" />
+	
+	<mx:Tree dataProvider="{ xmlListCollection }" labelField="@name" width="200" />
+	
+	
+</mx:Application>
