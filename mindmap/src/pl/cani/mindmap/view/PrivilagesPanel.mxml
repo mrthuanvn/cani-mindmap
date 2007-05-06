@@ -5,6 +5,9 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import com.asual.swfaddress.SWFAddress;
+			import pl.cani.mindmap.view.helpers.MainViewHelper;
+			import com.adobe.cairngorm.model.ModelLocator;
 			import mx.resources.ResourceBundle;
 			import pl.cani.mindmap.vo.UserVO;
 			import pl.cani.controls.DragAndDropNoRepeatEvent;
@@ -51,6 +54,12 @@
 				infoLbl.text = rb.getString( "info" );
 			}
 			
+			private function close() : void {
+				SWFAddress.setValue( "" );
+				AppModelLocator.getInstance().mainView.currentState 
+					= MainViewHelper.LOGGED_IN_STATE;
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -81,8 +90,10 @@
 				<mx:DataGridColumn headerText="E-mail" dataField="email" />
 			</mx:columns>
 		</mx:DataGrid>
-		<mx:Text text="@Resource( 'info' )" id="infoLbl" maxWidth="300"
+		<mx:Text text="@Resource( 'info' )" id="infoLbl" width="100%"
 			selectable="false" />
+		<mx:Button id="closeBtn" label="@Resource( key = 'close', bundle = 'Generic' )" 
+			click="close()"/>
 	</mx:VBox>
 	
 </mx:Panel>

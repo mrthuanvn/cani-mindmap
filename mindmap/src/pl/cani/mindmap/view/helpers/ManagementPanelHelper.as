@@ -18,12 +18,14 @@ package pl.cani.mindmap.view.helpers {
 	import pl.cani.mindmap.business.SessionAndPersitentData;
 	import pl.cani.mindmap.events.MindmapEvent;
 	import pl.cani.mindmap.model.AppModelLocator;
+	import pl.cani.mindmap.model.Mindmap;
 	import pl.cani.mindmap.model.MindmapPrivilages;
 	import pl.cani.mindmap.model.MindmapUserPair;
 	import pl.cani.mindmap.view.ManagementPanel;
 	import pl.cani.mindmap.view.PrivilagesWindow;
 	import pl.cani.mindmap.vo.MindmapVO;
 	import pl.cani.mindmap.vo.UserVO;
+	import com.adobe.crypto.MD5;
 
 	public class ManagementPanelHelper extends ViewHelper {
 		
@@ -50,12 +52,13 @@ package pl.cani.mindmap.view.helpers {
 			var mindmap : MindmapVO = new MindmapVO();
 			mindmap.name = concreteView.mindmapNameTxt.text;
 			mindmap.owner = SessionAndPersitentData.getInstance().getLoggedInUser();
+			mindmap.requiresPassword = concreteView.requiresPasswordCheckBox.selected;
+			mindmap.password = MD5.hash( concreteView.passwordTxt.text );
 			
 			var mindmapEvent : MindmapEvent 
 				= new MindmapEvent( MindmapEvent.ADD, mindmap );
 				
-			concreteView.createMindMapBtn.enabled = false;
-			concreteView.createMindMapBtn.label = rb.getString( "addingMindmap" );
+			concreteView.addMindmapBtn.currentState = "disabled";
 				
 			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
 		}
@@ -65,18 +68,17 @@ package pl.cani.mindmap.view.helpers {
 		}
 		
 		private function onMindmapAdded( event : MindmapEvent ) : void {
-			concreteView.createMindMapBtn.enabled = true;
-			concreteView.createMindMapBtn.label = rb.getString( "saveMindmap" );
+			concreteView.addMindmapBtn.currentState = "";
 		}
 		
-		public function findMindmapUsers( event : ListEvent ) : void {
+		public function findMindmapUsers( mindmapVO : MindmapVO ) : void {
 			var mindmapEvent : MindmapEvent = new MindmapEvent( 
 				MindmapEvent.FIND_MINDMAP_USERS );
 				
-			AppModelLocator.getInstance().selectedMindmap =
-				mindmapEvent.mindmap = event.currentTarget.selectedItem;
-			
-			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
+			AppModelLocator.getInstance().mindmap.mindmapVO =
+				mindmapEvent.mindmap = mindmapVO;
+				
+			mindmapEvent.dispatch();
 		}
 		
 		private function onMindmapUsersFound( event : MindmapEvent ) : void {
@@ -99,13 +101,14 @@ package pl.cani.mindmap.view.helpers {
 			CairngormEventDispatcher.getInstance().removeEventListener(
 				MindmapEvent.MINDMAPS_FOUND, onMindmapsFound );
 			
-			var mindmapEvent : MindmapEvent = new MindmapEvent( 
-				MindmapEvent.FIND_MINDMAP_USERS );
-				
-			AppModelLocator.getInstance().selectedMindmap =
-				mindmapEvent.mindmap = event.mindmaps[ 0 ];
+			var firstMindmapVO : MindmapVO = event.mindmaps[ 0 ];
+			AppModelLocator.getInstance().selectedMindmap = firstMindmapVO;
 			
-			CairngormEventDispatcher.getInstance().dispatchEvent( mindmapEvent );
+			var mindmap : Mindmap = new Mindmap( firstMindmapVO );
+			AppModelLocator.getInstance().mindmap = mindmap;
+			
+			findMindmapUsers( firstMindmapVO );
+			getMindmapStructure( firstMindmapVO );
 		}
 		
 		public function convertToPairs( users : Array ) : Array {
@@ -155,6 +158,19 @@ package pl.cani.mindmap.view.helpers {
 
 			ArrayCollection( concreteView.mindmapUsersDataGrid.dataProvider )
 			.removeItemAt( selectedIndex );
+		}
+		
+		public function getMindmapStructure( mindmapVO : MindmapVO ) : void {
+			var event : MindmapEvent = new MindmapEvent(
+				MindmapEvent.GET_MINDMAP_STRUCTURE );
+			event.mindmap = mindmapVO;
+			event.dispatch();
+		}
+
+		public function loadMindmapData( event : ListEvent ) : void {
+			var mindmapVO : MindmapVO = event.target.selectedItem as MindmapVO;
+			findMindmapUsers( mindmapVO );
+			getMindmapStructure( mindmapVO );
 		}
 		
 	}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Mindmap management" 
 	layout="absolute" creationComplete="onCreationComplete()" 
-	resizeEffect="{resizeEffect}" xmlns:view="pl.cani.mindmap.view.*">
+	resizeEffect="{resizeEffect}" xmlns:view="pl.cani.mindmap.view.*" xmlns:controls="pl.cani.mindmap.controls.*">
 
 	<mx:Script>
 		<![CDATA[
@@ -75,13 +75,31 @@
 
 	<mx:states>
 		<mx:State name="createMindmap" enterState="focusManager.setFocus( mindmapNameTxt )">
-			<mx:AddChild relativeTo="{vbox1}" position="lastChild">
-				<mx:TextInput id="mindmapNameTxt" keyDown="onKeyDown( event )" />
+			<mx:AddChild relativeTo="{ vbox1 }" position="lastChild">
+				<mx:Form defaultButton="{ addMindmapBtn }">
+					<mx:FormHeading label="Add a Mind Map" />
+					<mx:FormItem label="@Resource( key = 'name', 
+						bundle = 'Generic' )">
+						<mx:TextInput id="mindmapNameTxt" />
+					</mx:FormItem>
+					<mx:FormItem label="@Resource( 'requiresPassword' )">
+						<mx:CheckBox id="requiresPasswordCheckBox" />
+					</mx:FormItem>
+					<mx:FormItem label="@Resource( key = 'password', 
+						bundle = 'Generic' )">
+						<mx:TextInput id="passwordTxt" displayAsPassword="true" />
+					</mx:FormItem>
+					<mx:HBox horizontalAlign="center" width="100%">
+						<controls:RemotingButton id="addMindmapBtn"
+							enabledLabel="@Resource( key = 'add', bundle = 'Generic' )"
+							disabledLabel="@Resource( key = 'saving', bundle = 'Generic' )"
+							click="helper.createMindmap()" />
+						<mx:Button label="@Resource( key = 'cancel', bundle = 'Generic' )"
+							click="currentState = ''" />
+					</mx:HBox>
+				</mx:Form>
 			</mx:AddChild>
-			<mx:SetProperty target="{createMindMapBtn}" name="label" 
-				value="{ saveMindmap }" />
-			<mx:SetEventHandler target="{createMindMapBtn}" name="click" 
-				handler="helper.createMindmap()"/>
+			<mx:RemoveChild target="{createMindMapBtn}"/>
 		</mx:State>
 	</mx:states>
 
@@ -89,7 +107,7 @@
 	
 		<mx:HBox width="100%">
 			<mx:Label text="@Resource( 'myMindmaps' )" id="myMindmapsLbl"/>
-			<mx:ComboBox id="mindmapsCbx" change="helper.findMindmapUsers( event )"
+			<mx:ComboBox id="mindmapsCbx" change="helper.loadMindmapData( event )"
 				dataProvider="{ AppModelLocator.getInstance().myMindmaps }"
 				resizeEffect="{resizeEffect}" />
 		</mx:HBox>
@@ -121,10 +139,11 @@
 			</mx:columns>
 		</mx:DataGrid>
 	
-		<mx:HBox width="100%">
+		<mx:HBox width="100%" id="hbox1">
 			<mx:Button label="@Resource( 'grantPrivilages' )" id="grantPrivilagesBtn"
 				click="onGrantPrivilagesBtnClick()"/>
-			<mx:Button label="@Resource( 'createMindmap' )" id="createMindMapBtn" click="currentState = 'createMindmap'"/>
+			<mx:Button label="@Resource( 'createMindmap' )" id="createMindMapBtn" 
+				click="currentState = 'createMindmap'"/>
 		</mx:HBox>
 	
 	</mx:VBox>

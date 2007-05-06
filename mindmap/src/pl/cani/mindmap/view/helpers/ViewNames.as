@@ -11,6 +11,7 @@ package pl.cani.mindmap.view.helpers {
 		
 		public static const MANAGEMENT_PANEL : String = "managementPanel";
 		public static const PRIVILAGES : String = "privilages";
+		public static const MINDMAP_CREATION_PANEL : String = "mindmapCreationPanel";
 		
 	}
 

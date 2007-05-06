@@ -16,6 +16,7 @@ package pl.cani.mindmap.view.helpers {
 	import pl.cani.mindmap.events.RegistrationEvent;
 	import pl.cani.mindmap.view.RegistrationForm;
 	import pl.cani.mindmap.vo.UserVO;
+	import com.adobe.cairngorm.view.ViewLocator;
 
 	public class RegistrationFormHelper extends ViewHelper {
 		

@@ -53,17 +53,16 @@
             	    width="100%" creationComplete="showAppCtrlBar.play()" />
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:HDividedBox x="0" y="41" width="100%" height="336">
+				<mx:HBox x="0" y="41" width="100%" height="100%">
 					<view:ManagementPanel id="managementPanel" />
-					<view:MindmapCreationPanel id="mindmapCreationPanel" height="100%" width="100%">
+					<view:MindmapCreationPanel id="mindmapCreationPanel" height="100%" width="100%"
+						mindmap="{ AppModelLocator.getInstance().mindmap }">
 					</view:MindmapCreationPanel>
-					<mx:Canvas width="200" height="200" id="canvas1">
-					</mx:Canvas>
-				</mx:HDividedBox>
+				</mx:HBox>
 			</mx:AddChild>
 		</mx:State>
 		<mx:State name="privilages" basedOn="loggedIn">
-			<mx:AddChild relativeTo="{canvas1}" position="before">
+			<mx:AddChild relativeTo="{managementPanel}" position="after">
 				<view:PrivilagesPanel id="privilagesPanel">
 				</view:PrivilagesPanel>
 			</mx:AddChild>

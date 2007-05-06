@@ -1,4 +1,4 @@
-package pl.cani.mindmap.commands.login {
+ package pl.cani.mindmap.commands.login {
 
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
@@ -27,12 +27,15 @@ package pl.cani.mindmap.commands.login {
 
 	public class RegisterUserCommand extends EventDispatcher 
 		implements ICommand, IResponder {
+
+		private var userToBeRegistered : UserVO;
 		
 		public function execute( event : CairngormEvent ) : void {
 			var registrationEvent : RegistrationEvent = event as RegistrationEvent;
 			var delegate : RegistrationServiceDelegate 
 				= new RegistrationServiceDelegate( this );
  			delegate.registerUser( registrationEvent.user ); 
+ 			userToBeRegistered = registrationEvent.user;
 		}
 		
 		public function result( event : Object ) : void {
@@ -52,9 +55,9 @@ package pl.cani.mindmap.commands.login {
 			} else {
 				registrationEvent = new RegistrationEvent( 
 					RegistrationEvent.REGISTRATION_COMPLETE );
-					
-				CairngormEventDispatcher.getInstance().dispatchEvent( 
-					registrationEvent );
+				userToBeRegistered.id = event.result;
+				registrationEvent.user = userToBeRegistered;
+				registrationEvent.dispatch();		
 			}
 		}
 		

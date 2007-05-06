@@ -1,39 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" 
+	xmlns:controls="pl.cani.mindmap.controls.*" title="@Resource( 'title' )"
+	creationComplete="onCreationComplete()">
+	<mx:creationCompleteEffect>
+        <mx:Zoom zoomHeightFrom="0" zoomWidthFrom="0"
+        	easingFunction="Quintic.easeInOut" />
+	</mx:creationCompleteEffect>
+	<mx:resizeEffect>
+		<mx:Resize duration="200" easingFunction="Quintic.easeInOut" />
+	</mx:resizeEffect>
 
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.cairngorm.view.ViewLocator;
+			import com.mikenimer.components.Debug;
+
+			import mx.effects.easing.*;
+
+			import pl.cani.mindmap.view.helpers.ViewNames;
+			import pl.cani.mindmap.view.helpers.MindmapCreationPanelHelper;
+			import pl.cani.mindmap.events.MindmapEvent;
 			import pl.cani.mindmap.model.Mindmap;
+
+			[Bindable]
+			private var helper : MindmapCreationPanelHelper;
 			
+			[Bindable]
 			public var mindmap : Mindmap;
+			
+			private function onCreationComplete() : void {
+				helper = new MindmapCreationPanelHelper( this );
+				ViewLocator.getInstance().register( 
+					ViewNames.MINDMAP_CREATION_PANEL, helper );
+			}
 			
 		]]>
 	</mx:Script>
 	
-	<mx:Tree id="tree" height="100%">
-        <mx:XMLListCollection id="mindmapData" source="{ mindmap.mindmapData }" />
-	</mx:Tree>
+	<mx:Tree id="tree" height="100%" width="100%" 
+		dataProvider="{ mindmap.mindmapData }" labelField="@name"
+		click="{ helper.editBtnsEnabled = true }" />
 	
-	<mx:VBox>
-		<mx:Form>
-			<mx:Text text="@Resource( 'editInfo' )" />
-			<mx:FormItem label="@Resource( 'nameLbl' )">
-				<mx:TextInput id="nameTxt"/>
-			</mx:FormItem>
-			<mx:Button id="updateBtn" 
-				label="@Resource( key = 'update', bundle = 'Generic' )" />
+	<mx:VBox width="200">
+		<mx:Form defaultButton="{ updateBtn }">
+			<mx:Text text="@Resource( 'editInfo' )" width="100%" />
+			<mx:TextInput id="nameTxt" text="{ tree.selectedItem.@name }"
+				change="helper.checkInput( event )" />
+			<mx:HBox>
+				<mx:Button id="updateBtn" click="helper.updateNode()" 
+					label="@Resource( key = 'update', bundle = 'Generic' )"
+					enabled="{ helper.editBtnsEnabled }" />
+				<mx:Button id="deleteBtn" click="helper.deleteNode()"
+					label="@Resource( key = 'delete', bundle = 'Generic' )"
+					enabled="{ helper.editBtnsEnabled }" />
+			</mx:HBox>
 		</mx:Form>
 
-		<mx:Form>
-			<mx:Label text="@Resource( 'addInfo' )" />
-			<mx:FormItem label="@Resource( 'nameLbl' )">
-				<mx:TextInput id="newItemTxt" />
-			</mx:FormItem>
-			<mx:Button id="addBtn" label="@Resource( key = 'add', bundle = 'Generic' )" />
+		<mx:Form defaultButton="{ addBtn }" id="addForm">
+			<mx:Text text="@Resource( 'addInfo' )" width="100%" />
+			<mx:TextInput id="newItemTxt" change="helper.checkInput( event )" />
+			<mx:Button id="addBtn" click="helper.addNode()"
+				label="@Resource( key = 'add', bundle = 'Generic' )" 
+				enabled="{ helper.addBtnEnabled }" />
 		</mx:Form>
-
-		<mx:Button id="saveBtn"
-				label="@Resource( key = 'save', bundle = 'Generic' )" />
+		
+		<controls:RemotingButton id="saveBtn" click="helper.saveChanges()"
+			enabledLabel="@Resource( key = 'save', bundle = 'Generic' )"
+			disabledLabel="@Resource( key = 'saving', bundle = 'Generic' )" />
+		<mx:Spacer height="5" />
 	</mx:VBox>
 	
 </mx:Panel>

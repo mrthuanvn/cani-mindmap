@@ -27,6 +27,7 @@ package pl.cani.mindmap.model {
 		public var myMindmaps : ArrayCollection;
 		public var selectedMindmap : MindmapVO;
 		public var mindmapUsersDataGrid : DataGrid;
+		public var mindmap : Mindmap;
 		
 		public static function getInstance() : AppModelLocator {
 			if ( instance == null ) {
