@@ -45,6 +45,7 @@ package pl.cani.mindmap.view.helpers {
 		
 		public function onRegistrationComplete( event : RegistrationEvent ) : void {
 			concreteView.emailValidator.removeNotRegisteredEmail( event.user.email );
+			validate( concreteView.emailValidator );
 		}
 
 		public function showBaseState() : void {
@@ -74,13 +75,8 @@ package pl.cani.mindmap.view.helpers {
         	view.invalidateDisplayList();
         	view.invalidateProperties();
         	
-//        	view.emailValidator.addNotActivatedEmail( email );
         	view.activationKeyValidator.addActivationKey( email, activationKey );
         	
-/*         	focussedFormControl = view.emailTxt;
-        	validate( view.emailValidator );
-        	view.emailTxt.dispatchEvent( new MouseEvent( MouseEvent.MOUSE_OVER ) );
- */        	
         	focussedFormControl = view.activationKeyTxt;
         	validate( view.activationKeyValidator );
         	view.activationKeyTxt.dispatchEvent( 

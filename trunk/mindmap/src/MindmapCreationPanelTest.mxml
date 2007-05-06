@@ -3,9 +3,23 @@
 	xmlns:model="pl.cani.mindmap.model.*" xmlns:view="pl.cani.mindmap.view.*"
 	creationComplete="mindmapService.send()">
 
-	<mx:HTTPService id="mindmapService" url="http://localhost/mindmap/mindmaps/113.xml" 
-		resultFormat="e4x" showBusyCursor="true" />
+	<mx:Script>
+		<![CDATA[
+			import com.mikenimer.components.Debug;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			
+			private function onResult( event : ResultEvent ) : void {
+//				xmlListCollection.source = new XMLList( event.result );
+//				mindmap.mindmapData = event.result as XML;
+//				mcp.mindmap = mindmap;
+			}
+		]]>
+	</mx:Script>
 
+	<mx:HTTPService id="mindmapService" url="http://localhost/mindmap/mindmaps/113.xml" 
+		resultFormat="e4x" showBusyCursor="true" result="onResult( event )" />
+<!--
 	<mx:XMLList id="xmlList">
 		<mindmap name="113">
 			<branch name="pierwsza gałąź">
@@ -15,9 +29,25 @@
 		</mindmap>
 	</mx:XMLList>
 
-	<mx:XMLListCollection id="xmlListCollection" source="{ xmlList }" />
+	<mx:XMLListCollection id="xmlListCollection" source="{ mindmapService.lastResult.branch }" />
+	<mx:Tree dataProvider="{ xmlListCollection }" labelField="@name" 
+		width="200" />
+-->	
+		
+	<model:Mindmap id="mindmap">
+		<model:mindmapData>
+			<mx:XML>
+				<mindmap name="113">
+					<branch name="first branch">
+						<branch name="sub-branch" />
+					</branch>
+					<branch name="second branch"/>
+				</mindmap>
+			</mx:XML>
+		</model:mindmapData>
+	</model:Mindmap>
 	
-	<mx:Tree dataProvider="{ xmlListCollection }" labelField="@name" width="200" />
-	
+		
+	<view:MindmapCreationPanel id="mcp" width="80%" mindmap="{ mindmap }" />
 	
 </mx:Application>

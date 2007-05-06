@@ -81,9 +81,11 @@ package pl.cani.mindmap.commands.login {
 
 				
 
-				if ( SWFAddress.getValue() != null && SWFAddress.getValue() != "" ) {
+				if ( SWFAddress.getValue() != null && SWFAddress.getValue() != "" 
+						&& SWFAddress.getValue() != "login" ) {
 					SWFAddressHandler.handle();
 				} else {
+					SWFAddress.setValue( "" );
 	 				var mainViewHelper : MainViewHelper = ViewLocator.getInstance()
 						.getViewHelper( ViewNames.MAIN ) as MainViewHelper;
 	

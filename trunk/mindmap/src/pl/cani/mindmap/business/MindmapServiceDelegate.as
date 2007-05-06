@@ -43,5 +43,17 @@ package pl.cani.mindmap.business {
 			token.addResponder( responder );
 		}
 		
+		public function updateMindmapStructure( mindmapId : uint, 
+				xmlStructure : String ) : void {
+			var token : AsyncToken 
+				= service.updateMindmapStructure( mindmapId, xmlStructure );
+			token.addResponder( responder );
+		}
+		
+		public function getMindmapStructure( mindmapId : uint ) : void {
+			var token : AsyncToken = service.getMindmapStructure( mindmapId );
+			token.addResponder( responder );
+		}
+
 	}
 }
